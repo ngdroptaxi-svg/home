@@ -3,125 +3,1090 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NG Drop Taxi - Reliable Oneway Cab Tamilnadu Service</title>
-    <link rel="stylesheet" href="style.css">
+    <title>NG Drop Taxi | Best Oneway Cab Service in Tamilnadu</title>
+    <meta name="description" content="Book affordable Oneway Cab Tamilnadu with NG Drop Taxi. Lowest per km rates for Sedan, SUV, Innova, Crysta, and Tempo Traveller. No return charges!">
+    <meta name="keywords" content="Drop taxi Tamilnadu, Oneway Cab Tamilnadu, One way drop taxi Chennai, Outstation taxi Tamilnadu, NG Drop Taxi">
+    
+    <!-- Leaflet CSS for OpenStreetMap Routing -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        :root {
+            --primary-yellow: #F7B928;
+            --dark-slate: #1A1D20;
+            --pure-white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --border-color: #E9ECEF;
+            --text-dark: #212529;
+            --text-muted: #6C757D;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Top Contact Bar */
+        .top-bar {
+            background-color: var(--primary-yellow);
+            color: var(--dark-slate);
+            padding: 0.4rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .top-bar a {
+            color: var(--dark-slate);
+            text-decoration: none;
+        }
+
+        .top-bar-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background-color: var(--dark-slate);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            color: var(--primary-yellow);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--pure-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary-yellow);
+        }
+
+        .btn-cta {
+            background-color: var(--primary-yellow);
+            color: var(--dark-slate);
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .btn-cta:hover {
+            background-color: #e0a720;
+        }
+
+        /* Page Management */
+        .page-section {
+            display: none;
+            min-height: calc(100vh - 150px);
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Hero & Home Section */
+        .hero {
+            background: linear-gradient(rgba(26, 29, 32, 0.8), rgba(26, 29, 32, 0.8)), url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1350&q=80') center/cover;
+            color: var(--pure-white);
+            padding: 4rem 5%;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .hero-text {
+            flex: 1 1 400px;
+        }
+
+        .hero-text h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-text span {
+            color: var(--primary-yellow);
+        }
+
+        .contact-card-home {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(247, 185, 40, 0.4);
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .contact-card-home p {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .booking-widget {
+            background: var(--pure-white);
+            color: var(--text-dark);
+            padding: 2rem;
+            border-radius: 8px;
+            flex: 1 1 350px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        /* Autocomplete Suggestions */
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--pure-white);
+            border: 1px solid var(--border-color);
+            border-top: none;
+            z-index: 100;
+            max-height: 150px;
+            overflow-y: auto;
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .suggestion-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .suggestion-item:hover {
+            background: var(--primary-yellow);
+            color: var(--dark-slate);
+        }
+
+        .features {
+            padding: 4rem 5%;
+            text-align: center;
+            background: var(--pure-white);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--light-gray);
+        }
+
+        /* Tariff Table */
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 2rem auto;
+        }
+
+        .tariff-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--pure-white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .tariff-table th, .tariff-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tariff-table th {
+            background-color: var(--dark-slate);
+            color: var(--primary-yellow);
+        }
+
+        .info-box {
+            background: var(--pure-white);
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary-yellow);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        /* Services Cards */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: var(--pure-white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .service-card h3 {
+            color: var(--dark-slate);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Fare Calculator Box */
+        .calculator-box {
+            background: var(--dark-slate);
+            color: var(--pure-white);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .calc-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(247, 185, 40, 0.2);
+            border: 1px solid var(--primary-yellow);
+            border-radius: 4px;
+        }
+
+        /* Routes Page Styles */
+        .routes-filter {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .routes-filter input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .routes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .route-card {
+            background: var(--pure-white);
+            padding: 1rem 1.2rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.2s;
+        }
+
+        .route-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-yellow);
+        }
+
+        .route-title {
+            font-weight: 600;
+            color: var(--dark-slate);
+        }
+
+        .route-action {
+            color: var(--dark-slate);
+            background: var(--primary-yellow);
+            border: none;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        #map {
+            height: 250px;
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .btn-telegram {
+            background-color: #0088cc;
+            color: var(--pure-white);
+            padding: 1rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .btn-telegram:hover {
+            background-color: #006699;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-slate);
+            color: var(--pure-white);
+            text-align: center;
+            padding: 2rem 5%;
+            margin-top: 2rem;
+            border-top: 3px solid var(--primary-yellow);
+        }
+
+        footer a {
+            color: var(--primary-yellow);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .top-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="logo">
-                <h1>🚖 NG Drop Taxi</h1>
-            </div>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="tariff.html">Tariff</a></li>
-                <li><a href="booking.html">Book Now</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="contact-info">
-                <a href="tel:8122268687">📞 8122268687</a>
-            </div>
-        </nav>
-    </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Pay for One Way Only!</h1>
-            <h2>Premium Drop Taxi Service Across Tamil Nadu</h2>
-            <p>Connecting all 38 districts & 100+ cities at lowest fares per kilometer</p>
-            <div class="hero-buttons">
-                <a href="booking.html" class="btn btn-primary">Book Your Cab</a>
-                <a href="tel:8122268687" class="btn btn-secondary">Call Now</a>
+    <!-- Top Contact & Web Bar -->
+    <div class="top-bar">
+        <div>
+            📞 Call / WhatsApp: <a href="tel:8122268687"><strong>8122268687</strong></a> | ✉️ Email: <a href="mailto:ngdroptaxi@gmail.com"><strong>ngdroptaxi@gmail.com</strong></a>
+        </div>
+        <div class="top-bar-links">
+            🌐 Website: <a href="https://www.ngdroptaxi.com" target="_blank"><strong>www.ngdroptaxi.com</strong></a>
+        </div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo" onclick="showPage('home')">🚖 NG Drop Taxi</a>
+        <ul class="nav-links">
+            <li><a href="#" id="link-home" class="active" onclick="showPage('home')">Home</a></li>
+            <li><a href="#" id="link-tariff" onclick="showPage('tariff')">Tariff</a></li>
+            <li><a href="#" id="link-services" onclick="showPage('services')">Services</a></li>
+            <li><a href="#" id="link-routes" onclick="showPage('routes')">Routes</a></li>
+            <li><a href="#" id="link-booking" onclick="showPage('booking')">Book Now</a></li>
+            <li><a href="#" id="link-contact" onclick="showPage('contact')">Contact</a></li>
+        </ul>
+        <button class="btn-cta" onclick="showPage('booking')">Book Taxi</button>
+    </nav>
+
+    <!-- Page 1: Home Section -->
+    <section id="home" class="page-section active">
+        <div class="hero">
+            <div class="hero-text">
+                <h1>Reliable <span>Oneway Cab Tamilnadu</span> Service</h1>
+                <p>Pay for one way only! Premium drop taxi service connecting all 38 districts & 100+ cities across Tamil Nadu at lowest fares per kilometer.</p>
+                
+                <!-- Quick Contact Card Embedded Directly on Homepage -->
+                <div class="contact-card-home">
+                    <h3>Direct Contact & Details</h3>
+                    <p>📞 <strong>Phone:</strong> <a href="tel:8122268687" style="color:var(--primary-yellow);">8122268687</a></p>
+                    <p>💬 <strong>WhatsApp:</strong> <a href="https://wa.me/918122268687" target="_blank" style="color:var(--primary-yellow);">Chat on 8122268687</a></p>
+                    <p>✉️ <strong>Email:</strong> <a href="mailto:ngdroptaxi@gmail.com" style="color:var(--pure-white);">ngdroptaxi@gmail.com</a></p>
+                    <p>🌐 <strong>Website:</strong> <a href="https://www.ngdroptaxi.com" target="_blank" style="color:var(--primary-yellow);">www.ngdroptaxi.com</a></p>
+                </div>
+            </div>
+            <div class="booking-widget">
+                <h3 style="margin-bottom: 1rem; color: var(--dark-slate);">Quick Booking Request</h3>
+                <form onsubmit="handleQuickBook(event)">
+                    <div class="form-group">
+                        <label>Customer Name</label>
+                        <input type="text" id="quick-name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <input type="tel" id="quick-phone" placeholder="Your Mobile Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pickup Location</label>
+                        <input type="text" id="quick-pickup" placeholder="e.g. Chennai" autocomplete="off" oninput="searchOSM(this.value, 'quick-pickup-sug')" required>
+                        <div id="quick-pickup-sug" class="suggestions"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Drop Location</label>
+                        <input type="text" id="quick-drop" placeholder="e.g. Coimbatore" autocomplete="off" oninput="searchOSM(this.value, 'quick-drop-sug')" required>
+                        <div id="quick-drop-sug" class="suggestions"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Car Type</label>
+                        <select id="quick-car">
+                            <option value="Sedan">Sedan (₹15/km)</option>
+                            <option value="Etios">Etios (₹16/km)</option>
+                            <option value="SUV">SUV (₹20/km)</option>
+                            <option value="Innova">Innova (₹21/km)</option>
+                            <option value="Crysta">Crysta (₹25/km)</option>
+                            <option value="Tempo Traveller">Tempo Traveller (₹32/km)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-cta" style="width: 100%;">Proceed to Detailed Booking</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="features">
+            <h2>Why Choose NG Drop Taxi Tamilnadu?</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>No Return Charges</h3>
+                    <p>Pay strictly for the distance you travel on one-way trips across Tamil Nadu.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>24/7 Availability</h3>
+                    <p>Round-the-clock booking support and instant driver assignment. Call 8122268687 anytime.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Transparent Pricing</h3>
+                    <p>Clear driver allowances and explicit per-kilometer rates with no hidden costs.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="features">
-        <h2>Why Choose NG Drop Taxi?</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon">💰</div>
-                <h3>Lowest Fares</h3>
-                <p>Pay only for one way - no return charges!</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🗺️</div>
-                <h3>38 Districts Covered</h3>
-                <p>100+ cities across Tamil Nadu</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🚗</div>
-                <h3>Premium Vehicles</h3>
-                <p>Sedan, SUV, Innova, Crysta & more</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">⏰</div>
-                <h3>24/7 Service</h3>
-                <p>Available round the clock</p>
-            </div>
-        </div>
-    </section>
+    <!-- Page 2: Tariff Section -->
+    <section id="tariff" class="page-section">
+        <div class="container">
+            <h2 style="margin-bottom: 1.5rem; text-align: center;">NG Drop Taxi Rate Chart</h2>
+            <table class="tariff-table">
+                <thead>
+                    <tr>
+                        <th>Vehicle Type</th>
+                        <th>Capacity</th>
+                        <th>Per KM Rate</th>
+                        <th>Ideal For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Sedan</strong></td>
+                        <td>4 Passengers</td>
+                        <td>₹15 / km</td>
+                        <td>Budget One-Way Journeys</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Etios</strong></td>
+                        <td>4 Passengers</td>
+                        <td>₹16 / km</td>
+                        <td>Comfortable Outstation Trips</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SUV</strong></td>
+                        <td>6-7 Passengers</td>
+                        <td>₹20 / km</td>
+                        <td>Family Group Travels</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Innova</strong></td>
+                        <td>7 Passengers</td>
+                        <td>₹21 / km</td>
+                        <td>Long-distance Highway Travel</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Crysta</strong></td>
+                        <td>7 Passengers</td>
+                        <td>₹25 / km</td>
+                        <td>Premium Luxury Travel</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tempo Traveller</strong></td>
+                        <td>12-14 Passengers</td>
+                        <td>₹32 / km</td>
+                        <td>Large Group & Tour Trips</td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <section class="services-preview">
-        <h2>Our Services</h2>
-        <div class="service-grid">
-            <div class="service-card">
-                <h3>🚖 One-Way Drop Taxi</h3>
-                <p>Convenient one-way intercity drops without return fare charges. Perfect for single trips across Tamil Nadu.</p>
-            </div>
-            <div class="service-card">
-                <h3>🔄 Outstation Round Trips</h3>
-                <p>Plan multi-day trips across cities with top-rated drivers and dedicated vehicles at your service.</p>
-            </div>
-            <div class="service-card">
-                <h3>✈️ Airport Transfers</h3>
-                <p>Timely pickup and drop services for Chennai, Coimbatore, Madurai, and Trichy airports.</p>
-            </div>
-            <div class="service-card">
-                <h3>🎯 Package Tours</h3>
-                <p>Customized pilgrimage and holiday taxi tour packages for popular destinations across Tamil Nadu.</p>
-            </div>
-        </div>
-        <div class="view-all">
-            <a href="services.html" class="btn btn-primary">View All Services</a>
-        </div>
-    </section>
-
-    <section class="cta">
-        <h2>Ready to Book Your Ride?</h2>
-        <p>Get instant fare calculation and book your cab now!</p>
-        <a href="booking.html" class="btn btn-primary">Book Now</a>
-    </section>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>NG Drop Taxi</h3>
-                <p>Reliable Oneway Cab Tamilnadu Service</p>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>📞 <a href="tel:8122268687">8122268687</a></p>
-                <p>💬 <a href="https://wa.me/918122268687">WhatsApp</a></p>
-                <p>✉️ <a href="mailto:ngdroptaxi@gmail.com">ngdroptaxi@gmail.com</a></p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="services.html">Services</a></li>
-                    <li><a href="tariff.html">Tariff</a></li>
-                    <li><a href="booking.html">Book Now</a></li>
-                    <li><a href="contact.html">Contact</a></li>
+            <div class="info-box">
+                <h4>Terms & Driver Allowance Details:</h4>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Minimum billable distance per day is 130 km.</li>
+                    <li>Driver allowance: ₹300 per day (₹400 for night drives between 10 PM and 5 AM).</li>
+                    <li>Toll fees, parking fees, and state entry permit charges are extra where applicable.</li>
                 </ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 NG Drop Taxi. All rights reserved. | <a href="https://www.ngdroptaxi.com/">www.ngdroptaxi.com</a></p>
+    </section>
+
+    <!-- Page 3: Services Section -->
+    <section id="services" class="page-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 1rem;">Our Taxi Services across Tamil Nadu</h2>
+            <p style="text-align: center; color: var(--text-muted);">Serving major hubs including Chennai, Coimbatore, Madurai, Trichy, Salem, Tirunelveli, and all 38 districts.</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>One-Way Drop Taxi</h3>
+                    <p>Convenient one-way intercity drops without return fare charges. Perfect for single trips across Tamil Nadu.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Outstation Round Trips</h3>
+                    <p>Plan multi-day trips across cities with top-rated drivers and dedicated vehicles at your service.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Airport Transfers</h3>
+                    <p>Timely pickup and drop services for Chennai, Coimbatore, Madurai, and Trichy airports.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Package Tours</h3>
+                    <p>Customized pilgrimage and holiday taxi tour packages for popular destinations across Tamil Nadu.</p>
+                </div>
+            </div>
         </div>
+    </section>
+
+    <!-- Page 4: Routes Section -->
+    <section id="routes" class="page-section">
+        <div class="container">
+            <h2 style="margin-bottom: 0.5rem; text-align: center;">Tamil Nadu Drop Taxi Routes</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 1.5rem;">
+                Every single route across all 38 Tamil Nadu districts. Select any route to auto-book!
+            </p>
+
+            <div class="routes-filter">
+                <input type="text" id="routeSearch" placeholder="🔍 Search route (e.g. Chennai to Madurai, Trichy to Salem)..." onkeyup="filterRoutes()">
+            </div>
+
+            <div id="routesContainer" class="routes-grid">
+                <!-- Routes dynamically inserted by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Page 5: Booking Section -->
+    <section id="booking" class="page-section">
+        <div class="container">
+            <h2 style="margin-bottom: 1.5rem;">Book Your Oneway Cab Tamilnadu</h2>
+            
+            <!-- Dynamic OpenStreetMap Route & Fare Box -->
+            <div class="calculator-box">
+                <h3>Auto Route & Distance Calculator (OpenStreetMap)</h3>
+                <p style="font-size: 0.85rem; color: #ccc;">Select pickup and drop location to auto-calculate exact road distance.</p>
+                
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+                    <div style="flex: 1; min-width: 200px;" class="form-group">
+                        <label style="color: white;">Pickup Location</label>
+                        <input type="text" id="book-pickup" placeholder="Type city or address" autocomplete="off" oninput="searchOSM(this.value, 'book-pickup-sug', 'pickup')" required>
+                        <div id="book-pickup-sug" class="suggestions"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;" class="form-group">
+                        <label style="color: white;">Drop Location</label>
+                        <input type="text" id="book-drop" placeholder="Type city or address" autocomplete="off" oninput="searchOSM(this.value, 'book-drop-sug', 'drop')" required>
+                        <div id="book-drop-sug" class="suggestions"></div>
+                    </div>
+                </div>
+
+                <div id="map"></div>
+
+                <div id="calc-result" class="calc-result" style="margin-top: 1rem;">
+                    <div><strong>Auto Calculated Distance:</strong> <span id="route-dist">0 km</span></div>
+                    <div style="font-size: 1.2rem; margin-top: 0.3rem;"><strong>Estimated Fare:</strong> <span id="fare-amount" style="color: var(--primary-yellow); font-weight: bold;">₹0</span></div>
+                    <small style="display:block; color: #ddd; margin-top: 0.3rem;">*Minimum billable distance: 130 km. Excludes toll, driver allowance (₹300/day), and parking fees.</small>
+                </div>
+            </div>
+
+            <!-- Booking Form -->
+            <div style="background: var(--pure-white); padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3>Passenger & Travel Details</h3>
+                <form id="bookingForm" onsubmit="handleBookingSubmit(event)" style="margin-top: 1rem;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                        <div class="form-group">
+                            <label>Customer Name</label>
+                            <input type="text" id="book-name" placeholder="Full Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number</label>
+                            <input type="tel" id="book-phone" placeholder="10-digit Mobile Number" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Travel Date</label>
+                            <input type="date" id="book-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Travel Time</label>
+                            <input type="time" id="book-time" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Selected Vehicle</label>
+                            <select id="book-vehicle" onchange="recalculateFare()">
+                                <option value="15|Sedan">Sedan (₹15/km)</option>
+                                <option value="16|Etios">Etios (₹16/km)</option>
+                                <option value="20|SUV">SUV (₹20/km)</option>
+                                <option value="21|Innova">Innova (₹21/km)</option>
+                                <option value="25|Crysta">Crysta (₹25/km)</option>
+                                <option value="32|Tempo Traveller">Tempo Traveller (₹32/km)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Passengers</label>
+                            <input type="number" id="book-passengers" min="1" max="15" value="1" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-cta" style="width: 100%; padding: 1rem; margin-top: 1rem;">Confirm Booking via WhatsApp</button>
+                    <button type="button" class="btn-telegram" onclick="sendToTelegram()">Send Booking via Telegram ✈️</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page 6: Contact Section -->
+    <section id="contact" class="page-section">
+        <div class="container">
+            <h2 style="margin-bottom: 1.5rem;">Contact NG Drop Taxi</h2>
+            <div class="contact-container">
+                <div style="background: var(--pure-white); padding: 2rem; border-radius: 8px;">
+                    <h3>Get In Touch</h3>
+                    <p style="margin-top: 1rem;"><strong>Office Address:</strong> Tamil Nadu, India</p>
+                    <p style="margin-top: 0.5rem;"><strong>Direct Phone:</strong> <a href="tel:8122268687" style="color:var(--dark-slate); font-weight:bold;">8122268687</a></p>
+                    <p style="margin-top: 0.5rem;"><strong>WhatsApp:</strong> <a href="https://wa.me/918122268687" target="_blank" style="color:green; font-weight:bold;">Chat on 8122268687</a></p>
+                    <p style="margin-top: 0.5rem;"><strong>Email:</strong> <a href="mailto:ngdroptaxi@gmail.com" style="color:var(--dark-slate); font-weight:bold;">ngdroptaxi@gmail.com</a></p>
+                    <p style="margin-top: 0.5rem;"><strong>Website:</strong> <a href="https://www.ngdroptaxi.com" target="_blank" style="color:var(--dark-slate); font-weight:bold;">www.ngdroptaxi.com</a></p>
+                    <p style="margin-top: 0.5rem;"><strong>Availability:</strong> 24/7 Service Across All TN Districts</p>
+                </div>
+                <div style="background: var(--pure-white); padding: 2rem; border-radius: 8px;">
+                    <h3>Send Inquiry</h3>
+                    <form onsubmit="handleInquiry(event)" style="margin-top: 1rem;">
+                        <div class="form-group">
+                            <label>Customer Name</label>
+                            <input type="text" id="inq-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number</label>
+                            <input type="tel" id="inq-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea id="inq-msg" rows="3" style="width: 100%; padding: 0.7rem; border: 1px solid var(--border-color); border-radius: 4px;" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-cta" style="width: 100%;">Submit Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 NG Drop Taxi - Oneway Cab Tamilnadu Service. Contact: 8122268687 | Email: ngdroptaxi@gmail.com</p>
+        <p style="margin-top:0.5rem;">Official Website: <a href="https://www.ngdroptaxi.com" target="_blank">www.ngdroptaxi.com</a></p>
     </footer>
+
+    <!-- Leaflet JS & OpenStreetMap Routing Script -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // Contact details
+        const CONTACT_PHONE = "918122268687";
+        const TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"; // Replace with your Telegram Bot Token
+        const TELEGRAM_CHAT_ID = "YOUR_TELEGRAM_CHAT_ID";     // Replace with your Telegram Chat ID
+
+        // Map and Route State
+        let map;
+        let pickupCoords = null;
+        let dropCoords = null;
+        let pickupMarker, dropMarker, routePolyline;
+        let calculatedDistanceKm = 0;
+
+        // Initialize map on script load
+        window.onload = function() {
+            initMap();
+            generateAllTamilNaduRoutes();
+        };
+
+        function initMap() {
+            // Default center: Tamil Nadu (Trichy area)
+            map = L.map('map').setView([10.7905, 78.7047], 7);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+        }
+
+        // SPA Navigation
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.remove('active'));
+
+            const links = document.querySelectorAll('.nav-links a');
+            links.forEach(link => link.classList.remove('active'));
+
+            const activePage = document.getElementById(pageId);
+            if (activePage) {
+                activePage.classList.add('active');
+            }
+
+            const activeLink = document.getElementById(`link-${pageId}`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+
+            if(pageId === 'booking') {
+                setTimeout(() => { map.invalidateSize(); }, 300);
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        // Search Locations using OpenStreetMap Nominatim API
+        let debounceTimer;
+        function searchOSM(query, suggestionBoxId, type) {
+            clearTimeout(debounceTimer);
+            const container = document.getElementById(suggestionBoxId);
+            if (!query || query.length < 2) {
+                container.innerHTML = '';
+                return;
+            }
+
+            debounceTimer = setTimeout(() => {
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Tamil Nadu, India')}&limit=5`)
+                    .then(res => res.json())
+                    .then(data => {
+                        container.innerHTML = '';
+                        data.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'suggestion-item';
+                            div.innerText = item.display_name;
+                            div.onclick = () => selectLocation(item, suggestionBoxId, type);
+                            container.appendChild(div);
+                        });
+                    })
+                    .catch(err => console.error(err));
+            }, 300);
+        }
+
+        function selectLocation(item, suggestionBoxId, type) {
+            document.getElementById(suggestionBoxId).innerHTML = '';
+            const lat = parseFloat(item.lat);
+            const lon = parseFloat(item.lon);
+
+            if (type === 'pickup') {
+                document.getElementById('book-pickup').value = item.display_name.split(',')[0];
+                pickupCoords = [lat, lon];
+                if (pickupMarker) map.removeLayer(pickupMarker);
+                pickupMarker = L.marker([lat, lon]).addTo(map).bindPopup('Pickup Location').openPopup();
+            } else if (type === 'drop') {
+                document.getElementById('book-drop').value = item.display_name.split(',')[0];
+                dropCoords = [lat, lon];
+                if (dropMarker) map.removeLayer(dropMarker);
+                dropMarker = L.marker([lat, lon]).addTo(map).bindPopup('Drop Location').openPopup();
+            }
+
+            if (pickupCoords && dropCoords) {
+                calculateOSMRoute();
+            } else if (pickupCoords || dropCoords) {
+                map.setView([lat, lon], 10);
+            }
+        }
+
+        // Calculate Route Distance using OSRM
+        function calculateOSMRoute() {
+            const url = `https://router.project-osrm.org/route/v1/driving/${pickupCoords[1]},${pickupCoords[0]};${dropCoords[1]},${dropCoords[0]}?overview=full&geometries=geojson`;
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.routes && data.routes.length > 0) {
+                        const route = data.routes[0];
+                        calculatedDistanceKm = Math.round(route.distance / 1000);
+
+                        if (routePolyline) map.removeLayer(routePolyline);
+                        const coordinates = route.geometry.coordinates.map(coord => [coord[1], coord[0]]);
+                        routePolyline = L.polyline(coordinates, { color: '#F7B928', weight: 5 }).addTo(map);
+                        map.fitBounds(routePolyline.getBounds(), { padding: [30, 30] });
+
+                        document.getElementById('route-dist').innerText = `${calculatedDistanceKm} km`;
+                        recalculateFare();
+                    }
+                })
+                .catch(err => console.error('Routing error:', err));
+        }
+
+        function recalculateFare() {
+            const selectedVal = document.getElementById('book-vehicle').value;
+            const rate = parseFloat(selectedVal.split('|')[0]);
+            
+            if (calculatedDistanceKm > 0) {
+                const billableKm = Math.max(calculatedDistanceKm, 130);
+                const fare = billableKm * rate;
+                document.getElementById('fare-amount').innerText = `₹${fare}`;
+            }
+        }
+
+        function handleQuickBook(event) {
+            event.preventDefault();
+            const name = document.getElementById('quick-name').value;
+            const phone = document.getElementById('quick-phone').value;
+            const pickup = document.getElementById('quick-pickup').value;
+            const drop = document.getElementById('quick-drop').value;
+            const car = document.getElementById('quick-car').value;
+
+            document.getElementById('book-name').value = name;
+            document.getElementById('book-phone').value = phone;
+            document.getElementById('book-pickup').value = pickup;
+            document.getElementById('book-drop').value = drop;
+            
+            showPage('booking');
+
+            searchOSM(pickup, 'book-pickup-sug', 'pickup');
+            searchOSM(drop, 'book-drop-sug', 'drop');
+        }
+
+        // WhatsApp Submission
+        function handleBookingSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('book-name').value;
+            const userPhone = document.getElementById('book-phone').value;
+            const pickup = document.getElementById('book-pickup').value;
+            const drop = document.getElementById('book-drop').value;
+            const date = document.getElementById('book-date').value;
+            const time = document.getElementById('book-time').value;
+            const vehicleVal = document.getElementById('book-vehicle').value;
+            const vehicle = vehicleVal.split('|')[1];
+            const passengers = document.getElementById('book-passengers').value;
+            const fare = document.getElementById('fare-amount').innerText;
+
+            const text = `*New Booking Request - NG Drop Taxi*%0A%0A` +
+                         `*Customer Name:* ${name}%0A` +
+                         `*Mobile Number:* ${userPhone}%0A` +
+                         `*Pickup:* ${pickup}%0A` +
+                         `*Drop:* ${drop}%0A` +
+                         `*Distance:* ${calculatedDistanceKm} km%0A` +
+                         `*Est. Fare:* ${fare}%0A` +
+                         `*Date & Time:* ${date} at ${time}%0A` +
+                         `*Vehicle:* ${vehicle}%0A` +
+                         `*Passengers:* ${passengers}`;
+
+            window.open(`https://wa.me/${CONTACT_PHONE}?text=${text}`, '_blank');
+        }
+
+        // Telegram Bot Integration
+        function sendToTelegram() {
+            const name = document.getElementById('book-name').value;
+            const userPhone = document.getElementById('book-phone').value;
+            const pickup = document.getElementById('book-pickup').value;
+            const drop = document.getElementById('book-drop').value;
+            const date = document.getElementById('book-date').value;
+            const time = document.getElementById('book-time').value;
+            const vehicleVal = document.getElementById('book-vehicle').value;
+            const vehicle = vehicleVal.split('|')[1];
+            const passengers = document.getElementById('book-passengers').value;
+            const fare = document.getElementById('fare-amount').innerText;
+
+            if(!name || !userPhone || !pickup || !drop || !date || !time) {
+                alert("Please fill in all required booking fields before sending via Telegram.");
+                return;
+            }
+
+            const message = `🚖 *New Booking Request - NG Drop Taxi*\n\n` +
+                            `👤 *Customer Name:* ${name}\n` +
+                            `📱 *Mobile Number:* ${userPhone}\n` +
+                            `📍 *Pickup:* ${pickup}\n` +
+                            `🏁 *Drop:* ${drop}\n` +
+                            `📏 *Distance:* ${calculatedDistanceKm} km\n` +
+                            `💰 *Est. Fare:* ${fare}\n` +
+                            `📅 *Date & Time:* ${date} at ${time}\n` +
+                            `🚘 *Vehicle:* ${vehicle}\n` +
+                            `👥 *Passengers:* ${passengers}`;
+
+            if (TELEGRAM_BOT_TOKEN === "YOUR_TELEGRAM_BOT_TOKEN") {
+                // Direct fallback URL if Bot Token is not configured
+                const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent("NG Drop Taxi Booking")}&text=${encodeURIComponent(message)}`;
+                window.open(telegramShareUrl, '_blank');
+            } else {
+                // API Request directly sending message to your Telegram Channel/Chat
+                fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.ok) {
+                        alert("Booking request sent successfully via Telegram!");
+                    } else {
+                        alert("Error sending Telegram notification. Opening direct link...");
+                        window.open(`https://t.me/share/url?text=${encodeURIComponent(message)}`, '_blank');
+                    }
+                })
+                .catch(() => {
+                    window.open(`https://t.me/share/url?text=${encodeURIComponent(message)}`, '_blank');
+                });
+            }
+        }
+
+        function handleInquiry(event) {
+            event.preventDefault();
+            const name = document.getElementById('inq-name').value;
+            const phone = document.getElementById('inq-phone').value;
+            const msg = document.getElementById('inq-msg').value;
+
+            const text = `*Inquiry for NG Drop Taxi*%0A` +
+                         `*Customer Name:* ${name}%0A` +
+                         `*Mobile Number:* ${phone}%0A` +
+                         `*Message:* ${msg}`;
+
+            window.open(`https://wa.me/${CONTACT_PHONE}?text=${text}`, '_blank');
+        }
+
+        // ALL 38 DISTRICTS OF TAMIL NADU & ROUTE GENERATOR
+        const tnDistricts = [
+            "Ariyalur", "Chengalpattu", "Chennai", "Coimbatore", "Cuddalore", 
+            "Dharmapuri", "Dindigul", "Erode", "Kanchipuram", "Kanyakumari", 
+            "Karur", "Krishnagiri", "Madurai", "Mayiladuthurai", "Nagapattinam", 
+            "Namakkal", "Nilgiris (Ooty)", "Perambalur", "Pudukkottai", "Ramanathapuram", 
+            "Ranipet", "Salem", "Sivaganga", "Tenkasi", "Thanjavur", 
+            "Theni", "Thoothukudi", "Tiruchirappalli (Trichy)", "Tirunelveli", "Tirupathur", 
+            "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", 
+            "Viluppuram", "Virudhunagar", "Kumbakonam"
+        ];
+
+        let allRoutes = [];
+
+        function generateAllTamilNaduRoutes() {
+            const hubCities = ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli (Trichy)", "Salem", "Tirunelveli", "Erode", "Vellore"];
+            const routesSet = new Set();
+
+            hubCities.forEach(hub => {
+                tnDistricts.forEach(district => {
+                    if (hub !== district) {
+                        routesSet.add(`${hub} ➔ ${district}`);
+                        routesSet.add(`${district} ➔ ${hub}`);
+                    }
+                });
+            });
+
+            allRoutes = Array.from(routesSet);
+            renderRoutes(allRoutes);
+        }
+
+        function renderRoutes(routesList) {
+            const container = document.getElementById('routesContainer');
+            container.innerHTML = '';
+
+            routesList.forEach(routeStr => {
+                const parts = routeStr.split(' ➔ ');
+                const from = parts[0];
+                const to = parts[1];
+
+                const card = document.createElement('div');
+                card.className = 'route-card';
+                card.innerHTML = `
+                    <div class="route-title">${routeStr}</div>
+                    <button class="route-action" onclick="quickSelectRoute('${from}', '${to}')">Book</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterRoutes() {
+            const query = document.getElementById('routeSearch').value.toLowerCase();
+            const filtered = allRoutes.filter(r => r.toLowerCase().includes(query));
+            renderRoutes(filtered);
+        }
+
+        function quickSelectRoute(from, to) {
+            showPage('booking');
+            document.getElementById('book-pickup').value = from;
+            document.getElementById('book-drop').value = to;
+
+            searchOSM(from, 'book-pickup-sug', 'pickup');
+            searchOSM(to, 'book-drop-sug', 'drop');
+        }
+    </script>
 </body>
 </html>
