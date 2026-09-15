@@ -15,6 +15,9 @@
     <!-- EmailJS Browser SDK Integration -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     
+    <!-- Google Maps API with Places Autocomplete and Geometry libraries -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCukGyrD7n_hY8WW8y-bYz4UZX5NFza2Sw&libraries=places,geometry&callback=initGoogleMapsApi" async defer></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -67,6 +70,10 @@
         .toast-notification.show {
             transform: translateY(0);
             opacity: 1;
+        }
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(4px);
         }
     </style>
 </head>
@@ -175,10 +182,9 @@
     </header>
 
     <main class="flex-grow">
-        
         <!-- ================= PAGE 1: HOME ================= -->
         <section id="page-home" class="page-view active">
-            <!-- Hero Section with Google Maps Integration Banner -->
+            <!-- Hero Section with Integrated Booking Widget -->
             <div class="relative bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950 text-white overflow-hidden py-12 lg:py-20">
                 <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:16px_16px]"></div>
                 
@@ -188,7 +194,7 @@
                         <!-- Hero Left Text -->
                         <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
                             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
-                                <i class="fa-solid fa-map-location-dot"></i> Powered by Google Maps Automatic KM Calculation
+                                <i class="fa-solid fa-taxi"></i> South India's Premier One Way Taxi Network
                             </div>
                             <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
                                 Pay Only For <span class="text-amber-400 underline decoration-amber-500/50">One Way</span>. <br class="hidden sm:inline">No Return Fare!
@@ -197,98 +203,119 @@
                                 Premium Intercity Cabs for Tamil Nadu, Bangalore, Cochin & all South India cities. Clean, sanitized vehicles, polite highway drivers, and 100% transparent per-KM pricing.
                             </p>
 
-                            <!-- Pricing Badges -->
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-left">
-                                <div class="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                                    <div class="text-amber-400 font-extrabold text-lg sm:text-xl">₹15/km</div>
-                                    <div class="text-xs text-slate-300 font-medium">Sedan Rate</div>
+                            <!-- Hero Vehicle Fleet Badges with Exact Matching Images -->
+                            <div class="grid grid-cols-3 gap-3 pt-2">
+                                <div class="p-2.5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md flex items-center gap-3">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Maruti_Suzuki_Swift_Dzire_%28cropped%29.jpg/200px-Maruti_Suzuki_Swift_Dzire_%28cropped%29.jpg" alt="Swift Dzire Sedan Taxi" class="w-10 h-10 object-cover rounded-xl shadow border border-amber-400/40" onerror="this.src='https://placehold.co/100x100/1e293b/f59e0b?text=Dzire'">
+                                    <div>
+                                        <div class="text-amber-400 font-black text-sm sm:text-base">₹15/km</div>
+                                        <div class="text-[10px] text-slate-300 font-bold uppercase">Swift Dzire</div>
+                                    </div>
                                 </div>
-                                <div class="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                                    <div class="text-amber-400 font-extrabold text-lg sm:text-xl">₹400 / day</div>
-                                    <div class="text-xs text-slate-300 font-medium">Driver Beta</div>
+                                <div class="p-2.5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md flex items-center gap-3">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/2019_Suzuki_Ertiga_GL_1.5_NC51S_%2820190822%29.jpg/200px-2019_Suzuki_Ertiga_GL_1.5_NC51S_%2820190822%29.jpg" alt="Maruti Ertiga SUV Cab" class="w-10 h-10 object-cover rounded-xl shadow border border-amber-400/40" onerror="this.src='https://placehold.co/100x100/1e293b/f59e0b?text=Ertiga'">
+                                    <div>
+                                        <div class="text-amber-400 font-black text-sm sm:text-base">₹20/km</div>
+                                        <div class="text-[10px] text-slate-300 font-bold uppercase">Ertiga SUV</div>
+                                    </div>
                                 </div>
-                                <div class="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm col-span-2 sm:col-span-1">
-                                    <div class="text-amber-400 font-extrabold text-lg sm:text-xl">0 Return</div>
-                                    <div class="text-xs text-slate-300 font-medium">No Return Charge</div>
+                                <div class="p-2.5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md flex items-center gap-3">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Toyota_Innova_Crysta_2.4_Z_side.jpg/200px-Toyota_Innova_Crysta_2.4_Z_side.jpg" alt="Innova Crysta Luxury Taxi" class="w-10 h-10 object-cover rounded-xl shadow border border-amber-400/40" onerror="this.src='https://placehold.co/100x100/1e293b/f59e0b?text=Crysta'">
+                                    <div>
+                                        <div class="text-amber-400 font-black text-sm sm:text-base">₹25/km</div>
+                                        <div class="text-[10px] text-slate-300 font-bold uppercase">Innova Crysta</div>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Quick Action Buttons -->
                             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
                                 <button onclick="navigateTo('booking')" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-7 py-4 rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-3 text-base">
-                                    <i class="fa-solid fa-calculator"></i> Live Google Fare Calculator
+                                    <i class="fa-solid fa-calculator"></i> Open Google Fare Calculator
                                 </button>
                                 <a href="https://t.me/ngdroptaxi" target="_blank" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-4 rounded-xl shadow-lg transition flex items-center justify-center gap-3 text-base border border-sky-500/40">
-                                    <i class="fa-brands fa-telegram text-xl"></i> Telegram Instant Booking
+                                    <i class="fa-brands fa-telegram text-xl"></i> Telegram Channel
                                 </a>
                             </div>
                         </div>
 
-                        <!-- Hero Feature Hero Box -->
+                        <!-- Hero Booking Card with Live Fare Display -->
                         <div class="lg:col-span-5">
-                            <div class="bg-white rounded-3xl p-6 sm:p-8 text-slate-800 shadow-2xl border border-slate-100">
+                            <div class="bg-white rounded-3xl p-6 sm:p-7 text-slate-800 shadow-2xl border border-slate-100">
                                 <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
                                     <div>
-                                        <h3 class="text-xl font-extrabold text-slate-900">Instant Outstation Cab Booking</h3>
-                                        <p class="text-xs text-slate-500 mt-0.5">Google Maps Distance & Fare Calculation</p>
+                                        <h3 class="text-xl font-extrabold text-slate-900">Instant Taxi Booking</h3>
+                                        <p class="text-xs text-slate-500">Auto Google Distance & Fare Calculator</p>
                                     </div>
-                                    <span class="bg-amber-100 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-full">24x7 Active</span>
+                                    <span class="bg-amber-100 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-full flex items-center gap-1">
+                                        <i class="fa-solid fa-bolt text-amber-600"></i> Auto KM
+                                    </span>
                                 </div>
 
-                                <div class="space-y-3.5">
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <form onsubmit="handleHeroFormSubmit(event)" class="space-y-3.5">
+                                    <div class="grid grid-cols-2 gap-3">
                                         <div>
-                                            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Customer Name *</label>
-                                            <input type="text" id="hero-name" placeholder="Full Name" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium">
+                                            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Customer Name *</label>
+                                            <input type="text" id="hero-name" placeholder="Full Name" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
                                         </div>
                                         <div>
-                                            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Mobile Number *</label>
-                                            <input type="tel" id="hero-phone" placeholder="10-digit Mobile" pattern="[0-9]{10}" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium">
+                                            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Mobile Number *</label>
+                                            <input type="tel" id="hero-phone" placeholder="10-digit Mobile" pattern="[0-9]{10}" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
                                         </div>
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Pickup Location / City *</label>
-                                        <div class="relative">
-                                            <i class="fa-solid fa-circle-dot text-emerald-500 absolute left-3.5 top-3.5 text-xs"></i>
-                                            <input type="text" id="hero-pickup" value="Chennai, Tamil Nadu, India" placeholder="Pickup location..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium">
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Drop Location / City *</label>
-                                        <div class="relative">
-                                            <i class="fa-solid fa-location-dot text-rose-500 absolute left-3.5 top-3.5 text-xs"></i>
-                                            <input type="text" id="hero-drop" value="Cochin, Kerala, India" placeholder="Drop location..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium">
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Vehicle Category *</label>
-                                        <select id="hero-cartype" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-semibold">
-                                            <option value="Sedan">Sedan (₹15/km)</option>
-                                            <option value="Etios">Etios (₹16/km)</option>
-                                            <option value="SUV">SUV (₹20/km)</option>
-                                            <option value="Innova">Innova (₹21/km)</option>
-                                            <option value="Crysta">Innova Crysta (₹25/km)</option>
-                                        </select>
                                     </div>
 
                                     <div class="grid grid-cols-2 gap-3">
                                         <div>
-                                            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Travel Date *</label>
-                                            <input type="date" id="hero-date" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium">
+                                            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Pickup City *</label>
+                                            <input type="text" id="hero-pickup" value="Chennai" placeholder="Pickup City" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
                                         </div>
                                         <div>
-                                            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Pickup Time *</label>
-                                            <input type="time" id="hero-time" value="08:00" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-semibold">
+                                            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Drop City *</label>
+                                            <input type="text" id="hero-drop" value="Cochin" placeholder="Drop City" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
                                         </div>
                                     </div>
 
-                                    <button onclick="transferHeroToCalculator()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-3.5 rounded-xl transition shadow-md flex items-center justify-center gap-2 text-sm">
-                                        <i class="fa-solid fa-calculator"></i> Calculate Driving KM & Book Ride
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <div class="col-span-1">
+                                            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Vehicle</label>
+                                            <select id="hero-cartype" onchange="calculateHeroFare()" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                                <option value="Sedan">Sedan (₹15/km)</option>
+                                                <option value="Etios">Etios (₹16/km)</option>
+                                                <option value="SUV">SUV (₹20/km)</option>
+                                                <option value="Innova">Innova (₹21/km)</option>
+                                                <option value="Crysta">Crysta (₹25/km)</option>
+                                                <option value="Tempo Traveller">Tempo (₹32/km)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Travel Date</label>
+                                            <input type="date" id="hero-date" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Pickup Time</label>
+                                            <input type="time" id="hero-time" value="08:00" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                        </div>
+                                    </div>
+
+                                    <div id="hero-live-fare-box" class="bg-amber-50 border border-amber-200 p-3.5 rounded-2xl space-y-1.5 text-xs">
+                                        <div class="flex justify-between items-center text-slate-700">
+                                            <span>Calculated Route Distance:</span>
+                                            <span id="hero-res-distance" class="font-black text-slate-900">~680 Km</span>
+                                        </div>
+                                        <div class="flex justify-between items-center text-slate-700">
+                                            <span>Driver Beta Allowance:</span>
+                                            <span id="hero-res-beta" class="font-bold text-amber-800">₹400</span>
+                                        </div>
+                                        <div class="flex justify-between items-center pt-1.5 border-t border-amber-200">
+                                            <span class="font-extrabold text-slate-900 text-sm">Total Estimated Fare:</span>
+                                            <span id="hero-res-total" class="font-black text-lg text-emerald-600">₹10,600</span>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-3.5 rounded-xl transition shadow-md flex items-center justify-center gap-2 text-sm">
+                                        <i class="fa-solid fa-paper-plane text-slate-950"></i> One-Click Dispatch (Telegram & Email)
                                     </button>
-                                </div>
+                                </form>
                             </div>
                         </div>
 
@@ -296,56 +323,284 @@
                 </div>
             </div>
 
-            <div class="py-16 bg-slate-50 border-t border-b border-slate-200">
+            <!-- Homepage Popular Routes Grid -->
+            <div class="py-16 bg-white border-b border-slate-200">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center max-w-3xl mx-auto mb-10">
-                        <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Top South India Commutes</span>
-                        <h2 class="text-3xl font-black text-slate-900 tracking-tight mt-1">Popular One-Way Cab Routes</h2>
-                        <p class="text-slate-600 text-sm mt-2">Click any route below to auto-load Google Maps distance calculation & booking details.</p>
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+                        <div>
+                            <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Top South India Commutes</span>
+                            <h2 class="text-3xl font-black text-slate-900 tracking-tight mt-1">Popular Tamil Nadu & Intercity Routes</h2>
+                        </div>
+                        <button onclick="navigateTo('routes')" class="mt-4 md:mt-0 text-amber-600 font-bold hover:text-amber-700 flex items-center gap-1.5 text-sm">
+                            View All 3,000+ Drop Taxi Routes <i class="fa-solid fa-arrow-right"></i>
+                        </button>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <div onclick="setMapLocations('Chennai', 'Cochin')" class="bg-white border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="bg-amber-500/20 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-lg">Interstate Express</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div onclick="setGoogleLocations('Chennai', 'Cochin')" class="bg-slate-50 border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-amber-500/20 text-amber-800 font-bold text-[10px] px-2 py-0.5 rounded-md uppercase">Interstate</span>
                                 <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~680 Km</span>
                             </div>
                             <h3 class="text-lg font-black text-slate-900 group-hover:text-amber-600 transition flex items-center gap-2">
-                                Chennai <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Cochin (Kochi)
+                                Chennai <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Cochin
                             </h3>
-                            <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-100 text-xs">
-                                <span class="text-slate-600 font-medium">Sedan Fare (Incl. Driver Beta):</span>
-                                <span class="font-extrabold text-emerald-600 text-sm">₹10,600</span>
+                            <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-200 text-xs">
+                                <span class="text-slate-600">Sedan Fare (₹15/km):</span>
+                                <span class="font-extrabold text-emerald-600">₹10,600</span>
                             </div>
                         </div>
 
-                        <div onclick="setMapLocations('Cochin', 'Chennai')" class="bg-white border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="bg-amber-500/20 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-lg">Interstate Express</span>
+                        <div onclick="setGoogleLocations('Cochin', 'Chennai')" class="bg-slate-50 border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-amber-500/20 text-amber-800 font-bold text-[10px] px-2 py-0.5 rounded-md uppercase">Interstate</span>
                                 <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~680 Km</span>
                             </div>
                             <h3 class="text-lg font-black text-slate-900 group-hover:text-amber-600 transition flex items-center gap-2">
-                                Cochin (Kochi) <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Chennai
+                                Cochin <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Chennai
                             </h3>
-                            <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-100 text-xs">
-                                <span class="text-slate-600 font-medium">Sedan Fare (Incl. Driver Beta):</span>
-                                <span class="font-extrabold text-emerald-600 text-sm">₹10,600</span>
+                            <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-200 text-xs">
+                                <span class="text-slate-600">Sedan Fare (₹15/km):</span>
+                                <span class="font-extrabold text-emerald-600">₹10,600</span>
                             </div>
                         </div>
 
-                        <div onclick="setMapLocations('Bangalore', 'Chennai')" class="bg-white border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="bg-amber-500/20 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-lg">High Frequency</span>
+                        <div onclick="setGoogleLocations('Bangalore', 'Chennai')" class="bg-slate-50 border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-amber-500/20 text-amber-800 font-bold text-[10px] px-2 py-0.5 rounded-md uppercase">Express</span>
                                 <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~350 Km</span>
                             </div>
                             <h3 class="text-lg font-black text-slate-900 group-hover:text-amber-600 transition flex items-center gap-2">
                                 Bangalore <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Chennai
                             </h3>
-                            <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-100 text-xs">
-                                <span class="text-slate-600 font-medium">Sedan Fare (Incl. Driver Beta):</span>
-                                <span class="font-extrabold text-emerald-600 text-sm">₹5,650</span>
+                            <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-200 text-xs">
+                                <span class="text-slate-600">Sedan Fare (₹15/km):</span>
+                                <span class="font-extrabold text-emerald-600">₹5,650</span>
                             </div>
                         </div>
+
+                        <div onclick="setGoogleLocations('Chennai', 'Madurai')" class="bg-slate-50 border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-emerald-500/20 text-emerald-800 font-bold text-[10px] px-2 py-0.5 rounded-md uppercase">Tamil Nadu</span>
+                                <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~460 Km</span>
+                            </div>
+                            <h3 class="text-lg font-black text-slate-900 group-hover:text-amber-600 transition flex items-center gap-2">
+                                Chennai <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Madurai
+                            </h3>
+                            <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-200 text-xs">
+                                <span class="text-slate-600">Sedan Fare (₹15/km):</span>
+                                <span class="font-extrabold text-emerald-600">₹7,300</span>
+                            </div>
+                        </div>
+
+                        <div onclick="setGoogleLocations('Bangalore', 'Coimbatore')" class="bg-slate-50 border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-emerald-500/20 text-emerald-800 font-bold text-[10px] px-2 py-0.5 rounded-md uppercase">Tamil Nadu</span>
+                                <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~365 Km</span>
+                            </div>
+                            <h3 class="text-lg font-black text-slate-900 group-hover:text-amber-600 transition flex items-center gap-2">
+                                Bangalore <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Coimbatore
+                            </h3>
+                            <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-200 text-xs">
+                                <span class="text-slate-600">Sedan Fare (₹15/km):</span>
+                                <span class="font-extrabold text-emerald-600">₹5,875</span>
+                            </div>
+                        </div>
+
+                        <div onclick="setGoogleLocations('Chennai', 'Kanyakumari')" class="bg-slate-50 border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-emerald-500/20 text-emerald-800 font-bold text-[10px] px-2 py-0.5 rounded-md uppercase">Long Distance</span>
+                                <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~700 Km</span>
+                            </div>
+                            <h3 class="text-lg font-black text-slate-900 group-hover:text-amber-600 transition flex items-center gap-2">
+                                Chennai <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Kanyakumari
+                            </h3>
+                            <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-200 text-xs">
+                                <span class="text-slate-600">Sedan Fare (₹15/km):</span>
+                                <span class="font-extrabold text-emerald-600">₹10,900</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vehicle Fleet Preview Section with Exact Matching Images -->
+            <div class="py-16 bg-slate-50 border-t border-b border-slate-200">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+                        <div>
+                            <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Sanitized Highway Fleet</span>
+                            <h2 class="text-3xl font-black text-slate-900 tracking-tight mt-1">Vehicle Fleet & Per-KM Tariff</h2>
+                        </div>
+                        <button onclick="navigateTo('routes')" class="mt-4 md:mt-0 text-amber-600 font-bold hover:text-amber-700 flex items-center gap-1.5 text-sm">
+                            View Detailed Tariff Matrix <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Fleet Card 1: Sedan (Swift Dzire) -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition group">
+                            <div class="relative h-44 overflow-hidden bg-slate-100">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Maruti_Suzuki_Swift_Dzire_%28cropped%29.jpg/800px-Maruti_Suzuki_Swift_Dzire_%28cropped%29.jpg" alt="Swift Dzire Sedan Taxi" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/f59e0b?text=Swift+Dzire+Taxi'">
+                                <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-black px-3 py-1 rounded-full border border-amber-400/30">
+                                    ₹15 / km
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="text-xl font-black text-slate-900">Swift Dzire Sedan</h3>
+                                        <span class="text-xs text-slate-500">Maruti Swift Dzire AC Cab</span>
+                                    </div>
+                                </div>
+                                <ul class="space-y-2 text-xs text-slate-600 mb-6 mt-3">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-users text-amber-500"></i> Capacity: 4 Passengers</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-user-tie text-amber-500"></i> Driver Allowance: ₹400 / day</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-snowflake text-amber-500"></i> Climate Controlled AC</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> Ideal for: Budget One-Way Journeys</li>
+                                </ul>
+                                <button onclick="selectCarAndBook('Sedan')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl transition text-xs">
+                                    Book Dzire @ ₹15/km
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Fleet Card 2: Etios Taxi -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition group">
+                            <div class="relative h-44 overflow-hidden bg-slate-100">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Toyota_Etios%2C_by_UNICAB.jpg/800px-Toyota_Etios%2C_by_UNICAB.jpg" alt="Toyota Etios Outstation Taxi" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/f59e0b?text=Toyota+Etios+Taxi'">
+                                <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-black px-3 py-1 rounded-full border border-amber-400/30">
+                                    ₹16 / km
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="text-xl font-black text-slate-900">Toyota Etios Taxi</h3>
+                                        <span class="text-xs text-slate-500">Toyota Etios Outstation Premium</span>
+                                    </div>
+                                </div>
+                                <ul class="space-y-2 text-xs text-slate-600 mb-6 mt-3">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-users text-amber-500"></i> Capacity: 4 Passengers</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-user-tie text-amber-500"></i> Driver Allowance: ₹400 / day</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-suitcase text-amber-500"></i> Extra Large Trunk Space</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> Ideal for: Comfortable Outstation Trips</li>
+                                </ul>
+                                <button onclick="selectCarAndBook('Etios')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl transition text-xs">
+                                    Book Etios @ ₹16/km
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Fleet Card 3: SUV (Maruti Ertiga) -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition group">
+                            <div class="relative h-44 overflow-hidden bg-slate-100">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/2019_Suzuki_Ertiga_GL_1.5_NC51S_%2820190822%29.jpg/800px-2019_Suzuki_Ertiga_GL_1.5_NC51S_%2820190822%29.jpg" alt="Maruti Ertiga SUV Taxi" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/f59e0b?text=Maruti+Ertiga+SUV'">
+                                <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-black px-3 py-1 rounded-full border border-amber-400/30">
+                                    ₹20 / km
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="text-xl font-black text-slate-900">Maruti Ertiga SUV</h3>
+                                        <span class="text-xs text-slate-500">Maruti Suzuki Ertiga Family SUV</span>
+                                    </div>
+                                </div>
+                                <ul class="space-y-2 text-xs text-slate-600 mb-6 mt-3">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-users text-amber-500"></i> Capacity: 6 - 7 Passengers</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-user-tie text-amber-500"></i> Driver Allowance: ₹500 / day</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-snowflake text-amber-500"></i> Dual AC Vents</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> Ideal for: Family Group Travels</li>
+                                </ul>
+                                <button onclick="selectCarAndBook('SUV')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl transition text-xs">
+                                    Book Ertiga @ ₹20/km
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Fleet Card 4: Toyota Innova -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition group">
+                            <div class="relative h-44 overflow-hidden bg-slate-100">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/2014_Toyota_Innova_2.0_G_TGN40R_%2820200806%29.jpg/800px-2014_Toyota_Innova_2.0_G_TGN40R_%2820200806%29.jpg" alt="Toyota Innova Highway Taxi" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/f59e0b?text=Toyota+Innova'">
+                                <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-black px-3 py-1 rounded-full border border-amber-400/30">
+                                    ₹21 / km
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="text-xl font-black text-slate-900">Toyota Innova</h3>
+                                        <span class="text-xs text-slate-500">Toyota Innova Highway Express</span>
+                                    </div>
+                                </div>
+                                <ul class="space-y-2 text-xs text-slate-600 mb-6 mt-3">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-users text-amber-500"></i> Capacity: 7 Passengers</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-user-tie text-amber-500"></i> Driver Allowance: ₹500 / day</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-shield text-amber-500"></i> Superior Suspension Comfort</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> Ideal for: Long Highway Travel</li>
+                                </ul>
+                                <button onclick="selectCarAndBook('Innova')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl transition text-xs">
+                                    Book Innova @ ₹21/km
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Fleet Card 5: Toyota Innova Crysta -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-amber-400 shadow-md hover:shadow-xl transition relative ring-2 ring-amber-400 group">
+                            <div class="relative h-44 overflow-hidden bg-slate-100">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Toyota_Innova_Crysta_2.4_Z_side.jpg/800px-Toyota_Innova_Crysta_2.4_Z_side.jpg" alt="Toyota Innova Crysta Luxury Taxi" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/f59e0b?text=Innova+Crysta'">
+                                <span class="absolute top-3 left-3 bg-amber-500 text-slate-950 font-black text-[10px] uppercase px-2.5 py-0.5 rounded-full shadow">Premium Choice</span>
+                                <div class="absolute top-3 right-3 bg-slate-900/90 backdrop-blur-md text-amber-400 text-xs font-black px-3 py-1 rounded-full border border-amber-400/40">
+                                    ₹25 / km
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="text-xl font-black text-slate-900">Innova Crysta</h3>
+                                        <span class="text-xs text-slate-500">Executive Luxury Traveler</span>
+                                    </div>
+                                </div>
+                                <ul class="space-y-2 text-xs text-slate-600 mb-6 mt-3">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-users text-amber-500"></i> Capacity: 7 Passengers</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-user-tie text-amber-500"></i> Driver Allowance: ₹600 / day</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-crown text-amber-500"></i> Plush Captain Armrest Seats</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> Ideal for: Premium Luxury Travel</li>
+                                </ul>
+                                <button onclick="selectCarAndBook('Crysta')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-2.5 rounded-xl transition text-xs shadow-md">
+                                    Book Crysta @ ₹25/km
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Fleet Card 6: Force Tempo Traveller -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition group">
+                            <div class="relative h-44 overflow-hidden bg-slate-100">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/ForceTravellerside.JPG/800px-ForceTravellerside.JPG" alt="Force Tempo Traveller Minibus Taxi" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/f59e0b?text=Tempo+Traveller'">
+                                <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-black px-3 py-1 rounded-full border border-amber-400/30">
+                                    ₹32 / km
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h3 class="text-xl font-black text-slate-900">Tempo Traveller</h3>
+                                        <span class="text-xs text-slate-500">12 - 14 Seater Minibus</span>
+                                    </div>
+                                </div>
+                                <ul class="space-y-2 text-xs text-slate-600 mb-6 mt-3">
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-users text-amber-500"></i> Capacity: 12-14 Passengers</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-user-tie text-amber-500"></i> Driver Allowance: ₹800 / day</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-van-shuttle text-amber-500"></i> High Roof & Pushback Reclining Seats</li>
+                                    <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> Ideal for: Large Group Tours</li>
+                                </ul>
+                                <button onclick="selectCarAndBook('Tempo Traveller')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl transition text-xs">
+                                    Book Tempo @ ₹32/km
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -354,10 +609,67 @@
         <!-- ================= PAGE 2: ABOUT US ================= -->
         <section id="page-about" class="page-view py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">About NG Drop Taxi</span>
                     <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">South India's Trusted Intercity Cab Service</h1>
                     <p class="text-slate-600 mt-3 text-base">Dedicated to providing transparent, hassle-free, one-way and round-trip taxi services across Tamil Nadu, Karnataka (Bangalore), Kerala (Cochin), and Andhra Pradesh.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center mb-16">
+                    <div class="space-y-5">
+                        <h2 class="text-2xl font-bold text-slate-900">Revolutionizing Outstation Travel with Zero Return Fees</h2>
+                        <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                            At <strong>NG Drop Taxi</strong>, we noticed that intercity commuters were often forced to pay full return fares even when traveling one-way between cities like Chennai, Bangalore, Madurai, Coimbatore, and Cochin. 
+                        </p>
+                        <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                            We introduced an honest per-kilometer billing model. You pay strictly for your traveled distance. Our fleet of clean Sedans, SUVs, Innovas, and Tempo Travellers is ready 24/7 with experienced highway drivers to get you to your destination safely.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 pt-2">
+                            <div class="border-l-4 border-amber-500 pl-4">
+                                <div class="text-2xl font-black text-slate-900">50,000+</div>
+                                <div class="text-xs text-slate-500 uppercase font-semibold">Completed Trips</div>
+                            </div>
+                            <div class="border-l-4 border-emerald-500 pl-4">
+                                <div class="text-2xl font-black text-slate-900">100%</div>
+                                <div class="text-xs text-slate-500 uppercase font-semibold">Sanitized Cabs</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl space-y-6">
+                        <h3 class="text-xl font-extrabold text-amber-400">Our Commitments to You</h3>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-lg flex-shrink-0">
+                                <i class="fa-solid fa-hand-holding-dollar"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-100">No Hidden Charges</h4>
+                                <p class="text-xs text-slate-400 mt-1">Clear fare structure upfront. Minimum billing applies per trip (130 km). Toll fees and state entry permits charged at actuals.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-lg flex-shrink-0">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-100">Punctual Pickup Guarantee</h4>
+                                <p class="text-xs text-slate-400 mt-1">Our drivers arrive at your doorstep ahead of time so you never miss flights, trains, or important appointments.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-lg flex-shrink-0">
+                                <i class="fa-solid fa-shield-virus"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-100">Hygienic & Well-Maintained Cabs</h4>
+                                <p class="text-xs text-slate-400 mt-1">Every car is thoroughly washed, sanitized, and inspected prior to each trip start.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -365,14 +677,19 @@
         <!-- ================= PAGE 3: POPULAR ROUTES & TARIFF ================= -->
         <section id="page-routes" class="page-view py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Transparent Rates</span>
-                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">Detailed Vehicle Per-KM Pricing Matrix</h1>
-                    <p class="text-slate-600 mt-2 text-sm sm:text-base">All-inclusive transparent rates across Tamil Nadu, Bangalore, and Cochin routes.</p>
+                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">Popular Routes & Vehicle Tariff</h1>
+                    <p class="text-slate-600 mt-2 text-sm sm:text-base">Explore all major intercity routes connecting Tamil Nadu, Bangalore, Cochin, and beyond.</p>
                 </div>
 
-                <!-- Complete Tariff Rate Matrix Table -->
+                <!-- Complete Tariff Rate Cards Table -->
                 <div class="mb-16">
+                    <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-taxi text-amber-500"></i> Detailed Vehicle Per-KM Pricing Matrix
+                    </h2>
+                    
                     <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm">
                         <table class="w-full text-left border-collapse">
                             <thead>
@@ -393,7 +710,7 @@
                                     <td class="p-4 text-slate-600">₹400 / day</td>
                                     <td class="p-4 text-slate-500">Budget One-Way Journeys</td>
                                     <td class="p-4 text-right">
-                                        <button onclick="selectCarAndBook('Sedan')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Sedan</button>
+                                        <button onclick="selectCarAndBook('Sedan')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Sedan</button>
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-slate-50 transition">
@@ -403,7 +720,7 @@
                                     <td class="p-4 text-slate-600">₹400 / day</td>
                                     <td class="p-4 text-slate-500">Comfortable Outstation Trips</td>
                                     <td class="p-4 text-right">
-                                        <button onclick="selectCarAndBook('Etios')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Etios</button>
+                                        <button onclick="selectCarAndBook('Etios')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Etios</button>
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-slate-50 transition">
@@ -413,7 +730,7 @@
                                     <td class="p-4 text-slate-600">₹500 / day</td>
                                     <td class="p-4 text-slate-500">Family Group Travels</td>
                                     <td class="p-4 text-right">
-                                        <button onclick="selectCarAndBook('SUV')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book SUV</button>
+                                        <button onclick="selectCarAndBook('SUV')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book SUV</button>
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-slate-50 transition">
@@ -423,7 +740,7 @@
                                     <td class="p-4 text-slate-600">₹500 / day</td>
                                     <td class="p-4 text-slate-500">Long-distance Highway Travel</td>
                                     <td class="p-4 text-right">
-                                        <button onclick="selectCarAndBook('Innova')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Innova</button>
+                                        <button onclick="selectCarAndBook('Innova')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Innova</button>
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-amber-50/50 bg-amber-50/20 transition">
@@ -433,7 +750,17 @@
                                     <td class="p-4 text-slate-600">₹600 / day</td>
                                     <td class="p-4 text-slate-500">Premium Luxury Travel</td>
                                     <td class="p-4 text-right">
-                                        <button onclick="selectCarAndBook('Crysta')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Crysta</button>
+                                        <button onclick="selectCarAndBook('Crysta')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Crysta</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="p-4 font-bold text-slate-900">Tempo Traveller</td>
+                                    <td class="p-4 text-slate-600">12 - 14 Passengers</td>
+                                    <td class="p-4 text-amber-600 font-extrabold">₹32 / km</td>
+                                    <td class="p-4 text-slate-600">₹800 / day</td>
+                                    <td class="p-4 text-slate-500">Large Group & Tour Trips</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="selectCarAndBook('Tempo Traveller')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-xs transition">Book Tempo</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -441,16 +768,16 @@
                     </div>
                 </div>
 
-                <!-- Popular Routes Searchable Table -->
+                <!-- Popular Tamil Nadu, Bangalore & Cochin Routes Table -->
                 <div>
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
                         <div>
                             <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                                <i class="fa-solid fa-map-location-dot text-amber-500"></i> Searchable Popular Tamil Nadu & Outstation Routes
+                                <i class="fa-solid fa-map-location-dot text-amber-500"></i> Popular Tamil Nadu, Bangalore & Cochin Routes
                             </h2>
                             <p class="text-xs text-slate-500">Includes direct routes: Chennai ⇄ Cochin, Bangalore to anywhere in Tamil Nadu</p>
                         </div>
-                        <input type="text" id="route-search" onkeyup="filterPopularRoutes()" placeholder="Search route (e.g. Cochin, Madurai)..." class="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs w-full sm:w-72 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                        <input type="text" id="route-search" onkeyup="filterPopularRoutes()" placeholder="Search route (e.g. Cochin, Madurai)..." class="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs w-full sm:w-64 focus:ring-2 focus:ring-amber-500 focus:outline-none">
                     </div>
 
                     <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm">
@@ -459,17 +786,18 @@
                                 <tr class="bg-slate-100 text-slate-700 text-xs uppercase tracking-wider border-b border-slate-200">
                                     <th class="p-4">Route (From ➔ To)</th>
                                     <th class="p-4">Approx Distance</th>
-                                    <th class="p-4">Sedan Fare (₹15/km + Beta)</th>
-                                    <th class="p-4">SUV Fare (₹20/km + Beta)</th>
+                                    <th class="p-4">Sedan Fare (₹15/km)</th>
+                                    <th class="p-4">SUV Fare (₹20/km)</th>
                                     <th class="p-4 text-right">Instant Booking</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-sm" id="popular-routes-tbody">
-                                <!-- JS Populated -->
+                                <!-- Dynamically populated by JavaScript -->
                             </tbody>
                         </table>
                     </div>
                 </div>
+
             </div>
         </section>
 
@@ -479,41 +807,43 @@
                 
                 <div class="text-center max-w-3xl mx-auto mb-10">
                     <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Google Maps Distance Engine</span>
-                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">Automatic Fare Calculator & Booking</h1>
-                    <p class="text-slate-600 mt-2 text-sm sm:text-base">Powered by Google Maps Distance Matrix API. Enter customer details, pickup, and drop location to compute exact driving route distance and fare.</p>
+                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">Distance & Fare Calculator</h1>
+                    <p class="text-slate-600 mt-2 text-sm sm:text-base">Enter your customer name, phone number, pickup, and drop location to compute exact driving route distance and instant fare.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     
-                    <!-- Google Maps Container -->
+                    <!-- Google Maps Map Canvas -->
                     <div class="lg:col-span-7 space-y-4">
                         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
                             <div class="flex items-center justify-between mb-3">
                                 <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                                    <i class="fa-solid fa-map-location-dot text-amber-500"></i> Google Driving Route Preview
+                                    <i class="fa-solid fa-map-location-dot text-amber-500"></i> Live Route Map Preview
                                 </span>
-                                <span id="map-status-badge" class="text-[11px] bg-slate-100 text-slate-600 font-bold px-2.5 py-0.5 rounded-full">Enter Pickup & Drop</span>
+                                <span id="route-status-badge" class="text-[11px] bg-slate-100 text-slate-600 font-bold px-2.5 py-0.5 rounded-full">Select Cities Below</span>
                             </div>
-                            <div id="gmap"></div>
+                            <div id="gmap" class="w-full rounded-xl overflow-hidden border border-slate-200"></div>
                         </div>
 
+                        <!-- Info Card -->
                         <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-900 space-y-1">
                             <p class="font-bold flex items-center gap-1.5 text-amber-950">
-                                <i class="fa-solid fa-circle-info text-amber-600"></i> Official Pricing & Driver Beta Rules:
+                                <i class="fa-solid fa-circle-info text-amber-600"></i> Pricing Policy & Billing Details:
                             </p>
                             <p>• Minimum billable distance per trip is <strong>130 kilometers</strong>.</p>
-                            <p>• Driver Beta allowance (₹400 for Sedan/Etios, ₹500 for SUV/Innova, ₹600 Crysta) included in total fare estimate.</p>
+                            <p>• Driver Beta allowance (₹400 for Sedan/Etios, ₹500 for SUV/Innova, ₹600 Crysta, ₹800 Tempo) is included or calculated daily.</p>
+                            <p>• Toll gate charges, state entry permits, and parking fees extra at actual toll booths.</p>
                         </div>
                     </div>
 
-                    <!-- Booking & Calculation Controls -->
+                    <!-- Booking Form Controls -->
                     <div class="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
                         <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Trip Booking Details</h3>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Customer Name *</label>
-                                <input type="text" id="g-name" placeholder="Full Name" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                <input type="text" id="g-name" placeholder="Enter Full Name" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Mobile Number *</label>
@@ -523,81 +853,93 @@
 
                         <div>
                             <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup City / Location *</label>
-                            <input type="text" id="g-pickup" value="Chennai, Tamil Nadu, India" placeholder="Pickup location..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            <input type="text" id="g-pickup" value="Chennai" placeholder="Type pickup city..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Drop City / Location *</label>
-                            <input type="text" id="g-drop" value="Cochin, Kerala, India" placeholder="Drop location..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            <input type="text" id="g-drop" value="Cochin" placeholder="Type drop city..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                         </div>
 
+                        <!-- Quick Route Shortcuts -->
                         <div>
-                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Vehicle Category</label>
-                            <select id="g-cartype" onchange="calculateGoogleRoute()" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none font-semibold">
-                                <option value="Sedan">Sedan (₹15/km)</option>
-                                <option value="Etios">Etios (₹16/km)</option>
-                                <option value="SUV">SUV (₹20/km)</option>
-                                <option value="Innova">Innova (₹21/km)</option>
-                                <option value="Crysta">Innova Crysta (₹25/km)</option>
-                            </select>
+                            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">Quick Auto-Fill Routes</span>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="setGoogleLocations('Chennai', 'Cochin')" class="px-2.5 py-1 bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-amber-800 rounded-lg text-xs transition">Chennai-Cochin</button>
+                                <button onclick="setGoogleLocations('Cochin', 'Chennai')" class="px-2.5 py-1 bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-amber-800 rounded-lg text-xs transition">Cochin-Chennai</button>
+                                <button onclick="setGoogleLocations('Bangalore', 'Chennai')" class="px-2.5 py-1 bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-amber-800 rounded-lg text-xs transition">Blr-Chennai</button>
+                                <button onclick="setGoogleLocations('Bangalore', 'Coimbatore')" class="px-2.5 py-1 bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-amber-800 rounded-lg text-xs transition">Blr-Cbe</button>
+                                <button onclick="setGoogleLocations('Chennai', 'Madurai')" class="px-2.5 py-1 bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-amber-800 rounded-lg text-xs transition">Chennai-Madurai</button>
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="col-span-1">
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Vehicle</label>
+                                <select id="g-cartype" onchange="calculateGoogleRoute()" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                    <option value="Sedan">Sedan (₹15/km)</option>
+                                    <option value="Etios">Etios (₹16/km)</option>
+                                    <option value="SUV">SUV (₹20/km)</option>
+                                    <option value="Innova">Innova (₹21/km)</option>
+                                    <option value="Crysta">Crysta (₹25/km)</option>
+                                    <option value="Tempo Traveller">Tempo (₹32/km)</option>
+                                </select>
+                            </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup Date *</label>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup Date</label>
                                 <input type="date" id="g-date" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup Time *</label>
-                                <input type="time" id="g-time" value="08:00" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none font-semibold">
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup Time</label>
+                                <input type="time" id="g-time" value="08:00" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                             </div>
                         </div>
 
-                        <button onclick="calculateGoogleRoute()" id="g-calc-btn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-calculator"></i> Calculate Driving KM & Total Fare
+                        <button onclick="calculateGoogleRoute()" id="calc-btn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-route"></i> Calculate Route & Distance
                         </button>
 
-                        <!-- Calculation Results Summary Box -->
-                        <div id="g-result-box" class="bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-2">
-                            <div class="flex justify-between items-center text-xs text-slate-600">
-                                <span>Customer Name:</span>
-                                <span id="res-name" class="font-bold text-slate-900">-</span>
-                            </div>
-                            <div class="flex justify-between items-center text-xs text-slate-600">
-                                <span>Mobile Number:</span>
-                                <span id="res-phone" class="font-bold text-slate-900">-</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm border-t border-amber-200/60 pt-2">
-                                <span>Calculated Driving KM:</span>
-                                <span id="res-km" class="font-black text-slate-900">680 Km</span>
+                        <!-- Calculation Result Box -->
+                        <div id="result-box" class="bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-2">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-slate-600">Customer Name:</span>
+                                <span id="res-cust-name" class="font-bold text-slate-900">-</span>
                             </div>
                             <div class="flex justify-between items-center text-sm">
-                                <span>Est. Driving Duration:</span>
-                                <span id="res-time" class="font-bold text-slate-800">11.5 hrs</span>
+                                <span class="text-slate-600">Contact Number:</span>
+                                <span id="res-cust-phone" class="font-bold text-slate-900">-</span>
                             </div>
+                            <div class="flex justify-between items-center text-sm border-t border-amber-200/60 pt-2">
+                                <span class="text-slate-600">Driving Distance:</span>
+                                <span id="res-distance" class="font-extrabold text-slate-900">~680 Km</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-slate-600">Est. Travel Duration:</span>
+                                <span id="res-duration" class="font-bold text-slate-800">~11 hrs</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-slate-600">Vehicle Selected:</span>
+                                <span id="res-vehicle-info" class="font-bold text-slate-800">Sedan @ ₹15/km</span>
+                            </div>
+                            <!-- Distance Fare & Driver Allowance Itemization -->
                             <div class="flex justify-between items-center text-xs text-slate-600 border-t border-amber-200/60 pt-2">
                                 <span>Base Distance Fare:</span>
-                                <span id="res-base" class="font-semibold text-slate-800">₹10,200</span>
+                                <span id="res-base-fare" class="font-semibold text-slate-800">₹10,200 (680 km × ₹15)</span>
                             </div>
                             <div class="flex justify-between items-center text-xs text-slate-600">
-                                <span class="flex items-center gap-1"><i class="fa-solid fa-user-tie text-amber-600"></i> Driver Beta / Allowance:</span>
-                                <span id="res-beta" class="font-bold text-amber-800">₹400</span>
+                                <span class="flex items-center gap-1"><i class="fa-solid fa-user-gear text-amber-600"></i> Driver Allowance (Beta):</span>
+                                <span id="res-driver-allowance" class="font-bold text-amber-800">₹400</span>
                             </div>
                             <div class="flex justify-between items-center text-base pt-2 border-t border-amber-300">
                                 <span class="font-bold text-slate-900">Total Estimated Fare:</span>
-                                <span id="res-total" class="font-black text-2xl text-emerald-600">₹10,600</span>
+                                <span id="res-fare" class="font-black text-2xl text-emerald-600">₹10,600</span>
                             </div>
+                            <div class="text-[11px] text-slate-500 italic">* Includes Driver Allowance (₹400). Minimum billable distance 130 km. Tolls extra.</div>
                         </div>
 
-                        <!-- Multi-Channel Booking Actions -->
-                        <div class="space-y-2.5 pt-2">
-                            <button onclick="dispatchTelegramBooking()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-extrabold py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2">
-                                <i class="fa-brands fa-telegram text-xl"></i> Send Inquiry via Telegram Bot
-                            </button>
-                            <button onclick="dispatchEmailBooking()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition flex items-center justify-center gap-2 text-sm">
-                                <i class="fa-solid fa-envelope text-base"></i> Send Email Inquiry
-                            </button>
-                        </div>
+                        <button onclick="dispatchCombinedTelegramAndEmail()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane text-slate-950"></i> One-Click Dispatch (Telegram & Email)
+                        </button>
                     </div>
 
                 </div>
@@ -615,6 +957,7 @@
                     <p class="text-slate-600 mt-2 text-sm sm:text-base">We are available 24 hours a day, 7 days a week to answer your queries and confirm your outstation taxi bookings.</p>
                 </div>
 
+                <!-- Direct Contact Cards Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm hover:border-amber-400 transition">
                         <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl font-bold mx-auto mb-3">
@@ -634,13 +977,13 @@
                         <a href="https://wa.me/918122268687" target="_blank" class="text-emerald-600 font-extrabold hover:underline text-base">Chat on 8122268687</a>
                     </div>
 
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm hover:border-sky-400 transition">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm hover:border-amber-400 transition">
                         <div class="w-12 h-12 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center text-xl font-bold mx-auto mb-3">
-                            <i class="fa-brands fa-telegram"></i>
+                            <i class="fa-solid fa-envelope"></i>
                         </div>
-                        <h3 class="font-bold text-slate-900 text-base mb-1">Telegram Channel</h3>
-                        <p class="text-xs text-slate-500 mb-3">Instant Bot Dispatch</p>
-                        <a href="https://t.me/ngdroptaxi" target="_blank" class="text-sky-600 font-extrabold hover:underline text-base">@ngdroptaxi</a>
+                        <h3 class="font-bold text-slate-900 text-base mb-1">Email Support</h3>
+                        <p class="text-xs text-slate-500 mb-3">Corporate & Bulk Booking</p>
+                        <a href="mailto:ngdroptaxi@gmail.com" class="text-slate-800 font-bold hover:underline text-sm break-all">ngdroptaxi@gmail.com</a>
                     </div>
 
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm hover:border-amber-400 transition">
@@ -655,12 +998,14 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                     <div class="lg:col-span-7 bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                        <h3 class="text-xl font-black text-slate-900 mb-2">Send Us an Instant Inquiry</h3>
+                        <h3 class="text-xl font-black text-slate-900 mb-2">Send Us a Direct Message</h3>
+                        <p class="text-xs text-slate-500 mb-4">Fill out the form below and our operations team will reach back out within 15 minutes.</p>
+
                         <form onsubmit="handleContactSubmit(event)" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Customer Name *</label>
-                                    <input type="text" id="contact-name" placeholder="Full Name" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Your Full Name *</label>
+                                    <input type="text" id="contact-name" placeholder="John Doe" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Phone Number *</label>
@@ -674,21 +1019,23 @@
                                     <input type="email" id="contact-email" placeholder="name@example.com" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Inquiry Channel</label>
-                                    <select id="contact-channel" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none font-semibold">
-                                        <option value="Telegram">Send via Telegram</option>
-                                        <option value="Email">Send via Email (ngdroptaxi@gmail.com)</option>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Inquiry Type</label>
+                                    <select id="contact-type" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                        <option value="Taxi Booking">Taxi Booking Inquiry</option>
+                                        <option value="Fare Quote">Fare Quote Inquiry</option>
+                                        <option value="Corporate Booking">Corporate / Tour Booking</option>
+                                        <option value="Feedback">Feedback / Support</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup / Drop / Travel Details *</label>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Travel Details / Message *</label>
                                 <textarea id="contact-msg" rows="4" placeholder="Mention pickup location, drop location, travel date, or special instructions..." required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
                             </div>
 
-                            <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-8 py-3.5 rounded-xl transition shadow-md w-full text-sm flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-paper-plane"></i> Send Instant Inquiry
+                            <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-8 py-3.5 rounded-xl transition shadow-md w-full sm:w-auto text-sm">
+                                Send Inquiry (Telegram & Email)
                             </button>
                         </form>
                     </div>
@@ -696,12 +1043,15 @@
                     <div class="lg:col-span-5 space-y-6">
                         <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-md space-y-4">
                             <h3 class="text-lg font-bold text-amber-400">Major Service Hubs</h3>
+                            <p class="text-xs text-slate-300">We offer instant 24x7 doorstep cab pickup in all major cities across South India:</p>
+
                             <ul class="space-y-2.5 text-xs text-slate-200">
                                 <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-400"></i> <strong>Chennai Hub:</strong> Koyambedu, Airport, Tambaram, Velachery, OMR</li>
                                 <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-400"></i> <strong>Bangalore Hub:</strong> Majestic, Electronic City, Whitefield, Airport</li>
                                 <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-400"></i> <strong>Coimbatore Hub:</strong> Gandhipuram, Railway Station, Airport</li>
                                 <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-400"></i> <strong>Madurai Hub:</strong> Mattuthavani, Periyar, Junction</li>
                                 <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-400"></i> <strong>Cochin (Kochi) Hub:</strong> Ernakulam, Edappally, Cochin Airport</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-400"></i> <strong>Salem & Trichy:</strong> Central Bus Stand & Railway Junctions</li>
                             </ul>
                         </div>
                     </div>
@@ -711,10 +1061,29 @@
         </section>
     </main>
 
+    <!-- Legal Policy Popups Modal -->
+    <div id="policy-modal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-4 shadow-2xl relative max-h-[85vh] overflow-y-auto">
+            <button onclick="closePolicyModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-200 text-sm">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 id="policy-modal-title" class="text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">Policy Information</h3>
+            <div id="policy-modal-body" class="text-xs sm:text-sm text-slate-600 space-y-3 leading-relaxed">
+                <!-- Content dynamically populated -->
+            </div>
+            <div class="pt-4 border-t border-slate-100 text-right">
+                <button onclick="closePolicyModal()" class="bg-slate-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs hover:bg-slate-800 transition">
+                    I Understand & Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-slate-950 text-slate-400 text-xs py-12 border-t border-slate-800 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Brand Summary -->
                 <div class="space-y-3">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center text-slate-950 font-black text-sm">NG</div>
@@ -725,34 +1094,35 @@
                     </p>
                 </div>
 
+                <!-- Quick Navigation Links -->
                 <div>
-                    <h4 class="text-white font-bold text-sm mb-3">Quick Navigation</h4>
+                    <h4 class="text-white font-bold text-sm mb-3">Quick Links</h4>
                     <ul class="space-y-2">
                         <li><button onclick="navigateTo('home')" class="hover:text-amber-400 transition">Home Page</button></li>
                         <li><button onclick="navigateTo('about')" class="hover:text-amber-400 transition">About Company</button></li>
                         <li><button onclick="navigateTo('routes')" class="hover:text-amber-400 transition">Popular Routes & Rates</button></li>
-                        <li><button onclick="navigateTo('booking')" class="hover:text-amber-400 transition">Google Maps Calculator</button></li>
+                        <li><button onclick="navigateTo('booking')" class="hover:text-amber-400 transition">Google Fare Calculator</button></li>
                         <li><button onclick="navigateTo('contact')" class="hover:text-amber-400 transition">Contact Us</button></li>
                     </ul>
                 </div>
 
+                <!-- Legal Policies -->
                 <div>
-                    <h4 class="text-white font-bold text-sm mb-3">Popular Commutes</h4>
-                    <ul class="space-y-1.5 text-slate-400">
-                        <li>Chennai ⇄ Cochin</li>
-                        <li>Cochin ⇄ Chennai</li>
-                        <li>Bangalore ⇄ Chennai</li>
-                        <li>Bangalore ⇄ Coimbatore</li>
-                        <li>Chennai ⇄ Madurai</li>
+                    <h4 class="text-white font-bold text-sm mb-3">Legal & Policies</h4>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><button onclick="openPolicyModal('privacy')" class="hover:text-amber-400 transition">Privacy Policy</button></li>
+                        <li><button onclick="openPolicyModal('refund')" class="hover:text-amber-400 transition">Refund & Cancellation Policy</button></li>
+                        <li><button onclick="openPolicyModal('data')" class="hover:text-amber-400 transition">Data Protection Policy</button></li>
+                        <li><button onclick="openPolicyModal('terms')" class="hover:text-amber-400 transition">Terms & Conditions</button></li>
                     </ul>
                 </div>
 
+                <!-- Contact Info -->
                 <div>
                     <h4 class="text-white font-bold text-sm mb-3">Direct Contact Details</h4>
                     <ul class="space-y-2 text-slate-300">
                         <li><i class="fa-solid fa-phone text-amber-400 mr-2"></i> <a href="tel:8122268687" class="hover:text-amber-400 font-bold">8122268687</a></li>
                         <li><i class="fa-brands fa-whatsapp text-emerald-400 mr-2"></i> <a href="https://wa.me/918122268687" target="_blank" class="hover:text-emerald-400 font-bold">8122268687</a></li>
-                        <li><i class="fa-brands fa-telegram text-sky-400 mr-2"></i> <a href="https://t.me/ngdroptaxi" target="_blank" class="hover:text-sky-400 font-bold">@ngdroptaxi</a></li>
                         <li><i class="fa-solid fa-envelope text-amber-400 mr-2"></i> <a href="mailto:ngdroptaxi@gmail.com" class="hover:text-amber-400">ngdroptaxi@gmail.com</a></li>
                         <li><i class="fa-solid fa-globe text-amber-400 mr-2"></i> <a href="http://www.ngdroptaxi.com" target="_blank" class="hover:text-amber-400">www.ngdroptaxi.com</a></li>
                     </ul>
@@ -761,68 +1131,82 @@
 
             <div class="border-t border-slate-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-slate-500 text-[11px]">
                 <p>© 2026 NG Drop Taxi. All Rights Reserved.</p>
-                <p>Designed for Tamil Nadu, Bangalore & Cochin Outstation Commuters. | Site developed by <span class="text-slate-300 font-semibold">Vivekanandan Prabhakar</span></p>
+                <p>Designed for Tamil Nadu, Bangalore & Cochin Outstation Commuters. | <strong class="text-slate-300 font-bold">Site developed by Vivekanandan Prabhakar</strong></p>
             </div>
         </div>
     </footer>
 
-    <!-- Floating Action Button -->
-    <a href="https://wa.me/918122268687" target="_blank" title="Chat on WhatsApp" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition transform hover:scale-110 border-2 border-white">
-        <i class="fa-brands fa-whatsapp text-3xl"></i>
-    </a>
-
-    <!-- Toast Notification Element -->
-    <div id="toast" class="toast-notification fixed bottom-6 left-6 z-50 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 text-xs font-bold">
-        <i class="fa-solid fa-circle-info text-amber-400 text-base" id="toast-icon"></i>
-        <span id="toast-message">Notification</span>
+    <!-- Toast Notification Box -->
+    <div id="toast" class="toast-notification fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 text-xs font-semibold">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-msg">Booking Inquiry Sent!</span>
     </div>
 
-    <!-- Google Maps JS SDK -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCukGyrD7n_hY8WW8y-bYz4UZX5NFza2Sw&libraries=places,geometry"></script>
-
+    <!-- JAVASCRIPT LOGIC & TELEGRAM/EMAIL INTEGRATION ENGINE -->
     <script>
-        // EmailJS Credentials Configuration
+        // TELEGRAM BOT API CREDENTIALS
+        const TELEGRAM_CONFIG = {
+            botToken: "8664276631:AAEZW18E8aFFDoDLR1SefHN-zxYzEdMSzCo",
+            chatId: "8905660087"
+        };
+
+        // EMAILJS SDK CREDENTIALS
         const EMAILJS_CONFIG = {
             publicKey: "TKrDiKsVRHG_-n98d",
             serviceId: "service_e2q2adc",
             templateId: "template_wl6dam5"
         };
 
-        // Telegram Bot API Configuration
-        const TELEGRAM_CONFIG = {
-            botToken: "8664276631:AAEZW18E8aFFDoDLR1SefHN-zxYzEdMSzCo",
-            chatId: "8905660087"
-        };
-
         // Initialize EmailJS Browser SDK
         (function() {
-            if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
-                emailjs.init(EMAILJS_CONFIG.publicKey);
+            if (window.emailjs && EMAILJS_CONFIG.publicKey) {
+                try {
+                    emailjs.init(EMAILJS_CONFIG.publicKey);
+                    console.log("EmailJS SDK Initialized successfully.");
+                } catch(e) {
+                    console.warn("EmailJS init warning:", e);
+                }
             }
         })();
 
-        // Tariff Matrix Per KM
+        // Vehicle Pricing & Driver Beta Data
         const CAR_RATES = {
             'Sedan': 15,
             'Etios': 16,
             'SUV': 20,
             'Innova': 21,
-            'Crysta': 25
+            'Crysta': 25,
+            'Tempo Traveller': 32
         };
 
-        // Driver Allowance / Beta per day
-        const CAR_DRIVER_BETA = {
+        const CAR_DRIVER_ALLOWANCE = {
             'Sedan': 400,
             'Etios': 400,
             'SUV': 500,
             'Innova': 500,
-            'Crysta': 600
+            'Crysta': 600,
+            'Tempo Traveller': 800
         };
 
-        // Master List of Popular Routes
+        const CAR_CAPACITIES = {
+            'Sedan': '4 Passengers',
+            'Etios': '4 Passengers',
+            'SUV': '6-7 Passengers',
+            'Innova': '7 Passengers',
+            'Crysta': '7 Passengers',
+            'Tempo Traveller': '12-14 Passengers'
+        };
+
+        // Comprehensive South India & Long Distance Routes Database
         const POPULAR_ROUTES = [
             { from: 'Chennai', to: 'Cochin', distance: '680 km', sedan: '₹10,600', suv: '₹14,100' },
             { from: 'Cochin', to: 'Chennai', distance: '680 km', sedan: '₹10,600', suv: '₹14,100' },
+            { from: 'Chennai', to: 'Kanyakumari', distance: '700 km', sedan: '₹10,900', suv: '₹14,500' },
+            { from: 'Chennai', to: 'Tirunelveli', distance: '620 km', sedan: '₹9,700', suv: '₹12,900' },
+            { from: 'Chennai', to: 'Tuticorin', distance: '600 km', sedan: '₹9,400', suv: '₹12,500' },
+            { from: 'Chennai', to: 'Rameswaram', distance: '560 km', sedan: '₹8,800', suv: '₹11,700' },
+            { from: 'Chennai', to: 'Ooty', distance: '540 km', sedan: '₹8,500', suv: '₹11,300' },
+            { from: 'Chennai', to: 'Kodaikanal', distance: '520 km', sedan: '₹8,200', suv: '₹10,900' },
             { from: 'Bangalore', to: 'Chennai', distance: '350 km', sedan: '₹5,650', suv: '₹7,500' },
             { from: 'Chennai', to: 'Madurai', distance: '460 km', sedan: '₹7,300', suv: '₹9,700' },
             { from: 'Bangalore', to: 'Coimbatore', distance: '365 km', sedan: '₹5,875', suv: '₹7,800' },
@@ -831,70 +1215,55 @@
             { from: 'Chennai', to: 'Trichy', distance: '330 km', sedan: '₹5,350', suv: '₹7,100' },
             { from: 'Chennai', to: 'Salem', distance: '340 km', sedan: '₹5,500', suv: '₹7,300' },
             { from: 'Coimbatore', to: 'Cochin', distance: '190 km', sedan: '₹3,250', suv: '₹4,300' },
-            { from: 'Bangalore', to: 'Salem', distance: '200 km', sedan: '₹3,400', suv: '₹4,500' },
             { from: 'Chennai', to: 'Pondicherry', distance: '150 km', sedan: '₹2,650', suv: '₹3,500' },
-            { from: 'Chennai', to: 'Kanyakumari', distance: '700 km', sedan: '₹10,900', suv: '₹14,500' },
-            { from: 'Chennai', to: 'Tirunelveli', distance: '620 km', sedan: '₹9,700', suv: '₹12,900' },
-            { from: 'Chennai', to: 'Thoothukudi (Tuticorin)', distance: '600 km', sedan: '₹9,400', suv: '₹12,500' },
-            { from: 'Chennai', to: 'Rameswaram', distance: '560 km', sedan: '₹8,800', suv: '₹11,700' },
-            { from: 'Chennai', to: 'Ooty (Udhagamandalam)', distance: '540 km', sedan: '₹8,500', suv: '₹11,300' },
-            { from: 'Chennai', to: 'Kodaikanal', distance: '520 km', sedan: '₹8,200', suv: '₹10,900' },
-            { from: 'Chennai', to: 'Nagercoil', distance: '680 km', sedan: '₹10,600', suv: '₹14,100' },
             { from: 'Bangalore', to: 'Kanyakumari', distance: '670 km', sedan: '₹10,450', suv: '₹13,900' },
-            { from: 'Bangalore', to: 'Tirunelveli', distance: '580 km', sedan: '₹9,100', suv: '₹12,100' },
-            { from: 'Bangalore', to: 'Trichy', distance: '380 km', sedan: '₹6,100', suv: '₹8,100' },
-            { from: 'Bangalore', to: 'Pondicherry', distance: '310 km', sedan: '₹5,050', suv: '₹6,700' },
-            { from: 'Coimbatore', to: 'Rameswaram', distance: '380 km', sedan: '₹6,100', suv: '₹8,100' },
-            { from: 'Coimbatore', to: 'Kanyakumari', distance: '440 km', sedan: '₹7,000', suv: '₹9,300' },
-            { from: 'Trichy', to: 'Kanyakumari', distance: '385 km', sedan: '₹6,175', suv: '₹8,200' },
-            { from: 'Madurai', to: 'Kanyakumari', distance: '245 km', sedan: '₹4,075', suv: '₹5,400' },
-            { from: 'Salem', to: 'Cochin', distance: '360 km', sedan: '₹5,800', suv: '₹7,700' },
-            { from: 'Madurai', to: 'Ooty', distance: '280 km', sedan: '₹4,600', suv: '₹6,100' },
-            { from: 'Pondicherry', to: 'Madurai', distance: '330 km', sedan: '₹5,350', suv: '₹7,100' }
+            { from: 'Chennai', to: 'Vellore', distance: '140 km', sedan: '₹2,500', suv: '₹3,300' },
+            { from: 'Chennai', to: 'Thanjavur', distance: '330 km', sedan: '₹5,350', suv: '₹7,100' },
+            { from: 'Madurai', to: 'Coimbatore', distance: '220 km', sedan: '₹3,700', suv: '₹4,900' }
         ];
 
-        let gMapInstance = null;
-        let directionsService = null;
-        let directionsRenderer = null;
-        let distanceMatrixService = null;
-        let currentCalculatedKm = 680;
-        let currentCalculatedHours = "11.5";
+        // Known City Coordinates for Haversine Fallback Engine
+        const CITY_COORDS = {
+            'chennai': { lat: 13.0827, lng: 80.2707 },
+            'cochin': { lat: 9.9312, lng: 76.2673 },
+            'kochi': { lat: 9.9312, lng: 76.2673 },
+            'bangalore': { lat: 12.9716, lng: 77.5946 },
+            'bengaluru': { lat: 12.9716, lng: 77.5946 },
+            'coimbatore': { lat: 11.0168, lng: 76.9558 },
+            'madurai': { lat: 9.9252, lng: 78.1198 },
+            'trichy': { lat: 10.7905, lng: 78.7047 },
+            'salem': { lat: 11.6643, lng: 78.1460 },
+            'tirunelveli': { lat: 8.7139, lng: 77.7567 },
+            'vellore': { lat: 12.9165, lng: 79.1325 },
+            'pondicherry': { lat: 11.9416, lng: 79.8083 },
+            'kanyakumari': { lat: 8.0883, lng: 77.5385 },
+            'tuticorin': { lat: 8.7642, lng: 78.1348 },
+            'rameswaram': { lat: 9.2876, lng: 79.3129 },
+            'ooty': { lat: 11.4102, lng: 76.6950 },
+            'kodaikanal': { lat: 10.2381, lng: 77.4892 }
+        };
 
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-message');
-            const toastIcon = document.getElementById('toast-icon');
+        let googleMap = null;
+        let googleDirectionsService = null;
+        let googleDirectionsRenderer = null;
+        let currentCalculatedDistance = 680;
 
-            if (!toast || !toastMsg) return;
-
-            toastMsg.textContent = message;
-            if (type === 'error') {
-                toastIcon.className = "fa-solid fa-circle-exclamation text-rose-400 text-base";
-            } else if (type === 'success') {
-                toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-base";
-            } else {
-                toastIcon.className = "fa-solid fa-circle-info text-amber-400 text-base";
-            }
-
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3500);
-        }
-
+        // Navigation Page Tab Switcher
         function navigateTo(pageId) {
             document.querySelectorAll('.page-view').forEach(page => page.classList.remove('active'));
-            const target = document.getElementById('page-' + pageId);
-            if (target) target.classList.add('active');
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) targetPage.classList.add('active');
 
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('bg-amber-100', 'text-amber-800'));
             const activeNav = document.getElementById('nav-' + pageId);
             if (activeNav) activeNav.classList.add('bg-amber-100', 'text-amber-800');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            if (pageId === 'booking') {
-                setTimeout(initGoogleMap, 200);
+            if (pageId === 'booking' && googleMap) {
+                setTimeout(() => {
+                    google.maps.event.trigger(googleMap, 'resize');
+                    calculateGoogleRoute();
+                }, 200);
             }
         }
 
@@ -902,115 +1271,278 @@
             document.getElementById('mobile-menu').classList.toggle('hidden');
         }
 
-        function initGoogleMap() {
-            const mapContainer = document.getElementById('gmap');
-            if (!mapContainer) return;
-
+        // Google Maps Initialization Callback
+        function initGoogleMapsApi() {
             try {
-                if (!gMapInstance && window.google && window.google.maps) {
-                    gMapInstance = new google.maps.Map(mapContainer, {
-                        center: { lat: 10.8505, lng: 78.7047 },
-                        zoom: 7,
-                        mapTypeControl: false,
-                        streetViewControl: false
-                    });
+                const mapContainer = document.getElementById('gmap');
+                if (!mapContainer) return;
 
-                    directionsService = new google.maps.DirectionsService();
-                    directionsRenderer = new google.maps.DirectionsRenderer({
-                        map: gMapInstance,
-                        polylineOptions: { strokeColor: '#d97706', strokeWeight: 5 }
-                    });
-                    distanceMatrixService = new google.maps.DistanceMatrixService();
+                const defaultCenter = { lat: 11.5, lng: 78.5 }; // South India
+                googleMap = new google.maps.Map(mapContainer, {
+                    zoom: 7,
+                    center: defaultCenter,
+                    mapTypeControl: false,
+                    streetViewControl: false
+                });
 
-                    const pickupInput = document.getElementById('g-pickup');
-                    const dropInput = document.getElementById('g-drop');
-                    const heroPickup = document.getElementById('hero-pickup');
-                    const heroDrop = document.getElementById('hero-drop');
+                googleDirectionsService = new google.maps.DirectionsService();
+                googleDirectionsRenderer = new google.maps.DirectionsRenderer({
+                    map: googleMap,
+                    polylineOptions: { strokeColor: '#d97706', strokeWeight: 5 }
+                });
 
-                    if (pickupInput) new google.maps.places.Autocomplete(pickupInput);
-                    if (dropInput) new google.maps.places.Autocomplete(dropInput);
-                    if (heroPickup) new google.maps.places.Autocomplete(heroPickup);
-                    if (heroDrop) new google.maps.places.Autocomplete(heroDrop);
+                // Attach Places Autocomplete
+                const pickupInput = document.getElementById('g-pickup');
+                const dropInput = document.getElementById('g-drop');
+                const heroPickup = document.getElementById('hero-pickup');
+                const heroDrop = document.getElementById('hero-drop');
 
-                    calculateGoogleRoute();
-                } else if (gMapInstance) {
-                    google.maps.event.trigger(gMapInstance, 'resize');
+                if (pickupInput) {
+                    const ac1 = new google.maps.places.Autocomplete(pickupInput);
+                    ac1.addListener('place_changed', () => calculateGoogleRoute());
                 }
-            } catch (e) {
-                console.warn("Google Maps SDK load fallback", e);
+                if (dropInput) {
+                    const ac2 = new google.maps.places.Autocomplete(dropInput);
+                    ac2.addListener('place_changed', () => calculateGoogleRoute());
+                }
+                if (heroPickup) {
+                    const ac3 = new google.maps.places.Autocomplete(heroPickup);
+                    ac3.addListener('place_changed', () => calculateHeroFare());
+                }
+                if (heroDrop) {
+                    const ac4 = new google.maps.places.Autocomplete(heroDrop);
+                    ac4.addListener('place_changed', () => calculateHeroFare());
+                }
+
+                // Initial Route Calculation
+                calculateGoogleRoute();
+                calculateHeroFare();
+            } catch(e) {
+                console.warn("Google Maps init fallback:", e);
+                calculateHeroFare();
             }
         }
 
+        // Calculate Distance via Google Maps Directions Service with Haversine Fallback
         function calculateGoogleRoute() {
-            const pickup = document.getElementById('g-pickup').value.trim();
-            const drop = document.getElementById('g-drop').value.trim();
-            const badge = document.getElementById('map-status-badge');
+            const pickup = document.getElementById('g-pickup')?.value.trim() || 'Chennai';
+            const drop = document.getElementById('g-drop')?.value.trim() || 'Cochin';
+            const carType = document.getElementById('g-cartype')?.value || 'Sedan';
+            const badge = document.getElementById('route-status-badge');
 
-            if (!pickup || !drop) {
-                showToast("Please enter both Pickup and Drop locations", "error");
-                return;
-            }
+            if (badge) badge.textContent = 'Calculating Route...';
 
-            if (badge) badge.textContent = "Calculating Google Route...";
-
-            if (window.google && window.google.maps && directionsService) {
-                directionsService.route({
+            if (googleDirectionsService && googleDirectionsRenderer) {
+                googleDirectionsService.route({
                     origin: pickup,
                     destination: drop,
                     travelMode: google.maps.TravelMode.DRIVING
-                }, function (response, status) {
-                    if (status === 'OK') {
-                        directionsRenderer.setDirections(response);
-                        const route = response.routes[0].legs[0];
-                        const distKm = Math.round(route.distance.value / 1000);
-                        const durationText = route.duration.text;
+                }, (response, status) => {
+                    if (status === 'OK' && response.routes[0]?.legs[0]) {
+                        googleDirectionsRenderer.setDirections(response);
+                        const leg = response.routes[0].legs[0];
+                        const distKm = Math.round(leg.distance.value / 1000);
+                        const durText = leg.duration.text;
+                        currentCalculatedDistance = distKm;
 
-                        currentCalculatedKm = distKm;
-                        currentCalculatedHours = durationText;
-
-                        updateResultsUI(distKm, durationText);
-                        if (badge) badge.textContent = `${distKm} Km (${durationText})`;
+                        updateCalculatorUI(distKm, durText, carType);
+                        if (badge) badge.textContent = `${distKm} Km (${durText})`;
                     } else {
-                        fallbackEstimate(pickup, drop);
+                        fallbackDistanceCalculation(pickup, drop, carType);
                     }
                 });
             } else {
-                fallbackEstimate(pickup, drop);
+                fallbackDistanceCalculation(pickup, drop, carType);
             }
         }
 
-        function fallbackEstimate(pickup, drop) {
-            const badge = document.getElementById('map-status-badge');
-            const estimatedKm = 350;
-            currentCalculatedKm = estimatedKm;
-            currentCalculatedHours = "6.5 hrs";
+        // Haversine / Matrix Fallback Calculator Engine
+        function fallbackDistanceCalculation(pickup, drop, carType) {
+            const pClean = pickup.toLowerCase();
+            const dClean = drop.toLowerCase();
+            let km = 350;
 
-            updateResultsUI(estimatedKm, "6.5 hrs");
-            if (badge) badge.textContent = `~${estimatedKm} Km (Est.)`;
+            if (CITY_COORDS[pClean] && CITY_COORDS[dClean]) {
+                const c1 = CITY_COORDS[pClean];
+                const c2 = CITY_COORDS[dClean];
+                const R = 6371;
+                const dLat = (c2.lat - c1.lat) * Math.PI / 180;
+                const dLon = (c2.lng - c1.lng) * Math.PI / 180;
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                          Math.cos(c1.lat * Math.PI / 180) * Math.cos(c2.lat * Math.PI / 180) *
+                          Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                km = Math.round(R * c * 1.35); // 1.35 driving curvature factor
+            }
+
+            currentCalculatedDistance = km;
+            const hours = Math.round(km / 55);
+            updateCalculatorUI(km, `~${hours} hours`, carType);
+            const badge = document.getElementById('route-status-badge');
+            if (badge) badge.textContent = `~${km} Km (Est.)`;
         }
 
-        function updateResultsUI(km, duration) {
-            const carType = document.getElementById('g-cartype').value;
+        function updateCalculatorUI(distKm, durText, carType) {
             const rate = CAR_RATES[carType] || 15;
-            const driverBeta = CAR_DRIVER_BETA[carType] || 400;
+            const beta = CAR_DRIVER_ALLOWANCE[carType] || 400;
+            const billableKm = Math.max(distKm, 130);
+            const baseKmFare = billableKm * rate;
+            const totalFare = baseKmFare + beta;
 
-            const name = document.getElementById('g-name').value.trim();
-            const phone = document.getElementById('g-phone').value.trim();
+            const name = document.getElementById('g-name')?.value.trim() || '-';
+            const phone = document.getElementById('g-phone')?.value.trim() || '-';
 
-            const billableKm = Math.max(km, 130);
-            const baseFare = billableKm * rate;
-            const totalFare = baseFare + driverBeta;
-
-            document.getElementById('res-name').textContent = name ? name : "(Enter name above)";
-            document.getElementById('res-phone').textContent = phone ? phone : "(Enter mobile above)";
-            document.getElementById('res-km').textContent = `${km} Km`;
-            document.getElementById('res-time').textContent = duration;
-            document.getElementById('res-base').textContent = `₹${baseFare.toLocaleString('en-IN')} (${billableKm} km × ₹${rate})`;
-            document.getElementById('res-beta').textContent = `+ ₹${driverBeta}`;
-            document.getElementById('res-total').textContent = `₹${totalFare.toLocaleString('en-IN')}`;
+            document.getElementById('res-cust-name').textContent = name;
+            document.getElementById('res-cust-phone').textContent = phone;
+            document.getElementById('res-distance').textContent = `~${distKm} Km`;
+            document.getElementById('res-duration').textContent = durText;
+            document.getElementById('res-vehicle-info').textContent = `${carType} @ ₹${rate}/km`;
+            document.getElementById('res-base-fare').textContent = `₹${baseKmFare.toLocaleString('en-IN')} (${billableKm} km × ₹${rate})`;
+            document.getElementById('res-driver-allowance').textContent = `+ ₹${beta.toLocaleString('en-IN')}`;
+            document.getElementById('res-fare').textContent = `₹${totalFare.toLocaleString('en-IN')}`;
         }
 
-        function setMapLocations(pickup, drop) {
+        function calculateHeroFare() {
+            const pickup = document.getElementById('hero-pickup')?.value.trim() || 'Chennai';
+            const drop = document.getElementById('hero-drop')?.value.trim() || 'Cochin';
+            const carType = document.getElementById('hero-cartype')?.value || 'Sedan';
+            
+            const pClean = pickup.toLowerCase();
+            const dClean = drop.toLowerCase();
+            let km = 680;
+
+            if (CITY_COORDS[pClean] && CITY_COORDS[dClean]) {
+                const c1 = CITY_COORDS[pClean];
+                const c2 = CITY_COORDS[dClean];
+                const R = 6371;
+                const dLat = (c2.lat - c1.lat) * Math.PI / 180;
+                const dLon = (c2.lng - c1.lng) * Math.PI / 180;
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                          Math.cos(c1.lat * Math.PI / 180) * Math.cos(c2.lat * Math.PI / 180) *
+                          Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                km = Math.round(R * c * 1.35);
+            }
+
+            const rate = CAR_RATES[carType] || 15;
+            const beta = CAR_DRIVER_ALLOWANCE[carType] || 400;
+            const billableKm = Math.max(km, 130);
+            const total = (billableKm * rate) + beta;
+
+            document.getElementById('hero-res-distance').textContent = `~${km} Km`;
+            document.getElementById('hero-res-beta').textContent = `₹${beta}`;
+            document.getElementById('hero-res-total').textContent = `₹${total.toLocaleString('en-IN')}`;
+        }
+
+        // Unified Dual Dispatcher (Automated Telegram API + EmailJS Service)
+        async function dispatchCombinedTelegramAndEmail() {
+            const name = document.getElementById('g-name')?.value.trim() || document.getElementById('hero-name')?.value.trim();
+            const phone = document.getElementById('g-phone')?.value.trim() || document.getElementById('hero-phone')?.value.trim();
+            const pickup = document.getElementById('g-pickup')?.value.trim() || document.getElementById('hero-pickup')?.value.trim();
+            const drop = document.getElementById('g-drop')?.value.trim() || document.getElementById('hero-drop')?.value.trim();
+            const carType = document.getElementById('g-cartype')?.value || document.getElementById('hero-cartype')?.value || 'Sedan';
+            const date = document.getElementById('g-date')?.value || document.getElementById('hero-date')?.value || 'Today';
+            const time = document.getElementById('g-time')?.value || document.getElementById('hero-time')?.value || 'Asap';
+
+            if (!name) {
+                alert('Please enter your Customer Name.');
+                return;
+            }
+            if (!phone || phone.length < 10) {
+                alert('Please enter a valid 10-digit Mobile Number.');
+                return;
+            }
+
+            const rate = CAR_RATES[carType] || 15;
+            const beta = CAR_DRIVER_ALLOWANCE[carType] || 400;
+            const billableKm = Math.max(currentCalculatedDistance, 130);
+            const baseFare = billableKm * rate;
+            const totalFare = baseFare + beta;
+
+            // 1. Dispatch to Telegram Bot API
+            const telegramMsg = `🚕 *NEW NG DROP TAXI ENQUIRY*%0A%0A` +
+                `👤 *Customer:* ${encodeURIComponent(name)}%0A` +
+                `📞 *Mobile:* ${encodeURIComponent(phone)}%0A` +
+                `📍 *Pickup:* ${encodeURIComponent(pickup)}%0A` +
+                `🎯 *Drop:* ${encodeURIComponent(drop)}%0A` +
+                `🚗 *Vehicle:* ${encodeURIComponent(carType)} (₹${rate}/km)%0A` +
+                `📏 *Est. Distance:* ${currentCalculatedDistance} Km%0A` +
+                `💰 *Est. Total Fare:* ₹${totalFare.toLocaleString('en-IN')} (Incl. ₹${beta} Beta)%0A` +
+                `📅 *Date & Time:* ${date} at ${time}`;
+
+            const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage?chat_id=${TELEGRAM_CONFIG.chatId}&text=${telegramMsg}&parse_mode=Markdown`;
+
+            fetch(telegramUrl).catch(err => console.warn("Telegram dispatch log:", err));
+
+            // 2. Dispatch via EmailJS Service
+            if (window.emailjs && EMAILJS_CONFIG.serviceId) {
+                const emailParams = {
+                    from_name: name,
+                    customer_phone: phone,
+                    pickup_location: pickup,
+                    drop_location: drop,
+                    vehicle_type: carType,
+                    distance_km: currentCalculatedDistance,
+                    total_fare: `₹${totalFare}`,
+                    travel_date: date,
+                    pickup_time: time,
+                    message: `Booking request from ${name} (${phone}) for ${pickup} to ${drop}.`
+                };
+
+                emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, emailParams)
+                    .then(() => showToast("Enquiry sent via Telegram & EmailJS!"))
+                    .catch(() => {
+                        window.location.href = `mailto:ngdroptaxi@gmail.com?subject=Taxi Booking Request - ${name}&body=Name: ${name}%0APhone: ${phone}%0APickup: ${pickup}%0ADrop: ${drop}%0AVehicle: ${carType}%0ADistance: ${currentCalculatedDistance}km%0ATotal Fare: ₹${totalFare}`;
+                        showToast("Enquiry sent automatically!");
+                    });
+            } else {
+                showToast("Enquiry dispatched to Telegram & Email!");
+            }
+        }
+
+        function handleHeroFormSubmit(e) {
+            e.preventDefault();
+            const heroName = document.getElementById('hero-name').value;
+            const heroPhone = document.getElementById('hero-phone').value;
+            const heroPickup = document.getElementById('hero-pickup').value;
+            const heroDrop = document.getElementById('hero-drop').value;
+            const heroCar = document.getElementById('hero-cartype').value;
+            const heroDate = document.getElementById('hero-date').value;
+            const heroTime = document.getElementById('hero-time').value;
+
+            document.getElementById('g-name').value = heroName;
+            document.getElementById('g-phone').value = heroPhone;
+            document.getElementById('g-pickup').value = heroPickup;
+            document.getElementById('g-drop').value = heroDrop;
+            document.getElementById('g-cartype').value = heroCar;
+            document.getElementById('g-date').value = heroDate;
+            document.getElementById('g-time').value = heroTime;
+
+            dispatchCombinedTelegramAndEmail();
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('contact-name').value;
+            const phone = document.getElementById('contact-phone').value;
+            const email = document.getElementById('contact-email').value;
+            const type = document.getElementById('contact-type').value;
+            const msg = document.getElementById('contact-msg').value;
+
+            const telegramMsg = `📩 *NEW CONTACT INQUIRY*%0A%0A` +
+                `👤 *Name:* ${encodeURIComponent(name)}%0A` +
+                `📞 *Phone:* ${encodeURIComponent(phone)}%0A` +
+                `✉️ *Email:* ${encodeURIComponent(email || 'N/A')}%0A` +
+                `🏷️ *Type:* ${encodeURIComponent(type)}%0A` +
+                `💬 *Message:* ${encodeURIComponent(msg)}`;
+
+            fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage?chat_id=${TELEGRAM_CONFIG.chatId}&text=${telegramMsg}&parse_mode=Markdown`);
+
+            showToast("Message sent to Operations Team!");
+            e.target.reset();
+        }
+
+        function setGoogleLocations(pickup, drop) {
             document.getElementById('g-pickup').value = pickup;
             document.getElementById('g-drop').value = drop;
             navigateTo('booking');
@@ -1023,244 +1555,19 @@
             setTimeout(calculateGoogleRoute, 300);
         }
 
-        function transferHeroToCalculator() {
-            const heroNameEl = document.getElementById('hero-name');
-            const heroPhoneEl = document.getElementById('hero-phone');
-            const heroPickupEl = document.getElementById('hero-pickup');
-            const heroDropEl = document.getElementById('hero-drop');
-            const heroCarTypeEl = document.getElementById('hero-cartype');
-            const heroDateEl = document.getElementById('hero-date');
-            const heroTimeEl = document.getElementById('hero-time');
-
-            const hn = heroNameEl ? heroNameEl.value.trim() : '';
-            const hph = heroPhoneEl ? heroPhoneEl.value.trim() : '';
-            const hp = heroPickupEl ? heroPickupEl.value.trim() : '';
-            const hd = heroDropEl ? heroDropEl.value.trim() : '';
-            const hc = heroCarTypeEl ? heroCarTypeEl.value : 'Sedan';
-            const hdt = heroDateEl ? heroDateEl.value : '';
-            const ht = heroTimeEl ? heroTimeEl.value : '08:00';
-
-            if (hn) document.getElementById('g-name').value = hn;
-            if (hph) document.getElementById('g-phone').value = hph;
-            if (hp) document.getElementById('g-pickup').value = hp;
-            if (hd) document.getElementById('g-drop').value = hd;
-            if (hc) document.getElementById('g-cartype').value = hc;
-            if (hdt) document.getElementById('g-date').value = hdt;
-            if (ht) document.getElementById('g-time').value = ht;
-
-            navigateTo('booking');
-            setTimeout(calculateGoogleRoute, 300);
-        }
-
-        async function dispatchTelegramBooking() {
-            const name = document.getElementById('g-name').value.trim();
-            const phone = document.getElementById('g-phone').value.trim();
-            const pickup = document.getElementById('g-pickup').value.trim();
-            const drop = document.getElementById('g-drop').value.trim();
-            const carType = document.getElementById('g-cartype').value;
-            const date = document.getElementById('g-date').value;
-            const time = document.getElementById('g-time') ? document.getElementById('g-time').value : '08:00';
-
-            if (!name) {
-                showToast("Please enter Customer Name", "error");
-                document.getElementById('g-name').focus();
-                return;
-            }
-            if (!phone || phone.length < 10) {
-                showToast("Please enter a valid 10-digit Mobile Number", "error");
-                document.getElementById('g-phone').focus();
-                return;
-            }
-
-            const rate = CAR_RATES[carType] || 15;
-            const driverBeta = CAR_DRIVER_BETA[carType] || 400;
-            const billableKm = Math.max(currentCalculatedKm, 130);
-            const totalFare = (billableKm * rate) + driverBeta;
-
-            const messageText = `🚕 *NEW TAXI BOOKING INQUIRY - NG DROP TAXI*\n\n` +
-                `👤 *Customer Name:* ${name}\n` +
-                `📞 *Mobile Number:* ${phone}\n` +
-                `📍 *Pickup:* ${pickup}\n` +
-                `🎯 *Drop:* ${drop}\n` +
-                `🚗 *Vehicle:* ${carType} (₹${rate}/km)\n` +
-                `📏 *Google Distance:* ${currentCalculatedKm} Km\n` +
-                `💰 *Est. Total Fare:* ₹${totalFare.toLocaleString('en-IN')}\n` +
-                `📅 *Travel Date:* ${date || 'Today'}\n` +
-                `⏰ *Pickup Time:* ${time || 'Asap'}`;
-
-            showToast("Sending booking to Telegram Bot...", "info");
-
-            try {
-                const url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: TELEGRAM_CONFIG.chatId,
-                        text: messageText,
-                        parse_mode: 'Markdown'
-                    })
-                });
-
-                const resData = await response.json();
-                if (resData.ok) {
-                    showToast("Booking inquiry sent to Telegram Bot!", "success");
-                } else {
-                    console.error("Telegram API Error:", resData);
-                    showToast("Telegram API error, opening chat fallback...", "error");
-                    window.open(`https://t.me/ngdroptaxi?text=${encodeURIComponent(messageText)}`, '_blank');
-                }
-            } catch (err) {
-                console.error("Telegram Dispatch Error:", err);
-                showToast("Opening Telegram chat channel...", "info");
-                window.open(`https://t.me/ngdroptaxi?text=${encodeURIComponent(messageText)}`, '_blank');
-            }
-        }
-
-        async function dispatchEmailBooking() {
-            const name = document.getElementById('g-name').value.trim();
-            const phone = document.getElementById('g-phone').value.trim();
-            const pickup = document.getElementById('g-pickup').value.trim();
-            const drop = document.getElementById('g-drop').value.trim();
-            const carType = document.getElementById('g-cartype').value;
-            const date = document.getElementById('g-date').value;
-            const time = document.getElementById('g-time') ? document.getElementById('g-time').value : '';
-
-            if (!name) {
-                showToast("Please enter Customer Name", "error");
-                document.getElementById('g-name').focus();
-                return;
-            }
-            if (!phone || phone.length < 10) {
-                showToast("Please enter a valid 10-digit Mobile Number", "error");
-                document.getElementById('g-phone').focus();
-                return;
-            }
-
-            const rate = CAR_RATES[carType] || 15;
-            const driverBeta = CAR_DRIVER_BETA[carType] || 400;
-            const billableKm = Math.max(currentCalculatedKm, 130);
-            const totalFare = (billableKm * rate) + driverBeta;
-
-            const templateParams = {
-                to_email: "ngdroptaxi@gmail.com",
-                from_name: name,
-                customer_phone: phone,
-                pickup_location: pickup,
-                drop_location: drop,
-                vehicle_type: carType,
-                travel_date: date || 'Today',
-                pickup_time: time || 'Asap',
-                estimated_distance: `${currentCalculatedKm} km`,
-                estimated_fare: `₹${totalFare.toLocaleString('en-IN')}`,
-                message: `New taxi booking inquiry for ${carType} from ${pickup} to ${drop}.`
-            };
-
-            if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceId) {
-                showToast("Sending booking inquiry via EmailJS...", "info");
-                try {
-                    await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, templateParams);
-                    showToast("Email inquiry sent successfully to NG Drop Taxi!", "success");
-                } catch (error) {
-                    console.error("EmailJS error:", error);
-                    showToast("EmailJS failed, switching to default mail client...", "error");
-                    fallbackMailto(name, phone, pickup, drop, carType, date, time);
-                }
-            } else {
-                fallbackMailto(name, phone, pickup, drop, carType, date, time);
-            }
-        }
-
-        function fallbackMailto(name, phone, pickup, drop, carType, date, time) {
-            const subject = encodeURIComponent("Taxi Inquiry - NG Drop Taxi");
-            const body = encodeURIComponent(
-                `Customer Name: ${name}\n` +
-                `Mobile: ${phone}\n` +
-                `Pickup Location: ${pickup}\n` +
-                `Drop Location: ${drop}\n` +
-                `Vehicle Category: ${carType}\n` +
-                `Travel Date: ${date}\n` +
-                `Pickup Time: ${time}\n` +
-                `Distance: ${currentCalculatedKm} km`
-            );
-            window.location.href = `mailto:ngdroptaxi@gmail.com?subject=${subject}&body=${body}`;
-        }
-
-        async function handleContactSubmit(e) {
-            e.preventDefault();
-            const name = document.getElementById('contact-name').value.trim();
-            const phone = document.getElementById('contact-phone').value.trim();
-            const email = document.getElementById('contact-email').value.trim();
-            const channel = document.getElementById('contact-channel').value;
-            const message = document.getElementById('contact-msg').value.trim();
-
-            if (channel === 'Telegram') {
-                const messageText = `📩 *CONTACT INQUIRY - NG DROP TAXI*\n\n` +
-                    `👤 *Name:* ${name}\n` +
-                    `📞 *Phone:* ${phone}\n` +
-                    `💬 *Details:* ${message}`;
-
-                showToast("Sending message to Telegram Bot...", "info");
-                try {
-                    const url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            chat_id: TELEGRAM_CONFIG.chatId,
-                            text: messageText,
-                            parse_mode: 'Markdown'
-                        })
-                    });
-                    const resData = await response.json();
-                    if (resData.ok) {
-                        showToast("Message sent to Telegram Bot!", "success");
-                        e.target.reset();
-                    } else {
-                        window.open(`https://t.me/ngdroptaxi?text=${encodeURIComponent(messageText)}`, '_blank');
-                    }
-                } catch (err) {
-                    window.open(`https://t.me/ngdroptaxi?text=${encodeURIComponent(messageText)}`, '_blank');
-                }
-            } else {
-                const templateParams = {
-                    to_email: "ngdroptaxi@gmail.com",
-                    from_name: name,
-                    customer_phone: phone,
-                    customer_email: email || "Not provided",
-                    message: message
-                };
-
-                if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceId) {
-                    showToast("Sending contact message via EmailJS...", "info");
-                    try {
-                        await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, templateParams);
-                        showToast("Message sent successfully!", "success");
-                        e.target.reset();
-                    } catch (error) {
-                        console.error("EmailJS error:", error);
-                        showToast("Opening default mail client...", "error");
-                        window.location.href = `mailto:ngdroptaxi@gmail.com?subject=${encodeURIComponent('Inquiry from Website')}&body=${encodeURIComponent('Name: ' + name + '\nPhone: ' + phone + '\nEmail: ' + email + '\nMessage: ' + message)}`;
-                    }
-                } else {
-                    window.location.href = `mailto:ngdroptaxi@gmail.com?subject=${encodeURIComponent('Inquiry from Website')}&body=${encodeURIComponent('Name: ' + name + '\nPhone: ' + phone + '\nEmail: ' + email + '\nMessage: ' + message)}`;
-                }
-            }
-        }
-
-        function renderRoutesTable(routes) {
-            const tableBody = document.getElementById('popular-routes-tbody');
-            if (!tableBody) return;
-            const list = routes || POPULAR_ROUTES;
-            tableBody.innerHTML = list.map(route => `
-                <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                    <td class="p-4 font-bold text-slate-900">${route.from} <i class="fa-solid fa-arrow-right text-xs text-slate-400 mx-1"></i> ${route.to}</td>
-                    <td class="p-4 text-slate-600">${route.distance}</td>
-                    <td class="p-4 text-amber-600 font-extrabold">${route.sedan}</td>
-                    <td class="p-4 text-emerald-600 font-extrabold">${route.suv}</td>
-                    <td class="p-4 text-right">
-                        <button onclick="setMapLocations('${route.from}', '${route.to}')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">
-                            Book Ride
+        function renderRoutesTable(list) {
+            const tbody = document.getElementById('popular-routes-tbody');
+            if (!tbody) return;
+            const data = list || POPULAR_ROUTES;
+            tbody.innerHTML = data.map(r => `
+                <tr class="hover:bg-slate-50 border-b border-slate-100 transition">
+                    <td class="px-4 py-3 font-semibold text-slate-800">${r.from} ➔ ${r.to}</td>
+                    <td class="px-4 py-3 text-slate-600">${r.distance}</td>
+                    <td class="px-4 py-3 text-amber-600 font-bold">${r.sedan}</td>
+                    <td class="px-4 py-3 text-emerald-600 font-bold">${r.suv}</td>
+                    <td class="px-4 py-3 text-right">
+                        <button onclick="setGoogleLocations('${r.from}', '${r.to}')" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg text-xs font-bold transition">
+                            Book Route
                         </button>
                     </td>
                 </tr>
@@ -1268,23 +1575,65 @@
         }
 
         function filterPopularRoutes() {
-            const queryInput = document.getElementById('route-search');
-            if (!queryInput) return;
-            const query = queryInput.value.toLowerCase();
-            const filtered = POPULAR_ROUTES.filter(r => 
-                r.from.toLowerCase().includes(query) || r.to.toLowerCase().includes(query)
-            );
+            const q = document.getElementById('route-search').value.toLowerCase();
+            const filtered = POPULAR_ROUTES.filter(r => r.from.toLowerCase().includes(q) || r.to.toLowerCase().includes(q));
             renderRoutesTable(filtered);
         }
 
-        window.onload = function() {
-            renderRoutesTable(POPULAR_ROUTES);
+        // Policy Modal Controller
+        function openPolicyModal(type) {
+            const modal = document.getElementById('policy-modal');
+            const title = document.getElementById('policy-modal-title');
+            const body = document.getElementById('policy-modal-body');
+
+            if (type === 'privacy') {
+                title.textContent = 'Privacy Policy';
+                body.innerHTML = `<p>NG Drop Taxi respects your privacy. We collect customer names, phone numbers, and travel locations strictly to coordinate outstation cab rides. Your information is never sold or shared with third-party advertisers.</p>`;
+            } else if (type === 'refund') {
+                title.textContent = 'Refund & Cancellation Policy';
+                body.innerHTML = `<p>Free cancellation is available up to 2 hours before the scheduled pickup time. In case of prepaid advances, full refunds are processed back to the original source within 3-5 business days.</p>`;
+            } else if (type === 'data') {
+                title.textContent = 'Data Protection Policy';
+                body.innerHTML = `<p>All booking transmissions via EmailJS and Telegram API are encrypted in transit. Customer phone numbers and addresses are stored securely in operational dispatch systems with restricted employee access.</p>`;
+            } else if (type === 'terms') {
+                title.textContent = 'Terms & Conditions';
+                body.innerHTML = `<p>1. Minimum billable distance per trip is 130 km.<br>2. Driver Beta allowance (₹400/₹500/₹600) is charged per calendar day.<br>3. Toll gate fees, parking, and state entry permit charges extra at actuals.</p>`;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closePolicyModal() {
+            document.getElementById('policy-modal').classList.add('hidden');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            if (toast && toastMsg) {
+                toastMsg.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3500);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
-            const heroDate = document.getElementById('hero-date');
-            const gDate = document.getElementById('g-date');
-            if (heroDate) heroDate.value = today;
-            if (gDate) gDate.value = today;
-        };
+            if (document.getElementById('g-date')) document.getElementById('g-date').value = today;
+            if (document.getElementById('hero-date')) document.getElementById('hero-date').value = today;
+
+            renderRoutesTable(POPULAR_ROUTES);
+
+            ['hero-pickup', 'hero-drop', 'hero-cartype'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', calculateHeroFare);
+            });
+
+            ['g-pickup', 'g-drop', 'g-cartype', 'g-name', 'g-phone'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', calculateGoogleRoute);
+            });
+        });
     </script>
 </body>
 </html>
