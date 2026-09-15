@@ -22,7 +22,7 @@
       gtag('config', 'AW-18453006158');
     </script>
 
-    <!-- Tailwind CSS CDN (Deferred non-blocking load) -->
+    <!-- Tailwind CSS CDN -->
     <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
     <script src="https://cdn.tailwindcss.com" defer></script>
 
@@ -33,7 +33,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     
-    <!-- EmailJS Browser SDK (Deferred non-blocking load) -->
+    <!-- EmailJS Browser SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
     
     <!-- Google Maps API with Async Load -->
@@ -124,12 +124,12 @@
         </div>
     </div>
 
-    <!-- Header Navigation -->
+    <!-- Header Navigation with Separate Links -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Brand Logo -->
-                <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')" title="NG Drop Taxi Home">
+                <a href="/" onclick="event.preventDefault(); navigateTo('home');" class="flex items-center gap-3 cursor-pointer" title="NG Drop Taxi Home">
                     <div class="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center text-slate-900 shadow-md font-black text-xl border-2 border-amber-400">
                         NG
                     </div>
@@ -137,28 +137,28 @@
                         <span class="text-2xl font-black text-slate-900 tracking-tight block leading-none">NG DROP TAXI</span>
                         <span class="text-[11px] font-bold text-amber-600 tracking-widest uppercase block mt-0.5">South India One Way Cabs</span>
                     </div>
-                </div>
+                </a>
 
-                <!-- Desktop Navigation Links -->
+                <!-- Desktop Navigation Links with Separate URLs -->
                 <nav class="hidden lg:flex items-center space-x-1">
-                    <button onclick="navigateTo('home')" id="nav-home" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50 bg-amber-100 text-amber-800">
+                    <a href="/" onclick="event.preventDefault(); navigateTo('home');" id="nav-home" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50 bg-amber-100 text-amber-800">
                         <i class="fa-solid fa-house mr-1 text-xs"></i> Home
-                    </button>
-                    <button onclick="navigateTo('about')" id="nav-about" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
+                    </a>
+                    <a href="/about" onclick="event.preventDefault(); navigateTo('about');" id="nav-about" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
                         <i class="fa-solid fa-circle-info mr-1 text-xs"></i> About Us
-                    </button>
-                    <button onclick="navigateTo('services')" id="nav-services" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
+                    </a>
+                    <a href="/services" onclick="event.preventDefault(); navigateTo('services');" id="nav-services" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
                         <i class="fa-solid fa-map-pin mr-1 text-xs"></i> Operations & Services
-                    </button>
-                    <button onclick="navigateTo('routes')" id="nav-routes" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
+                    </a>
+                    <a href="/routes" onclick="event.preventDefault(); navigateTo('routes');" id="nav-routes" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
                         <i class="fa-solid fa-route mr-1 text-xs"></i> Tariff Matrix
-                    </button>
-                    <button onclick="navigateTo('booking')" id="nav-booking" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
+                    </a>
+                    <a href="/booking" onclick="event.preventDefault(); navigateTo('booking');" id="nav-booking" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
                         <i class="fa-solid fa-calculator mr-1 text-xs"></i> Fare Calculator
-                    </button>
-                    <button onclick="navigateTo('contact')" id="nav-contact" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
+                    </a>
+                    <a href="/contact" onclick="event.preventDefault(); navigateTo('contact');" id="nav-contact" class="nav-btn px-3.5 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
                         <i class="fa-solid fa-address-book mr-1 text-xs"></i> Contact
-                    </button>
+                    </a>
                 </nav>
 
                 <!-- Action Button & Mobile Menu Toggle -->
@@ -175,32 +175,32 @@
             </div>
         </div>
 
-        <!-- Mobile Navigation Menu -->
+        <!-- Mobile Navigation Menu Links -->
         <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2 shadow-lg">
-            <button onclick="navigateTo('home'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
+            <a href="/" onclick="event.preventDefault(); navigateTo('home'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
                 <span><i class="fa-solid fa-house w-6 text-amber-500"></i> Home</span>
                 <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-            <button onclick="navigateTo('about'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
+            </a>
+            <a href="/about" onclick="event.preventDefault(); navigateTo('about'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
                 <span><i class="fa-solid fa-circle-info w-6 text-amber-500"></i> About Us</span>
                 <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-            <button onclick="navigateTo('services'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
+            </a>
+            <a href="/services" onclick="event.preventDefault(); navigateTo('services'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
                 <span><i class="fa-solid fa-map-pin w-6 text-amber-500"></i> Operations & Services (38 Districts)</span>
                 <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-            <button onclick="navigateTo('routes'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
+            </a>
+            <a href="/routes" onclick="event.preventDefault(); navigateTo('routes'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
                 <span><i class="fa-solid fa-route w-6 text-amber-500"></i> Tariff Matrix</span>
                 <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-            <button onclick="navigateTo('booking'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
+            </a>
+            <a href="/booking" onclick="event.preventDefault(); navigateTo('booking'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
                 <span><i class="fa-solid fa-calculator w-6 text-amber-500"></i> Fare Calculator & Booking</span>
                 <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-            <button onclick="navigateTo('contact'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
+            </a>
+            <a href="/contact" onclick="event.preventDefault(); navigateTo('contact'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
                 <span><i class="fa-solid fa-address-book w-6 text-amber-500"></i> Contact Us</span>
                 <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
+            </a>
             <div class="pt-2">
                 <a href="tel:8122268687" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
                     <i class="fa-solid fa-phone"></i> Call Now: 8122268687
@@ -373,9 +373,9 @@
                             <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Top Intercity Linkages</span>
                             <h2 class="text-3xl font-black text-slate-900 tracking-tight mt-1">Popular Drop Taxi Routes Across Tamil Nadu</h2>
                         </div>
-                        <button onclick="navigateTo('routes')" class="mt-4 md:mt-0 text-amber-600 font-bold hover:text-amber-700 flex items-center gap-1.5 text-sm" title="View Complete Tariff Matrix">
+                        <a href="/routes" onclick="event.preventDefault(); navigateTo('routes');" class="mt-4 md:mt-0 text-amber-600 font-bold hover:text-amber-700 flex items-center gap-1.5 text-sm" title="View Complete Tariff Matrix">
                             View All 38 Districts & Tariff Matrix <i class="fa-solid fa-arrow-right"></i>
-                        </button>
+                        </a>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -667,7 +667,7 @@
                                 <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                                     <i class="fa-solid fa-map-location-dot text-amber-500"></i> Live Route Map Preview
                                 </span>
-                                <span id="route-status-badge" class="text-[11px] bg-slate-100 text-slate-600 font-bold px-2.5 py-0.5 rounded-full">Enter Locations Below</span>
+                                <span id="route-status-badge-bk" class="text-[11px] bg-slate-100 text-slate-600 font-bold px-2.5 py-0.5 rounded-full">Enter Locations Below</span>
                             </div>
                             <div id="gmap-booking" class="gmap-canvas w-full rounded-xl overflow-hidden border border-slate-200"></div>
                         </div>
@@ -741,43 +741,43 @@
                             </div>
                         </div>
 
-                        <button onclick="calculateGoogleRoute()" id="calc-btn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
+                        <button onclick="calculateGoogleRoute()" id="calc-btn-bk" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
                             <i class="fa-solid fa-route"></i> Calculate Route & Distance
                         </button>
 
                         <!-- Calculation Result Box -->
-                        <div id="result-box" class="bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-2">
+                        <div id="result-box-bk" class="bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-2">
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-slate-600">Customer Name:</span>
-                                <span id="res-cust-name" class="font-bold text-slate-900">-</span>
+                                <span id="res-cust-name-bk" class="font-bold text-slate-900">-</span>
                             </div>
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-slate-600">Contact Number:</span>
-                                <span id="res-cust-phone" class="font-bold text-slate-900">-</span>
+                                <span id="res-cust-phone-bk" class="font-bold text-slate-900">-</span>
                             </div>
                             <div class="flex justify-between items-center text-sm border-t border-amber-200/60 pt-2">
                                 <span class="text-slate-600">Driving Distance:</span>
-                                <span id="res-distance" class="font-extrabold text-slate-900">0 Km</span>
+                                <span id="res-distance-bk" class="font-extrabold text-slate-900">0 Km</span>
                             </div>
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-slate-600">Est. Travel Duration:</span>
-                                <span id="res-duration" class="font-bold text-slate-800">-</span>
+                                <span id="res-duration-bk" class="font-bold text-slate-800">-</span>
                             </div>
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-slate-600">Vehicle Selected:</span>
-                                <span id="res-vehicle-info" class="font-bold text-slate-800">Sedan @ ₹15/km</span>
+                                <span id="res-vehicle-info-bk" class="font-bold text-slate-800">Sedan @ ₹15/km</span>
                             </div>
                             <div class="flex justify-between items-center text-xs text-slate-600 border-t border-amber-200/60 pt-2">
                                 <span>Base Distance Fare:</span>
-                                <span id="res-base-fare" class="font-semibold text-slate-800">₹0 (0 km × ₹15)</span>
+                                <span id="res-base-fare-bk" class="font-semibold text-slate-800">₹0 (0 km × ₹15)</span>
                             </div>
                             <div class="flex justify-between items-center text-xs text-slate-600">
                                 <span class="flex items-center gap-1"><i class="fa-solid fa-user-gear text-amber-600"></i> Driver Allowance (Beta):</span>
-                                <span id="res-driver-allowance" class="font-bold text-amber-800">₹400</span>
+                                <span id="res-driver-allowance-bk" class="font-bold text-amber-800">₹400</span>
                             </div>
                             <div class="flex justify-between items-center text-base pt-2 border-t border-amber-300">
                                 <span class="font-bold text-slate-900">Total Estimated Fare:</span>
-                                <span id="res-fare" class="font-black text-2xl text-emerald-600">₹400</span>
+                                <span id="res-fare-bk" class="font-black text-2xl text-emerald-600">₹400</span>
                             </div>
                             <div class="text-[11px] text-slate-500 italic">* Includes Driver Allowance (₹400). Minimum billable distance 130 km. Tolls extra.</div>
                         </div>
@@ -942,11 +942,11 @@
                 <div>
                     <h4 class="text-white font-bold text-sm mb-3">Quick Drop Taxi Links</h4>
                     <ul class="space-y-2">
-                        <li><button onclick="navigateTo('home')" class="hover:text-amber-400 transition">Home Page</button></li>
-                        <li><button onclick="navigateTo('about')" class="hover:text-amber-400 transition">About Drop Taxi</button></li>
-                        <li><button onclick="navigateTo('services')" class="hover:text-amber-400 transition">38 Districts Operations</button></li>
-                        <li><button onclick="navigateTo('routes')" class="hover:text-amber-400 transition">Tariff & Rate Matrix</button></li>
-                        <li><button onclick="navigateTo('contact')" class="hover:text-amber-400 transition">Contact Helpline</button></li>
+                        <li><a href="/" onclick="event.preventDefault(); navigateTo('home');" class="hover:text-amber-400 transition">Home Page</a></li>
+                        <li><a href="/about" onclick="event.preventDefault(); navigateTo('about');" class="hover:text-amber-400 transition">About Drop Taxi</a></li>
+                        <li><a href="/services" onclick="event.preventDefault(); navigateTo('services');" class="hover:text-amber-400 transition">38 Districts Operations</a></li>
+                        <li><a href="/routes" onclick="event.preventDefault(); navigateTo('routes');" class="hover:text-amber-400 transition">Tariff & Rate Matrix</a></li>
+                        <li><a href="/contact" onclick="event.preventDefault(); navigateTo('contact');" class="hover:text-amber-400 transition">Contact Helpline</a></li>
                     </ul>
                 </div>
 
@@ -984,7 +984,7 @@
         <span id="toast-msg">Booking Confirmed Successfully!</span>
     </div>
 
-    <!-- JAVASCRIPT LOGIC & RECONFIGURED GMAPS API ENGINE -->
+    <!-- JAVASCRIPT ROUTING & GMAPS API ENGINE -->
     <script>
         const TELEGRAM_CONFIG = {
             botToken: "8664276631:AAEZW18E8aFFDoDLR1SefHN-zxYzEdMSzCo",
@@ -1113,7 +1113,17 @@
         let googleDirectionsRenderer = null;
         let currentCalculatedDistance = 150;
 
-        function navigateTo(pageId) {
+        // HTML5 PushState Router Handler
+        const PAGE_URLS = {
+            'home': '/',
+            'about': '/about',
+            'services': '/services',
+            'routes': '/routes',
+            'booking': '/booking',
+            'contact': '/contact'
+        };
+
+        function navigateTo(pageId, pushHistory = true) {
             document.querySelectorAll('.page-view').forEach(page => page.classList.remove('active'));
             const targetPage = document.getElementById('page-' + pageId);
             if (targetPage) targetPage.classList.add('active');
@@ -1122,6 +1132,10 @@
             const activeNav = document.getElementById('nav-' + pageId);
             if (activeNav) activeNav.classList.add('bg-amber-100', 'text-amber-800');
 
+            if (pushHistory && PAGE_URLS[pageId]) {
+                history.pushState({ page: pageId }, '', PAGE_URLS[pageId]);
+            }
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
             if (googleMap) {
                 setTimeout(() => {
@@ -1129,6 +1143,19 @@
                 }, 200);
             }
         }
+
+        // Listen to browser back/forward buttons
+        window.addEventListener('popstate', (event) => {
+            const path = window.location.pathname;
+            let foundPage = 'home';
+            for (const [pageId, url] of Object.entries(PAGE_URLS)) {
+                if (path === url || path === url + '/') {
+                    foundPage = pageId;
+                    break;
+                }
+            }
+            navigateTo(foundPage, false);
+        });
 
         function toggleMobileMenu() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
@@ -1198,7 +1225,7 @@
             const pickup = document.getElementById('g-pickup')?.value.trim() || document.getElementById('g-pickup-bk')?.value.trim() || '';
             const drop = document.getElementById('g-drop')?.value.trim() || document.getElementById('g-drop-bk')?.value.trim() || '';
             const carType = document.getElementById('g-cartype')?.value || document.getElementById('g-cartype-bk')?.value || 'Sedan';
-            const badge = document.getElementById('route-status-badge-home') || document.getElementById('route-status-badge');
+            const badge = document.getElementById('route-status-badge-home') || document.getElementById('route-status-badge-bk');
 
             if (!pickup || !drop) {
                 if (badge) badge.textContent = 'Enter Locations Below';
@@ -1258,14 +1285,23 @@
             const name = document.getElementById('g-name')?.value.trim() || document.getElementById('g-name-bk')?.value.trim() || '-';
             const phone = document.getElementById('g-phone')?.value.trim() || document.getElementById('g-phone-bk')?.value.trim() || '-';
 
-            document.querySelectorAll('#res-cust-name').forEach(el => el.textContent = name);
-            document.querySelectorAll('#res-cust-phone').forEach(el => el.textContent = phone);
-            document.querySelectorAll('#res-distance').forEach(el => el.textContent = `~${distKm} Km`);
-            document.querySelectorAll('#res-duration').forEach(el => el.textContent = durText);
-            document.querySelectorAll('#res-vehicle-info').forEach(el => el.textContent = `${carType} @ ₹${rate}/km`);
-            document.querySelectorAll('#res-base-fare').forEach(el => el.textContent = `₹${baseKmFare.toLocaleString('en-IN')} (${billableKm} km × ₹${rate})`);
-            document.querySelectorAll('#res-driver-allowance').forEach(el => el.textContent = distKm > 0 ? `+ ₹${beta.toLocaleString('en-IN')}` : `₹0`);
-            document.querySelectorAll('#res-fare').forEach(el => el.textContent = `₹${totalFare.toLocaleString('en-IN')}`);
+            // Sync inputs across homepage and booking page
+            const p1 = document.getElementById('g-pickup'); const p2 = document.getElementById('g-pickup-bk');
+            if (p1 && p2 && p1.value !== p2.value) { p2.value = p1.value; }
+            if (p1 && p2 && p2.value !== p1.value) { p1.value = p2.value; }
+
+            const d1 = document.getElementById('g-drop'); const d2 = document.getElementById('g-drop-bk');
+            if (d1 && d2 && d1.value !== d2.value) { d2.value = d1.value; }
+            if (d1 && d2 && d2.value !== d1.value) { d1.value = d2.value; }
+
+            document.querySelectorAll('#res-cust-name, #res-cust-name-bk').forEach(el => el.textContent = name);
+            document.querySelectorAll('#res-cust-phone, #res-cust-phone-bk').forEach(el => el.textContent = phone);
+            document.querySelectorAll('#res-distance, #res-distance-bk').forEach(el => el.textContent = `~${distKm} Km`);
+            document.querySelectorAll('#res-duration, #res-duration-bk').forEach(el => el.textContent = durText);
+            document.querySelectorAll('#res-vehicle-info, #res-vehicle-info-bk').forEach(el => el.textContent = `${carType} @ ₹${rate}/km`);
+            document.querySelectorAll('#res-base-fare, #res-base-fare-bk').forEach(el => el.textContent = `₹${baseKmFare.toLocaleString('en-IN')} (${billableKm} km × ₹${rate})`);
+            document.querySelectorAll('#res-driver-allowance, #res-driver-allowance-bk').forEach(el => el.textContent = distKm > 0 ? `+ ₹${beta.toLocaleString('en-IN')}` : `₹0`);
+            document.querySelectorAll('#res-fare, #res-fare-bk').forEach(el => el.textContent = `₹${totalFare.toLocaleString('en-IN')}`);
         }
 
         function dispatchCombinedTelegramAndEmail() {
@@ -1319,7 +1355,7 @@
             const dEl = document.getElementById('g-drop') || document.getElementById('g-drop-bk');
             if (pEl) pEl.value = pickup;
             if (dEl) dEl.value = drop;
-            navigateTo('home');
+            navigateTo('booking');
             calculateGoogleRoute();
         }
 
@@ -1327,14 +1363,14 @@
             const cleanCity = cityName.replace(" Drop Taxi", "").trim();
             const pEl = document.getElementById('g-pickup') || document.getElementById('g-pickup-bk');
             if (pEl) pEl.value = cleanCity;
-            navigateTo('home');
+            navigateTo('booking');
             showToast(`Selected pickup: ${cleanCity}. Enter drop location.`);
         }
 
         function selectCarAndBook(carType) {
             const cEl = document.getElementById('g-cartype') || document.getElementById('g-cartype-bk');
             if (cEl) cEl.value = carType;
-            navigateTo('home');
+            navigateTo('booking');
             calculateGoogleRoute();
         }
 
@@ -1424,6 +1460,17 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderDistrictsGrid();
             renderRoutesTable();
+
+            // Initial URL routing check on page load
+            const path = window.location.pathname;
+            let initialPage = 'home';
+            for (const [pageId, url] of Object.entries(PAGE_URLS)) {
+                if (path === url || path === url + '/') {
+                    initialPage = pageId;
+                    break;
+                }
+            }
+            navigateTo(initialPage, false);
 
             ['g-pickup', 'g-drop', 'g-cartype', 'g-pickup-bk', 'g-drop-bk', 'g-cartype-bk'].forEach(id => {
                 const el = document.getElementById(id);
