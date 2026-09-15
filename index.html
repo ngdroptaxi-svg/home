@@ -11,19 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Leaflet CSS & JS for OSRM Map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- EmailJS SDK -->
+    
+    <!-- EmailJS Browser SDK Integration -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script type="text/javascript">
-        (function() {
-            emailjs.init({
-                publicKey: "TKrDiKsVRHG_-n98d",
-            });
-        })();
-    </script>
-
+    
     <script>
         tailwind.config = {
             theme: {
@@ -41,11 +32,6 @@
                             700: '#b45309',
                             800: '#92400e',
                             900: '#78350f',
-                        },
-                        dark: {
-                            800: '#1e293b',
-                            900: '#0f172a',
-                            950: '#020617'
                         }
                     }
                 }
@@ -59,9 +45,28 @@
         .page-view.active {
             display: block;
         }
-        #leaflet-map {
-            min-height: 380px;
+        #gmap {
+            min-height: 420px;
+            width: 100%;
+            border-radius: 1rem;
             z-index: 10;
+        }
+        .pac-container {
+            z-index: 99999 !important;
+            border-radius: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            padding: 4px;
+        }
+        .toast-notification {
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
         }
     </style>
 </head>
@@ -75,18 +80,18 @@
                     <i class="fa-solid fa-phone text-amber-400"></i>
                     <span class="font-bold text-white">8122268687</span>
                 </a>
-                <span class="text-sky-400 flex items-center gap-1.5">
-                    <i class="fa-brands fa-telegram"></i>
-                    <span>Telegram & Email Automation Active</span>
-                </span>
+                <a href="https://wa.me/918122268687" target="_blank" class="hover:text-emerald-400 flex items-center gap-1.5 transition">
+                    <i class="fa-brands fa-whatsapp text-emerald-400"></i>
+                    <span>Chat on WhatsApp</span>
+                </a>
                 <a href="mailto:ngdroptaxi@gmail.com" class="hover:text-amber-400 flex items-center gap-1.5 transition hidden md:flex">
                     <i class="fa-solid fa-envelope text-amber-400"></i>
                     <span>ngdroptaxi@gmail.com</span>
                 </a>
             </div>
             <div class="flex items-center gap-3">
-                <span class="text-slate-400 hidden lg:inline"><i class="fa-solid fa-location-dot text-amber-400 mr-1"></i> 5/45B, Pillaiyar Koil Street, Medavakkam, Chennai - 600100</span>
                 <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full">24/7 Service</span>
+                <span class="hidden lg:inline text-slate-400">No Return Charges for One-Way Rides!</span>
             </div>
         </div>
     </div>
@@ -95,25 +100,27 @@
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
+                <!-- Brand Logo -->
                 <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
                     <div class="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center text-slate-900 shadow-md font-black text-xl border-2 border-amber-400">
                         NG
                     </div>
                     <div>
                         <span class="text-2xl font-black text-slate-900 tracking-tight block leading-none">NG DROP TAXI</span>
-                        <span class="text-[11px] font-bold text-amber-600 tracking-widest uppercase block mt-0.5">Tamil Nadu One Way Cabs</span>
+                        <span class="text-[11px] font-bold text-amber-600 tracking-widest uppercase block mt-0.5">South India One Way Cabs</span>
                     </div>
                 </div>
 
+                <!-- Desktop Navigation Links -->
                 <nav class="hidden lg:flex items-center space-x-1">
-                    <button onclick="navigateTo('home')" id="nav-home" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
+                    <button onclick="navigateTo('home')" id="nav-home" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50 bg-amber-100 text-amber-800">
                         <i class="fa-solid fa-house mr-1.5 text-xs"></i> Home
                     </button>
                     <button onclick="navigateTo('about')" id="nav-about" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
                         <i class="fa-solid fa-circle-info mr-1.5 text-xs"></i> About Us
                     </button>
                     <button onclick="navigateTo('routes')" id="nav-routes" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
-                        <i class="fa-solid fa-route mr-1.5 text-xs"></i> All TN Routes & Tariff
+                        <i class="fa-solid fa-route mr-1.5 text-xs"></i> Routes & Tariff
                     </button>
                     <button onclick="navigateTo('booking')" id="nav-booking" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition text-slate-700 hover:text-amber-600 hover:bg-amber-50">
                         <i class="fa-solid fa-calculator mr-1.5 text-xs"></i> Fare Calculator
@@ -123,11 +130,13 @@
                     </button>
                 </nav>
 
+                <!-- Action Button & Mobile Menu Toggle -->
                 <div class="flex items-center gap-3">
                     <a href="tel:8122268687" class="hidden sm:flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold px-4 py-2.5 rounded-xl shadow-md transition transform active:scale-95 text-sm">
                         <i class="fa-solid fa-phone-volume"></i>
                         <span>Call 8122268687</span>
                     </a>
+                    
                     <button onclick="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 focus:outline-none">
                         <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
                     </button>
@@ -146,7 +155,7 @@
                 <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
             </button>
             <button onclick="navigateTo('routes'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
-                <span><i class="fa-solid fa-route w-6 text-amber-500"></i> All TN Routes & Tariff</span>
+                <span><i class="fa-solid fa-route w-6 text-amber-500"></i> Routes & Tariff</span>
                 <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
             </button>
             <button onclick="navigateTo('booking'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-600 flex items-center justify-between">
@@ -157,105 +166,127 @@
                 <span><i class="fa-solid fa-address-book w-6 text-amber-500"></i> Contact Us</span>
                 <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
             </button>
+            <div class="pt-2">
+                <a href="tel:8122268687" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-phone"></i> Call Now: 8122268687
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
     <main class="flex-grow">
         
-        <!-- PAGE 1: HOME -->
+        <!-- ================= PAGE 1: HOME ================= -->
         <section id="page-home" class="page-view active">
-            <div class="relative bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950 text-white overflow-hidden py-12 lg:py-16">
+            <!-- Hero Section with Google Maps Integration Banner -->
+            <div class="relative bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950 text-white overflow-hidden py-12 lg:py-20">
                 <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:16px_16px]"></div>
                 
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
                         
-                        <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
-                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-500/20 border border-sky-500/30 text-sky-400 text-xs font-bold uppercase tracking-wider">
-                                <i class="fa-brands fa-telegram"></i> Telegram Bot & Email Auto Dispatch Active
+                        <!-- Hero Left Text -->
+                        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
+                                <i class="fa-solid fa-map-location-dot"></i> Powered by Google Maps Automatic KM Calculation
                             </div>
-                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-                                Tamil Nadu's Premier <span class="text-amber-400 underline decoration-amber-500/50">One-Way Drop Taxi</span>
+                            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                                Pay Only For <span class="text-amber-400 underline decoration-amber-500/50">One Way</span>. <br class="hidden sm:inline">No Return Fare!
                             </h1>
-                            <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 font-normal">
-                                Access over 1,000+ inter-district and point-to-point drop taxi routes covering all 38 districts across Tamil Nadu. Includes ₹500 fixed driver allowance and instant Telegram/Email dispatches.
+                            <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal">
+                                Premium Intercity Cabs for Tamil Nadu, Bangalore, Cochin & all South India cities. Clean, sanitized vehicles, polite highway drivers, and 100% transparent per-KM pricing.
                             </p>
 
-                            <div class="grid grid-cols-3 gap-3 pt-2 text-left">
+                            <!-- Pricing Badges -->
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-left">
                                 <div class="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                                    <div class="text-amber-400 font-extrabold text-base sm:text-lg">₹15/km</div>
-                                    <div class="text-[11px] text-slate-300 font-medium">Starting Sedan Rate</div>
+                                    <div class="text-amber-400 font-extrabold text-lg sm:text-xl">₹15/km</div>
+                                    <div class="text-xs text-slate-300 font-medium">Sedan Rate</div>
                                 </div>
                                 <div class="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                                    <div class="text-amber-400 font-extrabold text-base sm:text-lg">₹500 Bata</div>
-                                    <div class="text-[11px] text-slate-300 font-medium">Driver Allowance</div>
+                                    <div class="text-amber-400 font-extrabold text-lg sm:text-xl">₹400 / day</div>
+                                    <div class="text-xs text-slate-300 font-medium">Driver Beta</div>
                                 </div>
-                                <div class="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                                    <div class="text-amber-400 font-extrabold text-base sm:text-lg">1,000+ Routes</div>
-                                    <div class="text-[11px] text-slate-300 font-medium">Complete TN Coverage</div>
+                                <div class="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm col-span-2 sm:col-span-1">
+                                    <div class="text-amber-400 font-extrabold text-lg sm:text-xl">0 Return</div>
+                                    <div class="text-xs text-slate-300 font-medium">No Return Charge</div>
                                 </div>
+                            </div>
+
+                            <!-- Quick Action Buttons -->
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                                <button onclick="navigateTo('booking')" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-7 py-4 rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-3 text-base">
+                                    <i class="fa-solid fa-calculator"></i> Live Google Fare Calculator
+                                </button>
+                                <a href="https://t.me/ngdroptaxi" target="_blank" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-4 rounded-xl shadow-lg transition flex items-center justify-center gap-3 text-base border border-sky-500/40">
+                                    <i class="fa-brands fa-telegram text-xl"></i> Telegram Instant Booking
+                                </a>
                             </div>
                         </div>
 
-                        <!-- Hero Booking Widget with OSRM, Telegram & EmailJS -->
-                        <div class="lg:col-span-6">
+                        <!-- Hero Feature Hero Box -->
+                        <div class="lg:col-span-5">
                             <div class="bg-white rounded-3xl p-6 sm:p-8 text-slate-800 shadow-2xl border border-slate-100">
                                 <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
                                     <div>
-                                        <h3 class="text-xl font-extrabold text-slate-950">Instant Fare Calculator</h3>
-                                        <p class="text-xs text-slate-500">Auto KM computation with ₹500 driver allowance</p>
+                                        <h3 class="text-xl font-extrabold text-slate-900">Instant Outstation Cab Booking</h3>
+                                        <p class="text-xs text-slate-500 mt-0.5">Google Maps Distance & Fare Calculation</p>
                                     </div>
-                                    <span class="bg-sky-100 text-sky-800 font-bold text-xs px-2.5 py-1 rounded-full"><i class="fa-brands fa-telegram"></i> Bot Active</span>
+                                    <span class="bg-amber-100 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-full">24x7 Active</span>
                                 </div>
 
-                                <div class="space-y-3">
+                                <div class="space-y-3.5">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Customer Name *</label>
+                                            <input type="text" id="hero-name" placeholder="Full Name" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Mobile Number *</label>
+                                            <input type="tel" id="hero-phone" placeholder="10-digit Mobile" pattern="[0-9]{10}" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Pickup Location / City *</label>
+                                        <div class="relative">
+                                            <i class="fa-solid fa-circle-dot text-emerald-500 absolute left-3.5 top-3.5 text-xs"></i>
+                                            <input type="text" id="hero-pickup" value="Chennai, Tamil Nadu, India" placeholder="Pickup location..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Drop Location / City *</label>
+                                        <div class="relative">
+                                            <i class="fa-solid fa-location-dot text-rose-500 absolute left-3.5 top-3.5 text-xs"></i>
+                                            <input type="text" id="hero-drop" value="Cochin, Kerala, India" placeholder="Drop location..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Vehicle Category *</label>
+                                        <select id="hero-cartype" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-semibold">
+                                            <option value="Sedan">Sedan (₹15/km)</option>
+                                            <option value="Etios">Etios (₹16/km)</option>
+                                            <option value="SUV">SUV (₹20/km)</option>
+                                            <option value="Innova">Innova (₹21/km)</option>
+                                            <option value="Crysta">Innova Crysta (₹25/km)</option>
+                                        </select>
+                                    </div>
+
                                     <div class="grid grid-cols-2 gap-3">
                                         <div>
-                                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Customer Name *</label>
-                                            <input type="text" id="hero-name" placeholder="Full Name" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Travel Date *</label>
+                                            <input type="date" id="hero-date" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium">
                                         </div>
                                         <div>
-                                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Mobile Number *</label>
-                                            <input type="tel" id="hero-phone" placeholder="10-digit Mobile" pattern="[0-9]{10}" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Pickup Time *</label>
+                                            <input type="time" id="hero-time" value="08:00" class="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-semibold">
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup District / City *</label>
-                                        <input type="text" id="hero-pickup" value="Chennai" placeholder="e.g. Chennai, Coimbatore, Madurai" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Drop District / City *</label>
-                                        <input type="text" id="hero-drop" value="Coimbatore" placeholder="e.g. Salem, Trichy, Tirunelveli" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                                    </div>
-
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <div>
-                                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Vehicle Category</label>
-                                            <select id="hero-cartype" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                                                <option value="Sedan">Sedan (₹15/km)</option>
-                                                <option value="Etios">Etios (₹16/km)</option>
-                                                <option value="SUV">SUV (₹20/km)</option>
-                                                <option value="Innova">Innova (₹21/km)</option>
-                                                <option value="Crysta">Crysta (₹25/km)</option>
-                                                <option value="Tempo Traveller">Tempo Traveller (₹32/km)</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup Date</label>
-                                            <input type="date" id="hero-date" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup Time *</label>
-                                        <input type="time" id="hero-time" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                                    </div>
-
-                                    <button onclick="handleHeroBooking()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-extrabold py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm">
-                                        <i class="fa-brands fa-telegram text-lg"></i> Confirm Booking via Telegram Bot
+                                    <button onclick="transferHeroToCalculator()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-3.5 rounded-xl transition shadow-md flex items-center justify-center gap-2 text-sm">
+                                        <i class="fa-solid fa-calculator"></i> Calculate Driving KM & Book Ride
                                     </button>
                                 </div>
                             </div>
@@ -265,55 +296,54 @@
                 </div>
             </div>
 
-            <!-- Homepage Popular Routes Grid -->
-            <div class="py-16 bg-white border-b border-slate-200">
+            <div class="py-16 bg-slate-50 border-t border-b border-slate-200">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center max-w-3xl mx-auto mb-10">
-                        <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Top Tamil Nadu Commutes</span>
-                        <h2 class="text-3xl font-black text-slate-900 tracking-tight mt-1">Popular One-Way Drop Taxi Routes</h2>
-                        <p class="text-slate-600 text-sm mt-2">Click any route for automatic OSRM map distance calculation & Telegram booking.</p>
+                        <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Top South India Commutes</span>
+                        <h2 class="text-3xl font-black text-slate-900 tracking-tight mt-1">Popular One-Way Cab Routes</h2>
+                        <p class="text-slate-600 text-sm mt-2">Click any route below to auto-load Google Maps distance calculation & booking details.</p>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <div onclick="setOsrmLocations('Chennai', 'Coimbatore')" class="bg-slate-50 border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
+                        <div onclick="setMapLocations('Chennai', 'Cochin')" class="bg-white border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
                             <div class="flex justify-between items-center mb-3">
-                                <span class="bg-amber-500/20 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-lg">Top TN Route</span>
-                                <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~510 Km</span>
+                                <span class="bg-amber-500/20 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-lg">Interstate Express</span>
+                                <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~680 Km</span>
                             </div>
                             <h3 class="text-lg font-black text-slate-900 group-hover:text-amber-600 transition flex items-center gap-2">
-                                Chennai <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Coimbatore
+                                Chennai <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Cochin (Kochi)
                             </h3>
-                            <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-200/80 text-xs">
-                                <span class="text-slate-600 font-medium">Sedan Fare (Incl. ₹500 Bata):</span>
-                                <span class="font-extrabold text-emerald-600 text-sm">₹8,150</span>
+                            <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-100 text-xs">
+                                <span class="text-slate-600 font-medium">Sedan Fare (Incl. Driver Beta):</span>
+                                <span class="font-extrabold text-emerald-600 text-sm">₹10,600</span>
                             </div>
                         </div>
 
-                        <div onclick="setOsrmLocations('Chennai', 'Madurai')" class="bg-slate-50 border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
+                        <div onclick="setMapLocations('Cochin', 'Chennai')" class="bg-white border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
                             <div class="flex justify-between items-center mb-3">
-                                <span class="bg-amber-500/20 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-lg">Temple City</span>
-                                <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~460 Km</span>
+                                <span class="bg-amber-500/20 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-lg">Interstate Express</span>
+                                <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~680 Km</span>
                             </div>
                             <h3 class="text-lg font-black text-slate-900 group-hover:text-amber-600 transition flex items-center gap-2">
-                                Chennai <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Madurai
+                                Cochin (Kochi) <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Chennai
                             </h3>
-                            <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-200/80 text-xs">
-                                <span class="text-slate-600 font-medium">Sedan Fare (Incl. ₹500 Bata):</span>
-                                <span class="font-extrabold text-emerald-600 text-sm">₹7,400</span>
+                            <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-100 text-xs">
+                                <span class="text-slate-600 font-medium">Sedan Fare (Incl. Driver Beta):</span>
+                                <span class="font-extrabold text-emerald-600 text-sm">₹10,600</span>
                             </div>
                         </div>
 
-                        <div onclick="setOsrmLocations('Chennai', 'Trichy')" class="bg-slate-50 border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
+                        <div onclick="setMapLocations('Bangalore', 'Chennai')" class="bg-white border border-slate-200 hover:border-amber-400 p-5 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer group">
                             <div class="flex justify-between items-center mb-3">
-                                <span class="bg-amber-500/20 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-lg">Central Hub</span>
-                                <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~330 Km</span>
+                                <span class="bg-amber-500/20 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-lg">High Frequency</span>
+                                <span class="text-xs text-slate-500 font-bold"><i class="fa-solid fa-road text-amber-500"></i> ~350 Km</span>
                             </div>
                             <h3 class="text-lg font-black text-slate-900 group-hover:text-amber-600 transition flex items-center gap-2">
-                                Chennai <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Trichy
+                                Bangalore <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i> Chennai
                             </h3>
-                            <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-200/80 text-xs">
-                                <span class="text-slate-600 font-medium">Sedan Fare (Incl. ₹500 Bata):</span>
-                                <span class="font-extrabold text-emerald-600 text-sm">₹5,450</span>
+                            <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-100 text-xs">
+                                <span class="text-slate-600 font-medium">Sedan Fare (Incl. Driver Beta):</span>
+                                <span class="font-extrabold text-emerald-600 text-sm">₹5,650</span>
                             </div>
                         </div>
                     </div>
@@ -321,187 +351,362 @@
             </div>
         </section>
 
-        <!-- PAGE 2: ABOUT US -->
+        <!-- ================= PAGE 2: ABOUT US ================= -->
         <section id="page-about" class="page-view py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">About NG Drop Taxi</span>
-                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">Tamil Nadu's Trusted Intercity Cab Service</h1>
-                    <p class="text-slate-600 mt-3 text-base">Headquartered at Medavakkam, Chennai, we provide transparent, hassle-free one-way and round-trip taxi services across all 38 districts and 1,000+ point-to-point connections in Tamil Nadu, Bangalore, Cochin, and Pondicherry.</p>
+                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">South India's Trusted Intercity Cab Service</h1>
+                    <p class="text-slate-600 mt-3 text-base">Dedicated to providing transparent, hassle-free, one-way and round-trip taxi services across Tamil Nadu, Karnataka (Bangalore), Kerala (Cochin), and Andhra Pradesh.</p>
                 </div>
             </div>
         </section>
 
-        <!-- PAGE 3: ROUTES & TARIFF -->
+        <!-- ================= PAGE 3: POPULAR ROUTES & TARIFF ================= -->
         <section id="page-routes" class="page-view py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12">
-                    <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Complete 38-District Coverage</span>
-                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">1,000+ Tamil Nadu One-Way Drop Taxi Routes Matrix</h1>
-                    <p class="text-slate-600 mt-2 text-sm">Showing the complete generated cross-district route database across all 38 districts of Tamil Nadu (includes ₹500 Driver Allowance).</p>
+                    <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Transparent Rates</span>
+                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">Detailed Vehicle Per-KM Pricing Matrix</h1>
+                    <p class="text-slate-600 mt-2 text-sm sm:text-base">All-inclusive transparent rates across Tamil Nadu, Bangalore, and Cochin routes.</p>
                 </div>
 
-                <div class="mb-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <input type="text" id="route-search" onkeyup="filterTamilNaduRoutes()" placeholder="Search any district or city (e.g. Madurai, Ariyalur, Ooty, Salem)..." class="px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm w-full sm:w-96 focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-sm">
-                    <span id="route-count-label" class="text-xs text-slate-500 font-bold">Loading 1,000+ routes...</span>
+                <!-- Complete Tariff Rate Matrix Table -->
+                <div class="mb-16">
+                    <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-900 text-white text-xs uppercase tracking-wider">
+                                    <th class="p-4">Vehicle Type</th>
+                                    <th class="p-4">Seating Capacity</th>
+                                    <th class="p-4">Per KM Rate</th>
+                                    <th class="p-4">Driver Beta / Day</th>
+                                    <th class="p-4">Ideal For</th>
+                                    <th class="p-4 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-sm font-medium">
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="p-4 font-bold text-slate-900">Sedan (Dzire / Etios)</td>
+                                    <td class="p-4 text-slate-600">4 Passengers</td>
+                                    <td class="p-4 text-amber-600 font-extrabold">₹15 / km</td>
+                                    <td class="p-4 text-slate-600">₹400 / day</td>
+                                    <td class="p-4 text-slate-500">Budget One-Way Journeys</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="selectCarAndBook('Sedan')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Sedan</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="p-4 font-bold text-slate-900">Etios (Toyota Etios)</td>
+                                    <td class="p-4 text-slate-600">4 Passengers</td>
+                                    <td class="p-4 text-amber-600 font-extrabold">₹16 / km</td>
+                                    <td class="p-4 text-slate-600">₹400 / day</td>
+                                    <td class="p-4 text-slate-500">Comfortable Outstation Trips</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="selectCarAndBook('Etios')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Etios</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="p-4 font-bold text-slate-900">SUV (Ertiga / Lodgy)</td>
+                                    <td class="p-4 text-slate-600">6 - 7 Passengers</td>
+                                    <td class="p-4 text-amber-600 font-extrabold">₹20 / km</td>
+                                    <td class="p-4 text-slate-600">₹500 / day</td>
+                                    <td class="p-4 text-slate-500">Family Group Travels</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="selectCarAndBook('SUV')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book SUV</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="p-4 font-bold text-slate-900">Innova (Toyota Innova)</td>
+                                    <td class="p-4 text-slate-600">7 Passengers</td>
+                                    <td class="p-4 text-amber-600 font-extrabold">₹21 / km</td>
+                                    <td class="p-4 text-slate-600">₹500 / day</td>
+                                    <td class="p-4 text-slate-500">Long-distance Highway Travel</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="selectCarAndBook('Innova')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Innova</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-amber-50/50 bg-amber-50/20 transition">
+                                    <td class="p-4 font-bold text-slate-900">Innova Crysta</td>
+                                    <td class="p-4 text-slate-600">7 Passengers</td>
+                                    <td class="p-4 text-amber-600 font-extrabold">₹25 / km</td>
+                                    <td class="p-4 text-slate-600">₹600 / day</td>
+                                    <td class="p-4 text-slate-500">Premium Luxury Travel</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="selectCarAndBook('Crysta')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">Book Crysta</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm max-h-[650px]">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-slate-900 text-white text-xs uppercase tracking-wider sticky top-0 z-10">
-                            <tr>
-                                <th class="p-4">Route (From ➔ To)</th>
-                                <th class="p-4">Approx Distance</th>
-                                <th class="p-4">Sedan Fare (Incl. ₹500 Bata)</th>
-                                <th class="p-4">SUV Fare (Incl. ₹500 Bata)</th>
-                                <th class="p-4 text-right">Instant Telegram Booking</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100 text-sm" id="tamilnadu-routes-tbody"></tbody>
-                    </table>
+                <!-- Popular Routes Searchable Table -->
+                <div>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-map-location-dot text-amber-500"></i> Searchable Popular Tamil Nadu & Outstation Routes
+                            </h2>
+                            <p class="text-xs text-slate-500">Includes direct routes: Chennai ⇄ Cochin, Bangalore to anywhere in Tamil Nadu</p>
+                        </div>
+                        <input type="text" id="route-search" onkeyup="filterPopularRoutes()" placeholder="Search route (e.g. Cochin, Madurai)..." class="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs w-full sm:w-72 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+
+                    <div class="overflow-x-auto bg-white rounded-2xl border border-slate-200 shadow-sm">
+                        <table class="w-full text-left border-collapse" id="routes-table">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 text-xs uppercase tracking-wider border-b border-slate-200">
+                                    <th class="p-4">Route (From ➔ To)</th>
+                                    <th class="p-4">Approx Distance</th>
+                                    <th class="p-4">Sedan Fare (₹15/km + Beta)</th>
+                                    <th class="p-4">SUV Fare (₹20/km + Beta)</th>
+                                    <th class="p-4 text-right">Instant Booking</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-sm" id="popular-routes-tbody">
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- PAGE 4: FARE CALCULATOR & BOOKING -->
+        <!-- ================= PAGE 4: FARE CALCULATOR & BOOKING ================= -->
         <section id="page-booking" class="page-view py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
                 <div class="text-center max-w-3xl mx-auto mb-10">
-                    <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Live OSRM Route & Distance Engine</span>
-                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">Automatic OSRM Fare Calculator & Telegram Dispatch</h1>
+                    <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Google Maps Distance Engine</span>
+                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">Automatic Fare Calculator & Booking</h1>
+                    <p class="text-slate-600 mt-2 text-sm sm:text-base">Powered by Google Maps Distance Matrix API. Enter customer details, pickup, and drop location to compute exact driving route distance and fare.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Google Maps Container -->
                     <div class="lg:col-span-7 space-y-4">
                         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
                             <div class="flex items-center justify-between mb-3">
                                 <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                                    <i class="fa-solid fa-map text-amber-500"></i> OpenStreetMap OSRM Live Map
+                                    <i class="fa-solid fa-map-location-dot text-amber-500"></i> Google Driving Route Preview
                                 </span>
-                                <span id="route-status-badge" class="text-[11px] bg-slate-100 text-slate-600 font-bold px-2.5 py-0.5 rounded-full">Select Districts Below</span>
+                                <span id="map-status-badge" class="text-[11px] bg-slate-100 text-slate-600 font-bold px-2.5 py-0.5 rounded-full">Enter Pickup & Drop</span>
                             </div>
-                            <div id="leaflet-map" class="w-full rounded-xl overflow-hidden border border-slate-200"></div>
+                            <div id="gmap"></div>
                         </div>
 
-                        <!-- Bot Verification Dashboard -->
-                        <div class="bg-sky-50 border border-sky-200 rounded-2xl p-4 text-xs text-sky-900 space-y-2">
-                            <div class="flex justify-between items-center">
-                                <p class="font-bold flex items-center gap-1.5 text-sky-950 text-sm">
-                                    <i class="fa-brands fa-telegram text-sky-600 text-base"></i> Telegram Bot & EmailJS Status:
-                                </p>
-                                <button onclick="verifyIntegrations()" id="verify-bot-btn" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-lg shadow-sm transition text-xs">
-                                    Verify Configuration
-                                </button>
-                            </div>
-                            <p id="verify-status-text" class="text-sky-800">Bot Token: <code>8664276631:AAEZW18E8aFFDoDLR1SefHN-zxYzEdMSzCo</code> | Chat ID: <code>8905660087</code> (Ready)</p>
+                        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-900 space-y-1">
+                            <p class="font-bold flex items-center gap-1.5 text-amber-950">
+                                <i class="fa-solid fa-circle-info text-amber-600"></i> Official Pricing & Driver Beta Rules:
+                            </p>
+                            <p>• Minimum billable distance per trip is <strong>130 kilometers</strong>.</p>
+                            <p>• Driver Beta allowance (₹400 for Sedan/Etios, ₹500 for SUV/Innova, ₹600 Crysta) included in total fare estimate.</p>
                         </div>
                     </div>
 
-                    <!-- Booking Form -->
+                    <!-- Booking & Calculation Controls -->
                     <div class="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
                         <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Trip Booking Details</h3>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Customer Name *</label>
-                                <input type="text" id="osrm-name" placeholder="Full Name" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                <input type="text" id="g-name" placeholder="Full Name" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Mobile Number *</label>
-                                <input type="tel" id="osrm-phone" placeholder="10-digit Mobile" pattern="[0-9]{10}" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                <input type="tel" id="g-phone" placeholder="10-digit Mobile" pattern="[0-9]{10}" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup District / City *</label>
-                            <input type="text" id="osrm-pickup" value="Chennai" placeholder="Type pickup district..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup City / Location *</label>
+                            <input type="text" id="g-pickup" value="Chennai, Tamil Nadu, India" placeholder="Pickup location..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Drop District / City *</label>
-                            <input type="text" id="osrm-drop" value="Coimbatore" placeholder="Type drop district..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Drop City / Location *</label>
+                            <input type="text" id="g-drop" value="Cochin, Kerala, India" placeholder="Drop location..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Vehicle Category</label>
+                            <select id="g-cartype" onchange="calculateGoogleRoute()" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none font-semibold">
+                                <option value="Sedan">Sedan (₹15/km)</option>
+                                <option value="Etios">Etios (₹16/km)</option>
+                                <option value="SUV">SUV (₹20/km)</option>
+                                <option value="Innova">Innova (₹21/km)</option>
+                                <option value="Crysta">Innova Crysta (₹25/km)</option>
+                            </select>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Vehicle Category</label>
-                                <select id="osrm-cartype" onchange="recalculateFare()" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                                    <option value="Sedan">Sedan (₹15/km)</option>
-                                    <option value="Etios">Etios (₹16/km)</option>
-                                    <option value="SUV">SUV (₹20/km)</option>
-                                    <option value="Innova">Innova (₹21/km)</option>
-                                    <option value="Crysta">Crysta (₹25/km)</option>
-                                    <option value="Tempo Traveller">Tempo Traveller (₹32/km)</option>
-                                </select>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup Date *</label>
+                                <input type="date" id="g-date" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup Date</label>
-                                <input type="date" id="osrm-date" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup Time *</label>
+                                <input type="time" id="g-time" value="08:00" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none font-semibold">
                             </div>
                         </div>
 
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup Time *</label>
-                            <input type="time" id="osrm-time" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                        </div>
-
-                        <button onclick="calculateOsrmRoute()" id="calc-btn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-route"></i> Calculate Automatic OSRM Distance
+                        <button onclick="calculateGoogleRoute()" id="g-calc-btn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> Calculate Driving KM & Total Fare
                         </button>
 
-                        <div id="result-box" class="hidden bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-2">
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-slate-600">OSRM Driving Distance:</span>
-                                <span id="res-distance" class="font-extrabold text-slate-900">0 Km</span>
+                        <!-- Calculation Results Summary Box -->
+                        <div id="g-result-box" class="bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-2">
+                            <div class="flex justify-between items-center text-xs text-slate-600">
+                                <span>Customer Name:</span>
+                                <span id="res-name" class="font-bold text-slate-900">-</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs text-slate-600">
+                                <span>Mobile Number:</span>
+                                <span id="res-phone" class="font-bold text-slate-900">-</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm border-t border-amber-200/60 pt-2">
+                                <span>Calculated Driving KM:</span>
+                                <span id="res-km" class="font-black text-slate-900">680 Km</span>
                             </div>
                             <div class="flex justify-between items-center text-sm">
-                                <span class="text-slate-600">Distance Fare:</span>
-                                <span id="res-distance-fare" class="font-bold text-slate-800">₹0</span>
+                                <span>Est. Driving Duration:</span>
+                                <span id="res-time" class="font-bold text-slate-800">11.5 hrs</span>
                             </div>
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-slate-600">Driver Allowance (Bata):</span>
-                                <span class="font-bold text-slate-800">₹500</span>
+                            <div class="flex justify-between items-center text-xs text-slate-600 border-t border-amber-200/60 pt-2">
+                                <span>Base Distance Fare:</span>
+                                <span id="res-base" class="font-semibold text-slate-800">₹10,200</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs text-slate-600">
+                                <span class="flex items-center gap-1"><i class="fa-solid fa-user-tie text-amber-600"></i> Driver Beta / Allowance:</span>
+                                <span id="res-beta" class="font-bold text-amber-800">₹400</span>
                             </div>
                             <div class="flex justify-between items-center text-base pt-2 border-t border-amber-300">
                                 <span class="font-bold text-slate-900">Total Estimated Fare:</span>
-                                <span id="res-fare" class="font-black text-2xl text-emerald-600">₹0</span>
+                                <span id="res-total" class="font-black text-2xl text-emerald-600">₹10,600</span>
                             </div>
                         </div>
 
-                        <button onclick="submitBooking()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-extrabold py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2">
-                            <i class="fa-brands fa-telegram text-lg"></i> Confirm Booking & Send to Telegram & Email
-                        </button>
+                        <!-- Multi-Channel Booking Actions -->
+                        <div class="space-y-2.5 pt-2">
+                            <button onclick="dispatchTelegramBooking()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-extrabold py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-telegram text-xl"></i> Send Inquiry via Telegram Bot
+                            </button>
+                            <button onclick="dispatchEmailBooking()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+                                <i class="fa-solid fa-envelope text-base"></i> Send Email Inquiry
+                            </button>
+                        </div>
                     </div>
+
                 </div>
+
             </div>
         </section>
 
-        <!-- PAGE 5: CONTACT US -->
+        <!-- ================= PAGE 5: CONTACT US ================= -->
         <section id="page-contact" class="page-view py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">Get In Touch</span>
                     <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">Contact NG Drop Taxi</h1>
-                    <p class="text-slate-600 mt-2 text-sm">Available 24/7 at our Medavakkam office in Chennai.</p>
+                    <p class="text-slate-600 mt-2 text-sm sm:text-base">We are available 24 hours a day, 7 days a week to answer your queries and confirm your outstation taxi bookings.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm">
-                        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl font-bold mx-auto mb-3"><i class="fa-solid fa-phone"></i></div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm hover:border-amber-400 transition">
+                        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl font-bold mx-auto mb-3">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
                         <h3 class="font-bold text-slate-900 text-base mb-1">Direct Phone</h3>
+                        <p class="text-xs text-slate-500 mb-3">24/7 Booking Helpline</p>
                         <a href="tel:8122268687" class="text-amber-600 font-extrabold hover:underline text-lg">8122268687</a>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm">
-                        <div class="w-12 h-12 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center text-xl font-bold mx-auto mb-3"><i class="fa-brands fa-telegram"></i></div>
-                        <h3 class="font-bold text-slate-900 text-base mb-1">Telegram Automation</h3>
-                        <span class="text-sky-600 font-extrabold text-sm">Bot Active (Instant Dispatch)</span>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm hover:border-emerald-400 transition">
+                        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold mx-auto mb-3">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base mb-1">WhatsApp Chat</h3>
+                        <p class="text-xs text-slate-500 mb-3">Instant Chat & Fare Quote</p>
+                        <a href="https://wa.me/918122268687" target="_blank" class="text-emerald-600 font-extrabold hover:underline text-base">Chat on 8122268687</a>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm">
-                        <div class="w-12 h-12 bg-slate-100 text-slate-700 rounded-xl flex items-center justify-center text-xl font-bold mx-auto mb-3"><i class="fa-solid fa-location-dot"></i></div>
-                        <h3 class="font-bold text-slate-900 text-base mb-1">Office Address</h3>
-                        <p class="text-xs text-slate-600">5/45B, Pillaiyar Koil Street, Medavakkam, Chennai - 600100</p>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm hover:border-sky-400 transition">
+                        <div class="w-12 h-12 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center text-xl font-bold mx-auto mb-3">
+                            <i class="fa-brands fa-telegram"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base mb-1">Telegram Channel</h3>
+                        <p class="text-xs text-slate-500 mb-3">Instant Bot Dispatch</p>
+                        <a href="https://t.me/ngdroptaxi" target="_blank" class="text-sky-600 font-extrabold hover:underline text-base">@ngdroptaxi</a>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm hover:border-amber-400 transition">
+                        <div class="w-12 h-12 bg-slate-100 text-slate-700 rounded-xl flex items-center justify-center text-xl font-bold mx-auto mb-3">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base mb-1">Official Website</h3>
+                        <p class="text-xs text-slate-500 mb-3">Online Booking Portal</p>
+                        <a href="http://www.ngdroptaxi.com" target="_blank" class="text-slate-800 font-bold hover:underline text-sm">www.ngdroptaxi.com</a>
                     </div>
                 </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <div class="lg:col-span-7 bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                        <h3 class="text-xl font-black text-slate-900 mb-2">Send Us an Instant Inquiry</h3>
+                        <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Customer Name *</label>
+                                    <input type="text" id="contact-name" placeholder="Full Name" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Phone Number *</label>
+                                    <input type="tel" id="contact-phone" placeholder="10-digit Mobile" pattern="[0-9]{10}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Email Address</label>
+                                    <input type="email" id="contact-email" placeholder="name@example.com" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Inquiry Channel</label>
+                                    <select id="contact-channel" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none font-semibold">
+                                        <option value="Telegram">Send via Telegram</option>
+                                        <option value="Email">Send via Email (ngdroptaxi@gmail.com)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pickup / Drop / Travel Details *</label>
+                                <textarea id="contact-msg" rows="4" placeholder="Mention pickup location, drop location, travel date, or special instructions..." required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+                            </div>
+
+                            <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-8 py-3.5 rounded-xl transition shadow-md w-full text-sm flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> Send Instant Inquiry
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-md space-y-4">
+                            <h3 class="text-lg font-bold text-amber-400">Major Service Hubs</h3>
+                            <ul class="space-y-2.5 text-xs text-slate-200">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-400"></i> <strong>Chennai Hub:</strong> Koyambedu, Airport, Tambaram, Velachery, OMR</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-400"></i> <strong>Bangalore Hub:</strong> Majestic, Electronic City, Whitefield, Airport</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-400"></i> <strong>Coimbatore Hub:</strong> Gandhipuram, Railway Station, Airport</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-400"></i> <strong>Madurai Hub:</strong> Mattuthavani, Periyar, Junction</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-400"></i> <strong>Cochin (Kochi) Hub:</strong> Ernakulam, Edappally, Cochin Airport</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </main>
@@ -516,417 +721,570 @@
                         <span class="text-lg font-black text-white">NG DROP TAXI</span>
                     </div>
                     <p class="text-slate-400 text-xs leading-relaxed">
-                        Tamil Nadu's leading intercity drop taxi service provider across all 38 districts with zero return charges and dual Telegram & Email automation.
+                        South India's most trusted intercity drop taxi service provider. Offering one-way and round-trip outstation rides with transparent per-KM billing.
                     </p>
                 </div>
+
                 <div>
-                    <h4 class="text-white font-bold text-sm mb-3">Quick Links</h4>
+                    <h4 class="text-white font-bold text-sm mb-3">Quick Navigation</h4>
                     <ul class="space-y-2">
                         <li><button onclick="navigateTo('home')" class="hover:text-amber-400 transition">Home Page</button></li>
                         <li><button onclick="navigateTo('about')" class="hover:text-amber-400 transition">About Company</button></li>
-                        <li><button onclick="navigateTo('routes')" class="hover:text-amber-400 transition">All TN Routes & Rates</button></li>
-                        <li><button onclick="navigateTo('booking')" class="hover:text-amber-400 transition">OSRM Calculator</button></li>
+                        <li><button onclick="navigateTo('routes')" class="hover:text-amber-400 transition">Popular Routes & Rates</button></li>
+                        <li><button onclick="navigateTo('booking')" class="hover:text-amber-400 transition">Google Maps Calculator</button></li>
                         <li><button onclick="navigateTo('contact')" class="hover:text-amber-400 transition">Contact Us</button></li>
                     </ul>
                 </div>
+
                 <div>
-                    <h4 class="text-white font-bold text-sm mb-3">Office Location</h4>
-                    <p class="text-slate-300 text-xs leading-relaxed">
-                        5/45B, Pillaiyar Koil Street, <br>
-                        Medavakkam, Chennai, <br>
-                        Tamil Nadu - 600100
-                    </p>
+                    <h4 class="text-white font-bold text-sm mb-3">Popular Commutes</h4>
+                    <ul class="space-y-1.5 text-slate-400">
+                        <li>Chennai ⇄ Cochin</li>
+                        <li>Cochin ⇄ Chennai</li>
+                        <li>Bangalore ⇄ Chennai</li>
+                        <li>Bangalore ⇄ Coimbatore</li>
+                        <li>Chennai ⇄ Madurai</li>
+                    </ul>
                 </div>
+
                 <div>
-                    <h4 class="text-white font-bold text-sm mb-3">Direct Contacts</h4>
+                    <h4 class="text-white font-bold text-sm mb-3">Direct Contact Details</h4>
                     <ul class="space-y-2 text-slate-300">
                         <li><i class="fa-solid fa-phone text-amber-400 mr-2"></i> <a href="tel:8122268687" class="hover:text-amber-400 font-bold">8122268687</a></li>
-                        <li><i class="fa-brands fa-telegram text-sky-400 mr-2"></i> <span class="text-sky-300 font-bold">Telegram Bot Ready</span></li>
-                        <li><i class="fa-solid fa-envelope text-amber-400 mr-2"></i> <span class="text-sky-300 font-bold">EmailJS Inbox Active</span></li>
+                        <li><i class="fa-brands fa-whatsapp text-emerald-400 mr-2"></i> <a href="https://wa.me/918122268687" target="_blank" class="hover:text-emerald-400 font-bold">8122268687</a></li>
+                        <li><i class="fa-brands fa-telegram text-sky-400 mr-2"></i> <a href="https://t.me/ngdroptaxi" target="_blank" class="hover:text-sky-400 font-bold">@ngdroptaxi</a></li>
+                        <li><i class="fa-solid fa-envelope text-amber-400 mr-2"></i> <a href="mailto:ngdroptaxi@gmail.com" class="hover:text-amber-400">ngdroptaxi@gmail.com</a></li>
+                        <li><i class="fa-solid fa-globe text-amber-400 mr-2"></i> <a href="http://www.ngdroptaxi.com" target="_blank" class="hover:text-amber-400">www.ngdroptaxi.com</a></li>
                     </ul>
                 </div>
             </div>
 
             <div class="border-t border-slate-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-slate-500 text-[11px]">
                 <p>© 2026 NG Drop Taxi. All Rights Reserved.</p>
-                <p>Designed for Tamil Nadu Outstation Commuters. | Site developed by <span class="text-slate-300 font-semibold">Vivekanandan Prabhakar</span></p>
+                <p>Designed for Tamil Nadu, Bangalore & Cochin Outstation Commuters. | Site developed by <span class="text-slate-300 font-semibold">Vivekanandan Prabhakar</span></p>
             </div>
         </div>
     </footer>
 
-    <!-- Floating Telegram Quick Button -->
-    <a href="https://t.me/ngdroptaxi" target="_blank" title="Telegram Automation" class="fixed bottom-6 right-6 z-50 bg-sky-500 hover:bg-sky-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition transform hover:scale-110 border-2 border-white">
-        <i class="fa-brands fa-telegram text-3xl"></i>
+    <!-- Floating Action Button -->
+    <a href="https://wa.me/918122268687" target="_blank" title="Chat on WhatsApp" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition transform hover:scale-110 border-2 border-white">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
     </a>
 
-    <!-- JAVASCRIPT & DYNAMIC 1,000+ ROUTE MATRIX GENERATOR -->
+    <!-- Toast Notification Element -->
+    <div id="toast" class="toast-notification fixed bottom-6 left-6 z-50 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 text-xs font-bold">
+        <i class="fa-solid fa-circle-info text-amber-400 text-base" id="toast-icon"></i>
+        <span id="toast-message">Notification</span>
+    </div>
+
+    <!-- Google Maps JS SDK -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCukGyrD7n_hY8WW8y-bYz4UZX5NFza2Sw&libraries=places,geometry"></script>
+
     <script>
-        const TG_BOT_TOKEN = '8664276631:AAEZW18E8aFFDoDLR1SefHN-zxYzEdMSzCo';
-        const TG_CHAT_ID = '8905660087';
-
-        const EMAILJS_SERVICE_ID = 'service_e2q2adc';
-        const EMAILJS_TEMPLATE_ID = 'template_wl6dam5';
-
-        const CAR_RATES = {
-            'Sedan': 15, 'Etios': 16, 'SUV': 20, 'Innova': 21, 'Crysta': 25, 'Tempo Traveller': 32
+        // EmailJS Credentials Configuration
+        const EMAILJS_CONFIG = {
+            publicKey: "TKrDiKsVRHG_-n98d",
+            serviceId: "service_e2q2adc",
+            templateId: "template_wl6dam5"
         };
 
-        const DRIVER_BATA = 500; // Fixed Driver Allowance
+        // Telegram Bot API Configuration
+        const TELEGRAM_CONFIG = {
+            botToken: "8664276631:AAEZW18E8aFFDoDLR1SefHN-zxYzEdMSzCo",
+            chatId: "8905660087"
+        };
 
-        // All 38 Tamil Nadu Districts & Intercity Hubs for 1,000+ Route Matrix Generation
-        const TN_DISTRICTS = [
-            "Ariyalur", "Chengalpattu", "Chennai", "Coimbatore", "Cuddalore", 
-            "Dharmapuri", "Dindigul", "Erode", "Kallakurichi", "Kanchipuram", 
-            "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Mayiladuthurai", 
-            "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", 
-            "Ramanathapuram", "Ranipet", "Salem", "Sivaganga", "Tenkasi", 
-            "Thanjavur", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", 
-            "Tirupathur", "Tiruppur", "Tiruvallur", "Tiruvarur", "Tiruvannamalai", 
-            "Vellore", "Viluppuram", "Virudhunagar", "Bangalore", "Pondicherry", "Cochin"
+        // Initialize EmailJS Browser SDK
+        (function() {
+            if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey) {
+                emailjs.init(EMAILJS_CONFIG.publicKey);
+            }
+        })();
+
+        // Tariff Matrix Per KM
+        const CAR_RATES = {
+            'Sedan': 15,
+            'Etios': 16,
+            'SUV': 20,
+            'Innova': 21,
+            'Crysta': 25
+        };
+
+        // Driver Allowance / Beta per day
+        const CAR_DRIVER_BETA = {
+            'Sedan': 400,
+            'Etios': 400,
+            'SUV': 500,
+            'Innova': 500,
+            'Crysta': 600
+        };
+
+        // Master List of Popular Routes
+        const POPULAR_ROUTES = [
+            { from: 'Chennai', to: 'Cochin', distance: '680 km', sedan: '₹10,600', suv: '₹14,100' },
+            { from: 'Cochin', to: 'Chennai', distance: '680 km', sedan: '₹10,600', suv: '₹14,100' },
+            { from: 'Bangalore', to: 'Chennai', distance: '350 km', sedan: '₹5,650', suv: '₹7,500' },
+            { from: 'Chennai', to: 'Madurai', distance: '460 km', sedan: '₹7,300', suv: '₹9,700' },
+            { from: 'Bangalore', to: 'Coimbatore', distance: '365 km', sedan: '₹5,875', suv: '₹7,800' },
+            { from: 'Chennai', to: 'Coimbatore', distance: '510 km', sedan: '₹8,050', suv: '₹10,700' },
+            { from: 'Bangalore', to: 'Madurai', distance: '435 km', sedan: '₹6,925', suv: '₹9,200' },
+            { from: 'Chennai', to: 'Trichy', distance: '330 km', sedan: '₹5,350', suv: '₹7,100' },
+            { from: 'Chennai', to: 'Salem', distance: '340 km', sedan: '₹5,500', suv: '₹7,300' },
+            { from: 'Coimbatore', to: 'Cochin', distance: '190 km', sedan: '₹3,250', suv: '₹4,300' },
+            { from: 'Bangalore', to: 'Salem', distance: '200 km', sedan: '₹3,400', suv: '₹4,500' },
+            { from: 'Chennai', to: 'Pondicherry', distance: '150 km', sedan: '₹2,650', suv: '₹3,500' },
+            { from: 'Chennai', to: 'Kanyakumari', distance: '700 km', sedan: '₹10,900', suv: '₹14,500' },
+            { from: 'Chennai', to: 'Tirunelveli', distance: '620 km', sedan: '₹9,700', suv: '₹12,900' },
+            { from: 'Chennai', to: 'Thoothukudi (Tuticorin)', distance: '600 km', sedan: '₹9,400', suv: '₹12,500' },
+            { from: 'Chennai', to: 'Rameswaram', distance: '560 km', sedan: '₹8,800', suv: '₹11,700' },
+            { from: 'Chennai', to: 'Ooty (Udhagamandalam)', distance: '540 km', sedan: '₹8,500', suv: '₹11,300' },
+            { from: 'Chennai', to: 'Kodaikanal', distance: '520 km', sedan: '₹8,200', suv: '₹10,900' },
+            { from: 'Chennai', to: 'Nagercoil', distance: '680 km', sedan: '₹10,600', suv: '₹14,100' },
+            { from: 'Bangalore', to: 'Kanyakumari', distance: '670 km', sedan: '₹10,450', suv: '₹13,900' },
+            { from: 'Bangalore', to: 'Tirunelveli', distance: '580 km', sedan: '₹9,100', suv: '₹12,100' },
+            { from: 'Bangalore', to: 'Trichy', distance: '380 km', sedan: '₹6,100', suv: '₹8,100' },
+            { from: 'Bangalore', to: 'Pondicherry', distance: '310 km', sedan: '₹5,050', suv: '₹6,700' },
+            { from: 'Coimbatore', to: 'Rameswaram', distance: '380 km', sedan: '₹6,100', suv: '₹8,100' },
+            { from: 'Coimbatore', to: 'Kanyakumari', distance: '440 km', sedan: '₹7,000', suv: '₹9,300' },
+            { from: 'Trichy', to: 'Kanyakumari', distance: '385 km', sedan: '₹6,175', suv: '₹8,200' },
+            { from: 'Madurai', to: 'Kanyakumari', distance: '245 km', sedan: '₹4,075', suv: '₹5,400' },
+            { from: 'Salem', to: 'Cochin', distance: '360 km', sedan: '₹5,800', suv: '₹7,700' },
+            { from: 'Madurai', to: 'Ooty', distance: '280 km', sedan: '₹4,600', suv: '₹6,100' },
+            { from: 'Pondicherry', to: 'Madurai', distance: '330 km', sedan: '₹5,350', suv: '₹7,100' }
         ];
 
-        // Pseudo-distance matrix generator for all pairs to form 1,000+ routes
-        let TAMIL_NADU_ROUTES = [];
+        let gMapInstance = null;
+        let directionsService = null;
+        let directionsRenderer = null;
+        let distanceMatrixService = null;
+        let currentCalculatedKm = 680;
+        let currentCalculatedHours = "11.5";
 
-        function generateMassiveRouteDatabase() {
-            const routes = [];
-            // Deterministic distance generator based on string char codes to keep consistency
-            for (let i = 0; i < TN_DISTRICTS.length; i++) {
-                for (let j = 0; j < TN_DISTRICTS.length; j++) {
-                    if (i === j) continue;
-                    const from = TN_DISTRICTS[i];
-                    const to = TN_DISTRICTS[j];
-                    
-                    // Generate a realistic driving distance between 45km and 720km
-                    let seed = (from.charCodeAt(0) * 13 + to.charCodeAt(0) * 17) % 650;
-                    let dist = Math.max(45, seed + 40);
-                    
-                    let sedanFare = (dist * CAR_RATES['Sedan']) + DRIVER_BATA;
-                    let suvFare = (dist * CAR_RATES['SUV']) + DRIVER_BATA;
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
 
-                    routes.push({
-                        from: from,
-                        to: to,
-                        distance: dist + ' km',
-                        sedan: '₹' + sedanFare.toLocaleString('en-IN'),
-                        suv: '₹' + suvFare.toLocaleString('en-IN')
-                    });
-                }
+            if (!toast || !toastMsg) return;
+
+            toastMsg.textContent = message;
+            if (type === 'error') {
+                toastIcon.className = "fa-solid fa-circle-exclamation text-rose-400 text-base";
+            } else if (type === 'success') {
+                toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-base";
+            } else {
+                toastIcon.className = "fa-solid fa-circle-info text-amber-400 text-base";
             }
-            return routes;
+
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
         }
 
-        const CITY_COORDS = {
-            'chennai': [13.0827, 80.2707], 'cochin': [9.9312, 76.2673], 'bangalore': [12.9716, 77.5946],
-            'coimbatore': [11.0168, 76.9558], 'madurai': [9.9252, 78.1198], 'trichy': [10.7905, 78.7047],
-            'salem': [11.6643, 78.1460], 'tirunelveli': [8.7139, 77.7567], 'vellore': [12.9165, 79.1325],
-            'pondicherry': [11.9416, 79.8083], 'ooty': [11.4102, 76.6950], 'kodaikanal': [10.2381, 77.4892],
-            'rameshwaram': [9.2881, 79.3174], 'kanyakumari': [8.0883, 77.5385], 'thanjavur': [10.7870, 79.1378],
-            'ariyalur': [11.1401, 79.0786], 'chengalpattu': [12.6819, 79.9888], 'cuddalore': [11.7480, 79.7714],
-            'dharmapuri': [12.1284, 78.1578], 'dindigul': [10.3673, 77.9803], 'erode': [11.3410, 77.7172],
-            'kallakurichi': [11.7377, 78.9596], 'kanchipuram': [12.8341, 79.7036], 'karur': [10.9601, 78.0766],
-            'krishnagiri': [12.5266, 78.2140], 'mayiladuthurai': [11.1027, 79.6536], 'nagapattinam': [10.7672, 79.8449],
-            'nagercoil': [8.1833, 77.4119], 'namakkal': [11.2215, 78.1674], 'perambalur': [11.2342, 78.8804],
-            'pudukkottai': [10.3833, 78.8000], 'ramanathapuram': [9.3639, 78.8394], 'ranipet': [12.9246, 79.3339],
-            'sivaganga': [9.8433, 78.4809], 'tenkasi': [8.9594, 77.3138], 'theni': [10.0104, 77.4770],
-            'thoothukudi': [8.7642, 78.1348], 'tirupathur': [12.4937, 78.5646], 'tiruppur': [11.1085, 77.3411],
-            'tiruvallur': [13.1432, 79.9073], 'tiruvarur': [10.7731, 79.6360], 'tiruvannamalai': [12.2253, 79.0747],
-            'viluppuram': [11.9401, 79.4861], 'virudhunagar': [9.5814, 77.9623]
-        };
-
-        let leafletMap = null;
-        let routeLayer = null;
-        let pickupMarker = null;
-        let dropMarker = null;
-        let currentCalculatedDistance = 510;
-
         function navigateTo(pageId) {
-            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.page-view').forEach(page => page.classList.remove('active'));
             const target = document.getElementById('page-' + pageId);
             if (target) target.classList.add('active');
 
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('bg-amber-100', 'text-amber-800'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('bg-amber-100', 'text-amber-800'));
             const activeNav = document.getElementById('nav-' + pageId);
             if (activeNav) activeNav.classList.add('bg-amber-100', 'text-amber-800');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            if (pageId === 'booking') setTimeout(initLeafletMap, 200);
+
+            if (pageId === 'booking') {
+                setTimeout(initGoogleMap, 200);
+            }
         }
 
         function toggleMobileMenu() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         }
 
-        function initLeafletMap() {
-            if (leafletMap) {
-                leafletMap.invalidateSize();
-                return;
+        function initGoogleMap() {
+            const mapContainer = document.getElementById('gmap');
+            if (!mapContainer) return;
+
+            try {
+                if (!gMapInstance && window.google && window.google.maps) {
+                    gMapInstance = new google.maps.Map(mapContainer, {
+                        center: { lat: 10.8505, lng: 78.7047 },
+                        zoom: 7,
+                        mapTypeControl: false,
+                        streetViewControl: false
+                    });
+
+                    directionsService = new google.maps.DirectionsService();
+                    directionsRenderer = new google.maps.DirectionsRenderer({
+                        map: gMapInstance,
+                        polylineOptions: { strokeColor: '#d97706', strokeWeight: 5 }
+                    });
+                    distanceMatrixService = new google.maps.DistanceMatrixService();
+
+                    const pickupInput = document.getElementById('g-pickup');
+                    const dropInput = document.getElementById('g-drop');
+                    const heroPickup = document.getElementById('hero-pickup');
+                    const heroDrop = document.getElementById('hero-drop');
+
+                    if (pickupInput) new google.maps.places.Autocomplete(pickupInput);
+                    if (dropInput) new google.maps.places.Autocomplete(dropInput);
+                    if (heroPickup) new google.maps.places.Autocomplete(heroPickup);
+                    if (heroDrop) new google.maps.places.Autocomplete(heroDrop);
+
+                    calculateGoogleRoute();
+                } else if (gMapInstance) {
+                    google.maps.event.trigger(gMapInstance, 'resize');
+                }
+            } catch (e) {
+                console.warn("Google Maps SDK load fallback", e);
             }
-            const container = document.getElementById('leaflet-map');
-            if (!container) return;
-            leafletMap = L.map('leaflet-map').setView([11.5, 78.5], 7);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© OpenStreetMap' }).addTo(leafletMap);
-            calculateOsrmRoute();
         }
 
-        function renderTamilNaduRoutes(list) {
-            const tbody = document.getElementById('tamilnadu-routes-tbody');
-            const countLabel = document.getElementById('route-count-label');
-            if (!tbody) return;
-            
-            if (countLabel) countLabel.textContent = `Showing ${list.length.toLocaleString('en-IN')} active routes`;
+        function calculateGoogleRoute() {
+            const pickup = document.getElementById('g-pickup').value.trim();
+            const drop = document.getElementById('g-drop').value.trim();
+            const badge = document.getElementById('map-status-badge');
 
-            // Render first 250 items for high performance browser DOM rendering
-            tbody.innerHTML = list.slice(0, 250).map(r => `
-                <tr class="hover:bg-slate-50 border-b border-slate-100 transition">
-                    <td class="px-4 py-3 font-semibold text-slate-800">${r.from} ➔ ${r.to}</td>
-                    <td class="px-4 py-3 text-slate-600">${r.distance}</td>
-                    <td class="px-4 py-3 text-amber-600 font-bold">${r.sedan}</td>
-                    <td class="px-4 py-3 text-emerald-600 font-bold">${r.suv}</td>
-                    <td class="px-4 py-3 text-right">
-                        <button onclick="setOsrmLocations('${r.from}', '${r.to}')" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-bold shadow-sm transition flex items-center gap-1 ml-auto">
-                            <i class="fa-solid fa-paper-plane"></i> Book Trip
+            if (!pickup || !drop) {
+                showToast("Please enter both Pickup and Drop locations", "error");
+                return;
+            }
+
+            if (badge) badge.textContent = "Calculating Google Route...";
+
+            if (window.google && window.google.maps && directionsService) {
+                directionsService.route({
+                    origin: pickup,
+                    destination: drop,
+                    travelMode: google.maps.TravelMode.DRIVING
+                }, function (response, status) {
+                    if (status === 'OK') {
+                        directionsRenderer.setDirections(response);
+                        const route = response.routes[0].legs[0];
+                        const distKm = Math.round(route.distance.value / 1000);
+                        const durationText = route.duration.text;
+
+                        currentCalculatedKm = distKm;
+                        currentCalculatedHours = durationText;
+
+                        updateResultsUI(distKm, durationText);
+                        if (badge) badge.textContent = `${distKm} Km (${durationText})`;
+                    } else {
+                        fallbackEstimate(pickup, drop);
+                    }
+                });
+            } else {
+                fallbackEstimate(pickup, drop);
+            }
+        }
+
+        function fallbackEstimate(pickup, drop) {
+            const badge = document.getElementById('map-status-badge');
+            const estimatedKm = 350;
+            currentCalculatedKm = estimatedKm;
+            currentCalculatedHours = "6.5 hrs";
+
+            updateResultsUI(estimatedKm, "6.5 hrs");
+            if (badge) badge.textContent = `~${estimatedKm} Km (Est.)`;
+        }
+
+        function updateResultsUI(km, duration) {
+            const carType = document.getElementById('g-cartype').value;
+            const rate = CAR_RATES[carType] || 15;
+            const driverBeta = CAR_DRIVER_BETA[carType] || 400;
+
+            const name = document.getElementById('g-name').value.trim();
+            const phone = document.getElementById('g-phone').value.trim();
+
+            const billableKm = Math.max(km, 130);
+            const baseFare = billableKm * rate;
+            const totalFare = baseFare + driverBeta;
+
+            document.getElementById('res-name').textContent = name ? name : "(Enter name above)";
+            document.getElementById('res-phone').textContent = phone ? phone : "(Enter mobile above)";
+            document.getElementById('res-km').textContent = `${km} Km`;
+            document.getElementById('res-time').textContent = duration;
+            document.getElementById('res-base').textContent = `₹${baseFare.toLocaleString('en-IN')} (${billableKm} km × ₹${rate})`;
+            document.getElementById('res-beta').textContent = `+ ₹${driverBeta}`;
+            document.getElementById('res-total').textContent = `₹${totalFare.toLocaleString('en-IN')}`;
+        }
+
+        function setMapLocations(pickup, drop) {
+            document.getElementById('g-pickup').value = pickup;
+            document.getElementById('g-drop').value = drop;
+            navigateTo('booking');
+            setTimeout(calculateGoogleRoute, 300);
+        }
+
+        function selectCarAndBook(carType) {
+            document.getElementById('g-cartype').value = carType;
+            navigateTo('booking');
+            setTimeout(calculateGoogleRoute, 300);
+        }
+
+        function transferHeroToCalculator() {
+            const heroNameEl = document.getElementById('hero-name');
+            const heroPhoneEl = document.getElementById('hero-phone');
+            const heroPickupEl = document.getElementById('hero-pickup');
+            const heroDropEl = document.getElementById('hero-drop');
+            const heroCarTypeEl = document.getElementById('hero-cartype');
+            const heroDateEl = document.getElementById('hero-date');
+            const heroTimeEl = document.getElementById('hero-time');
+
+            const hn = heroNameEl ? heroNameEl.value.trim() : '';
+            const hph = heroPhoneEl ? heroPhoneEl.value.trim() : '';
+            const hp = heroPickupEl ? heroPickupEl.value.trim() : '';
+            const hd = heroDropEl ? heroDropEl.value.trim() : '';
+            const hc = heroCarTypeEl ? heroCarTypeEl.value : 'Sedan';
+            const hdt = heroDateEl ? heroDateEl.value : '';
+            const ht = heroTimeEl ? heroTimeEl.value : '08:00';
+
+            if (hn) document.getElementById('g-name').value = hn;
+            if (hph) document.getElementById('g-phone').value = hph;
+            if (hp) document.getElementById('g-pickup').value = hp;
+            if (hd) document.getElementById('g-drop').value = hd;
+            if (hc) document.getElementById('g-cartype').value = hc;
+            if (hdt) document.getElementById('g-date').value = hdt;
+            if (ht) document.getElementById('g-time').value = ht;
+
+            navigateTo('booking');
+            setTimeout(calculateGoogleRoute, 300);
+        }
+
+        async function dispatchTelegramBooking() {
+            const name = document.getElementById('g-name').value.trim();
+            const phone = document.getElementById('g-phone').value.trim();
+            const pickup = document.getElementById('g-pickup').value.trim();
+            const drop = document.getElementById('g-drop').value.trim();
+            const carType = document.getElementById('g-cartype').value;
+            const date = document.getElementById('g-date').value;
+            const time = document.getElementById('g-time') ? document.getElementById('g-time').value : '08:00';
+
+            if (!name) {
+                showToast("Please enter Customer Name", "error");
+                document.getElementById('g-name').focus();
+                return;
+            }
+            if (!phone || phone.length < 10) {
+                showToast("Please enter a valid 10-digit Mobile Number", "error");
+                document.getElementById('g-phone').focus();
+                return;
+            }
+
+            const rate = CAR_RATES[carType] || 15;
+            const driverBeta = CAR_DRIVER_BETA[carType] || 400;
+            const billableKm = Math.max(currentCalculatedKm, 130);
+            const totalFare = (billableKm * rate) + driverBeta;
+
+            const messageText = `🚕 *NEW TAXI BOOKING INQUIRY - NG DROP TAXI*\n\n` +
+                `👤 *Customer Name:* ${name}\n` +
+                `📞 *Mobile Number:* ${phone}\n` +
+                `📍 *Pickup:* ${pickup}\n` +
+                `🎯 *Drop:* ${drop}\n` +
+                `🚗 *Vehicle:* ${carType} (₹${rate}/km)\n` +
+                `📏 *Google Distance:* ${currentCalculatedKm} Km\n` +
+                `💰 *Est. Total Fare:* ₹${totalFare.toLocaleString('en-IN')}\n` +
+                `📅 *Travel Date:* ${date || 'Today'}\n` +
+                `⏰ *Pickup Time:* ${time || 'Asap'}`;
+
+            showToast("Sending booking to Telegram Bot...", "info");
+
+            try {
+                const url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CONFIG.chatId,
+                        text: messageText,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                const resData = await response.json();
+                if (resData.ok) {
+                    showToast("Booking inquiry sent to Telegram Bot!", "success");
+                } else {
+                    console.error("Telegram API Error:", resData);
+                    showToast("Telegram API error, opening chat fallback...", "error");
+                    window.open(`https://t.me/ngdroptaxi?text=${encodeURIComponent(messageText)}`, '_blank');
+                }
+            } catch (err) {
+                console.error("Telegram Dispatch Error:", err);
+                showToast("Opening Telegram chat channel...", "info");
+                window.open(`https://t.me/ngdroptaxi?text=${encodeURIComponent(messageText)}`, '_blank');
+            }
+        }
+
+        async function dispatchEmailBooking() {
+            const name = document.getElementById('g-name').value.trim();
+            const phone = document.getElementById('g-phone').value.trim();
+            const pickup = document.getElementById('g-pickup').value.trim();
+            const drop = document.getElementById('g-drop').value.trim();
+            const carType = document.getElementById('g-cartype').value;
+            const date = document.getElementById('g-date').value;
+            const time = document.getElementById('g-time') ? document.getElementById('g-time').value : '';
+
+            if (!name) {
+                showToast("Please enter Customer Name", "error");
+                document.getElementById('g-name').focus();
+                return;
+            }
+            if (!phone || phone.length < 10) {
+                showToast("Please enter a valid 10-digit Mobile Number", "error");
+                document.getElementById('g-phone').focus();
+                return;
+            }
+
+            const rate = CAR_RATES[carType] || 15;
+            const driverBeta = CAR_DRIVER_BETA[carType] || 400;
+            const billableKm = Math.max(currentCalculatedKm, 130);
+            const totalFare = (billableKm * rate) + driverBeta;
+
+            const templateParams = {
+                to_email: "ngdroptaxi@gmail.com",
+                from_name: name,
+                customer_phone: phone,
+                pickup_location: pickup,
+                drop_location: drop,
+                vehicle_type: carType,
+                travel_date: date || 'Today',
+                pickup_time: time || 'Asap',
+                estimated_distance: `${currentCalculatedKm} km`,
+                estimated_fare: `₹${totalFare.toLocaleString('en-IN')}`,
+                message: `New taxi booking inquiry for ${carType} from ${pickup} to ${drop}.`
+            };
+
+            if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceId) {
+                showToast("Sending booking inquiry via EmailJS...", "info");
+                try {
+                    await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, templateParams);
+                    showToast("Email inquiry sent successfully to NG Drop Taxi!", "success");
+                } catch (error) {
+                    console.error("EmailJS error:", error);
+                    showToast("EmailJS failed, switching to default mail client...", "error");
+                    fallbackMailto(name, phone, pickup, drop, carType, date, time);
+                }
+            } else {
+                fallbackMailto(name, phone, pickup, drop, carType, date, time);
+            }
+        }
+
+        function fallbackMailto(name, phone, pickup, drop, carType, date, time) {
+            const subject = encodeURIComponent("Taxi Inquiry - NG Drop Taxi");
+            const body = encodeURIComponent(
+                `Customer Name: ${name}\n` +
+                `Mobile: ${phone}\n` +
+                `Pickup Location: ${pickup}\n` +
+                `Drop Location: ${drop}\n` +
+                `Vehicle Category: ${carType}\n` +
+                `Travel Date: ${date}\n` +
+                `Pickup Time: ${time}\n` +
+                `Distance: ${currentCalculatedKm} km`
+            );
+            window.location.href = `mailto:ngdroptaxi@gmail.com?subject=${subject}&body=${body}`;
+        }
+
+        async function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('contact-name').value.trim();
+            const phone = document.getElementById('contact-phone').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const channel = document.getElementById('contact-channel').value;
+            const message = document.getElementById('contact-msg').value.trim();
+
+            if (channel === 'Telegram') {
+                const messageText = `📩 *CONTACT INQUIRY - NG DROP TAXI*\n\n` +
+                    `👤 *Name:* ${name}\n` +
+                    `📞 *Phone:* ${phone}\n` +
+                    `💬 *Details:* ${message}`;
+
+                showToast("Sending message to Telegram Bot...", "info");
+                try {
+                    const url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: TELEGRAM_CONFIG.chatId,
+                            text: messageText,
+                            parse_mode: 'Markdown'
+                        })
+                    });
+                    const resData = await response.json();
+                    if (resData.ok) {
+                        showToast("Message sent to Telegram Bot!", "success");
+                        e.target.reset();
+                    } else {
+                        window.open(`https://t.me/ngdroptaxi?text=${encodeURIComponent(messageText)}`, '_blank');
+                    }
+                } catch (err) {
+                    window.open(`https://t.me/ngdroptaxi?text=${encodeURIComponent(messageText)}`, '_blank');
+                }
+            } else {
+                const templateParams = {
+                    to_email: "ngdroptaxi@gmail.com",
+                    from_name: name,
+                    customer_phone: phone,
+                    customer_email: email || "Not provided",
+                    message: message
+                };
+
+                if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceId) {
+                    showToast("Sending contact message via EmailJS...", "info");
+                    try {
+                        await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, templateParams);
+                        showToast("Message sent successfully!", "success");
+                        e.target.reset();
+                    } catch (error) {
+                        console.error("EmailJS error:", error);
+                        showToast("Opening default mail client...", "error");
+                        window.location.href = `mailto:ngdroptaxi@gmail.com?subject=${encodeURIComponent('Inquiry from Website')}&body=${encodeURIComponent('Name: ' + name + '\nPhone: ' + phone + '\nEmail: ' + email + '\nMessage: ' + message)}`;
+                    }
+                } else {
+                    window.location.href = `mailto:ngdroptaxi@gmail.com?subject=${encodeURIComponent('Inquiry from Website')}&body=${encodeURIComponent('Name: ' + name + '\nPhone: ' + phone + '\nEmail: ' + email + '\nMessage: ' + message)}`;
+                }
+            }
+        }
+
+        function renderRoutesTable(routes) {
+            const tableBody = document.getElementById('popular-routes-tbody');
+            if (!tableBody) return;
+            const list = routes || POPULAR_ROUTES;
+            tableBody.innerHTML = list.map(route => `
+                <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                    <td class="p-4 font-bold text-slate-900">${route.from} <i class="fa-solid fa-arrow-right text-xs text-slate-400 mx-1"></i> ${route.to}</td>
+                    <td class="p-4 text-slate-600">${route.distance}</td>
+                    <td class="p-4 text-amber-600 font-extrabold">${route.sedan}</td>
+                    <td class="p-4 text-emerald-600 font-extrabold">${route.suv}</td>
+                    <td class="p-4 text-right">
+                        <button onclick="setMapLocations('${route.from}', '${route.to}')" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition">
+                            Book Ride
                         </button>
                     </td>
                 </tr>
             `).join('');
         }
 
-        function filterTamilNaduRoutes() {
-            const query = document.getElementById('route-search').value.toLowerCase();
-            const filtered = TAMIL_NADU_ROUTES.filter(r => r.from.toLowerCase().includes(query) || r.to.toLowerCase().includes(query));
-            renderTamilNaduRoutes(filtered);
+        function filterPopularRoutes() {
+            const queryInput = document.getElementById('route-search');
+            if (!queryInput) return;
+            const query = queryInput.value.toLowerCase();
+            const filtered = POPULAR_ROUTES.filter(r => 
+                r.from.toLowerCase().includes(query) || r.to.toLowerCase().includes(query)
+            );
+            renderRoutesTable(filtered);
         }
 
-        function setOsrmLocations(pickup, drop) {
-            document.getElementById('osrm-pickup').value = pickup;
-            document.getElementById('osrm-drop').value = drop;
-            navigateTo('booking');
-            setTimeout(calculateOsrmRoute, 300);
-        }
-
-        async function getCityCoords(name) {
-            const clean = name.trim().toLowerCase();
-            if (CITY_COORDS[clean]) return CITY_COORDS[clean];
-            try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(name + ', Tamil Nadu')}`);
-                const data = await res.json();
-                if (data && data.length > 0) return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-            } catch (err) {}
-            return [13.0827, 80.2707];
-        }
-
-        async function calculateOsrmRoute() {
-            const pickup = document.getElementById('osrm-pickup').value.trim();
-            const drop = document.getElementById('osrm-drop').value.trim();
-            const badge = document.getElementById('route-status-badge');
-            const calcBtn = document.getElementById('calc-btn');
-
-            if (!pickup || !drop) return;
-            if (calcBtn) calcBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Calculating OSRM Distance...';
-
-            const start = await getCityCoords(pickup);
-            const end = await getCityCoords(drop);
-            const url = `https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=full&geometries=geojson`;
-
-            try {
-                const res = await fetch(url);
-                const data = await res.json();
-                if (data.code === 'Ok' && data.routes && data.routes.length > 0) {
-                    const route = data.routes[0];
-                    currentCalculatedDistance = Math.round(route.distance / 1000);
-                    const hours = (route.duration / 3600).toFixed(1);
-                    displayRouteOnMap(start, end, route.geometry.coordinates);
-                    updateFareResults(currentCalculatedDistance, hours);
-                    if (badge) badge.textContent = `${currentCalculatedDistance} Km (~${hours} hrs)`;
-                }
-            } catch (e) {
-                currentCalculatedDistance = 350;
-                displayRouteOnMap(start, end, null);
-                updateFareResults(350, 5);
-            }
-            if (calcBtn) calcBtn.innerHTML = '<i class="fa-solid fa-route"></i> Calculate Automatic OSRM Distance';
-        }
-
-        function displayRouteOnMap(start, end, coords) {
-            if (!leafletMap) return;
-            if (routeLayer) leafletMap.removeLayer(routeLayer);
-            if (pickupMarker) leafletMap.removeLayer(pickupMarker);
-            if (dropMarker) leafletMap.removeLayer(dropMarker);
-
-            pickupMarker = L.marker(start).addTo(leafletMap).bindPopup("Pickup");
-            dropMarker = L.marker(end).addTo(leafletMap).bindPopup("Drop");
-
-            if (coords) {
-                const latLngs = coords.map(c => [c[1], c[0]]);
-                routeLayer = L.polyline(latLngs, { color: '#0284c7', weight: 5 }).addTo(leafletMap);
-                leafletMap.fitBounds(routeLayer.getBounds(), { padding: [40, 40] });
-            }
-        }
-
-        function updateFareResults(dist, hours) {
-            const carType = document.getElementById('osrm-cartype').value;
-            const rate = CAR_RATES[carType] || 15;
-            const billable = Math.max(dist, 130);
-            const distanceFare = billable * rate;
-            const total = distanceFare + DRIVER_BATA;
-
-            document.getElementById('res-distance').textContent = `${dist} Km`;
-            document.getElementById('res-distance-fare').textContent = `₹${distanceFare.toLocaleString('en-IN')}`;
-            document.getElementById('res-duration').textContent = `~${hours} Hours`;
-            document.getElementById('res-fare').textContent = `₹${total.toLocaleString('en-IN')}`;
-            document.getElementById('result-box').classList.remove('hidden');
-        }
-
-        function recalculateFare() {
-            updateFareResults(currentCalculatedDistance, (currentCalculatedDistance / 55).toFixed(1));
-        }
-
-        async function verifyIntegrations() {
-            const statusText = document.getElementById('verify-status-text');
-            statusText.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Testing Telegram & EmailJS connection...';
-            
-            try {
-                const res = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/getMe`);
-                const data = await res.json();
-                if (data.ok) {
-                    statusText.innerHTML = `<span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check"></i> Telegram Bot Connected Successfully! (@${data.result.username})</span>`;
-                } else {
-                    statusText.innerHTML = `<span class="text-sky-800 font-bold"><i class="fa-solid fa-circle-check"></i> Telegram Bot & EmailJS Configured Ready.</span>`;
-                }
-            } catch (err) {
-                statusText.innerHTML = `<span class="text-sky-800 font-bold"><i class="fa-solid fa-circle-check"></i> Telegram Bot & EmailJS Automation Active.</span>`;
-            }
-        }
-
-        // Dual Dispatch: Telegram Bot + EmailJS
-        async function dispatchBooking(name, phone, pickup, drop, carType, date, time) {
-            const rate = CAR_RATES[carType] || 15;
-            const billable = Math.max(currentCalculatedDistance, 130);
-            const distanceFare = billable * rate;
-            const total = distanceFare + DRIVER_BATA;
-
-            const tgMsg = `🚖 *NG DROP TAXI - NEW BOOKING*\n\n` +
-                `👤 *Name:* ${name}\n` +
-                `📞 *Phone:* ${phone}\n` +
-                `📍 *Pickup:* ${pickup}\n` +
-                `🎯 *Drop:* ${drop}\n` +
-                `🚗 *Vehicle:* ${carType} (₹${rate}/km)\n` +
-                `📏 *Distance:* ${currentCalculatedDistance} Km\n` +
-                `💼 *Driver Bata:* ₹${DRIVER_BATA}\n` +
-                `💰 *Total Fare:* ₹${total.toLocaleString('en-IN')}\n` +
-                `📅 *Date:* ${date || 'ASAP'}\n` +
-                `⏰ *Time:* ${time}`;
-
-            const emailParams = {
-                customer_name: name,
-                customer_phone: phone,
-                pickup_location: pickup,
-                drop_location: drop,
-                car_type: carType,
-                distance: currentCalculatedDistance + ' Km',
-                driver_bata: '₹' + DRIVER_BATA,
-                total_fare: '₹' + total.toLocaleString('en-IN'),
-                travel_date: date || 'ASAP',
-                travel_time: time
-            };
-
-            let sentSuccess = false;
-
-            // 1. Send via Telegram Bot API
-            try {
-                const tgRes = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: tgMsg, parse_mode: 'Markdown' })
-                });
-                const tgData = await tgRes.json();
-                if (tgData.ok) sentSuccess = true;
-            } catch (e) {
-                console.warn("Telegram direct dispatch warning:", e);
-            }
-
-            // 2. Send via EmailJS
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailParams)
-                .then((response) => {
-                    alert('Booking enquiry successfully sent to your Telegram chat and email inbox!');
-                }, (error) => {
-                    console.error('EmailJS error:', error);
-                    if (sentSuccess) {
-                        alert('Booking enquiry sent to Telegram successfully!');
-                    } else {
-                        alert('Booking request processed. Please verify your connection.');
-                    }
-                });
-        }
-
-        function submitBooking() {
-            const name = document.getElementById('osrm-name').value.trim();
-            const phone = document.getElementById('osrm-phone').value.trim();
-            const pickup = document.getElementById('osrm-pickup').value.trim();
-            const drop = document.getElementById('osrm-drop').value.trim();
-            const carType = document.getElementById('osrm-cartype').value;
-            const date = document.getElementById('osrm-date').value;
-            const time = document.getElementById('osrm-time').value;
-
-            if (!name || !phone || phone.length < 10) {
-                alert('Please enter a valid Customer Name and 10-digit Mobile Number.');
-                return;
-            }
-
-            if (!time) {
-                alert('Please specify a pickup time.');
-                document.getElementById('osrm-time').focus();
-                return;
-            }
-
-            dispatchBooking(name, phone, pickup, drop, carType, date, time);
-        }
-
-        function handleHeroBooking() {
-            const name = document.getElementById('hero-name').value.trim();
-            const phone = document.getElementById('hero-phone').value.trim();
-            const pickup = document.getElementById('hero-pickup').value.trim();
-            const drop = document.getElementById('hero-drop').value.trim();
-            const carType = document.getElementById('hero-cartype').value;
-            const date = document.getElementById('hero-date').value;
-            const time = document.getElementById('hero-time').value;
-
-            if (!name || !phone || phone.length < 10) {
-                alert('Please enter valid Customer Name and 10-digit Mobile Number.');
-                return;
-            }
-
-            if (!time) {
-                alert('Please specify a pickup time.');
-                document.getElementById('hero-time').focus();
-                return;
-            }
-
-            dispatchBooking(name, phone, pickup, drop, carType, date, time);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize 1,000+ Route Matrix
-            TAMIL_NADU_ROUTES = generateMassiveRouteDatabase();
-
+        window.onload = function() {
+            renderRoutesTable(POPULAR_ROUTES);
             const today = new Date().toISOString().split('T')[0];
-            if (document.getElementById('osrm-date')) document.getElementById('osrm-date').value = today;
-            if (document.getElementById('hero-date')) document.getElementById('hero-date').value = today;
-
-            const now = new Date();
-            now.setHours(now.getHours() + 1);
-            const timeStr = now.toTimeString().substring(0, 5);
-            if (document.getElementById('osrm-time')) document.getElementById('osrm-time').value = timeStr;
-            if (document.getElementById('hero-time')) document.getElementById('hero-time').value = timeStr;
-
-            renderTamilNaduRoutes(TAMIL_NADU_ROUTES);
-
-            const pickupInput = document.getElementById('osrm-pickup');
-            const dropInput = document.getElementById('osrm-drop');
-            if (pickupInput) pickupInput.addEventListener('input', calculateOsrmRoute);
-            if (dropInput) dropInput.addEventListener('input', calculateOsrmRoute);
-        });
+            const heroDate = document.getElementById('hero-date');
+            const gDate = document.getElementById('g-date');
+            if (heroDate) heroDate.value = today;
+            if (gDate) gDate.value = today;
+        };
     </script>
 </body>
 </html>
