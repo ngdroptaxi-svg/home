@@ -1,0 +1,11 @@
+# Ng Drop Taxi
+
+> NG Drop Taxi – 24/7 one-way and outstation taxi services across Tamil Nadu, Bangalore and Cochin with affordable fares, doorstep pickup and easy online booking.
+
+## Docs
+- [NG DROP TAXI](https://ngdroptaxi.com/): Drop Taxi Booking
+- [About](https://ngdroptaxi.com/about): About Us
+- [Services](https://ngdroptaxi.com/services): Operations and Services
+- [Routes](https://ngdroptaxi.com/routes): Tariffs and Routes
+- [Booking](https://ngdroptaxi.com/booking): Fare Calculator With Booking Form
+- [Contact](https://ngdroptaxi.com/contact): Contact Us
