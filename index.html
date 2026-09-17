@@ -6,11 +6,14 @@
     <!-- Shortened Title Tag (50-60 characters) -->
     <title>NG Drop Taxi | One-Way Outstation Cabs in Tamil Nadu</title>
     
+    <!-- Seorce API Script Integration -->
+    <script src="https://scripts.seorce.com/api?projectId=6aaba99ce29e2b08342ab337" defer data-uuid="6aaba99ce29e2b08342ab337"></script>
+
     <!-- Canonical Tag Added -->
     <link rel="canonical" href="https://ngdroptaxi.com/">
 
     <!-- Content Security Policy (CSP) Header -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://maps.googleapis.com https://www.googletagmanager.com https://api.telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://api.telegram.org https://maps.googleapis.com https://*.emailjs.com https://www.googletagmanager.com https://www.google-analytics.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://maps.googleapis.com https://www.googletagmanager.com https://api.telegram.org https://scripts.seorce.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://api.telegram.org https://maps.googleapis.com https://*.emailjs.com https://www.googletagmanager.com https://www.google-analytics.com https://scripts.seorce.com;">
 
     <!-- SEO Meta Description Tag (Optimized to 120-160 characters) -->
     <meta name="description" content="Book 24/7 one-way drop taxi across 38 districts of Tamil Nadu. Get affordable outstation cab booking, transparent per-km fares, and zero return charges.">
@@ -247,20 +250,39 @@
                     </div>
                 </div>
 
-                <!-- Embedded Fare Calculator / Booking Engine on Homepage -->
+                <!-- Embedded Fare Calculator / Booking Engine on Homepage (Replaced Map with High-Value SEO Content) -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                         
-                        <!-- Google Maps Map Canvas -->
-                        <div class="lg:col-span-7 space-y-4">
-                            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-slate-800">
-                                <div class="flex items-center justify-between mb-3">
-                                    <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                                        <i class="fa-solid fa-map-location-dot text-amber-500"></i> Live Route Map Preview
+                        <!-- SEO Keyword Rich Content Block (Replacing Map Preview) -->
+                        <div class="lg:col-span-7 space-y-4 text-slate-300">
+                            <div class="bg-slate-900/90 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
+                                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                    <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                                        <i class="fa-solid fa-ranking-star text-amber-400"></i> Tamil Nadu's Leading Intercity Cab Provider
                                     </span>
-                                    <span id="route-status-badge-home" class="text-[11px] bg-slate-100 text-slate-600 font-bold px-2.5 py-0.5 rounded-full">Enter Locations Below</span>
+                                    <span class="text-[11px] bg-amber-500/20 text-amber-300 font-bold px-2.5 py-0.5 rounded-full border border-amber-500/30">38 Districts Covered</span>
                                 </div>
-                                <div id="gmap-home" class="gmap-canvas w-full rounded-xl overflow-hidden border border-slate-200"></div>
+                                <h2 class="text-xl sm:text-2xl font-black text-white leading-snug">
+                                    Why NG Drop Taxi is Tamil Nadu's Preferred <span class="text-amber-400">One-Way Outstation Taxi</span> Service
+                                </h2>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                    When searching for an affordable <strong>one way drop taxi</strong> or <strong>drop taxi near me</strong>, travelers across Tamil Nadu trust <strong>NG Drop Taxi</strong> for transparent per-kilometer pricing, 24/7 availability, and zero return charges. Whether you need a quick <strong>airport drop taxi</strong> in Chennai, Coimbatore, or Madurai, or an <strong>intercity taxi service</strong> to Bangalore or Cochin, our fleet of sanitized Sedans, SUVs, and Innova Crysta cabs guarantees ultimate safety and comfort.
+                                </p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                                        <div class="text-amber-400 font-bold text-xs flex items-center gap-1.5 mb-1">
+                                            <i class="fa-solid fa-circle-check"></i> Zero Return Fare Policy
+                                        </div>
+                                        <p class="text-[11px] text-slate-400">Pay strictly for your one-way distance. No hidden round-trip charges or extra toll surprises on standard routes.</p>
+                                    </div>
+                                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                                        <div class="text-amber-400 font-bold text-xs flex items-center gap-1.5 mb-1">
+                                            <i class="fa-solid fa-circle-check"></i> 24/7 Doorstep Pickup
+                                        </div>
+                                        <p class="text-[11px] text-slate-400">On-time dispatch across all 38 districts including Ooty, Kanyakumari, Salem, Trichy, and Tirunelveli.</p>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Info Card -->
@@ -1273,7 +1295,8 @@
 
         function initGoogleMapsApi() {
             try {
-                const mapContainer = document.getElementById('gmap-home') || document.getElementById('gmap-booking');
+                // Note: gmap-home is removed from home page, but kept on booking page for calculator
+                const mapContainer = document.getElementById('gmap-booking');
                 if (!mapContainer) return;
 
                 googleMap = new google.maps.Map(mapContainer, {
@@ -1326,7 +1349,6 @@
                           Math.cos(c1.lat * Math.PI / 180) * Math.cos(c2.lat * Math.PI / 180) *
                           Math.sin(dLon/2) * Math.sin(dLon/2);
                 const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-                // Exact direct highway multiplier (1.15x instead of inflated 1.35x)
                 return Math.round(R * c * 1.15);
             }
             return 150;
