@@ -250,11 +250,11 @@
                     </div>
                 </div>
 
-                <!-- Embedded Fare Calculator / Booking Engine on Homepage (Replaced Map with High-Value SEO Content) -->
+                <!-- Embedded Booking Form / Fare Calculator Engine on Homepage -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                         
-                        <!-- SEO Keyword Rich Content Block (Replacing Map Preview) -->
+                        <!-- SEO Keyword Rich Content Block -->
                         <div class="lg:col-span-7 space-y-4 text-slate-300">
                             <div class="bg-slate-900/90 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
                                 <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -296,7 +296,7 @@
                             </div>
                         </div>
 
-                        <!-- Booking Form Controls -->
+                        <!-- Booking Form Controls with Show Fare & Telegram Submission -->
                         <div class="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-xl text-slate-800 space-y-4">
                             <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Trip Booking Details</h3>
 
@@ -354,12 +354,13 @@
                                 </div>
                             </div>
 
-                            <button onclick="calculateGoogleRoute()" id="calc-btn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-route"></i> Calculate Route & Distance
+                            <!-- Show Fare Button (Triggers calculation & Telegram notification) -->
+                            <button onclick="handleShowFare()" id="calc-btn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-calculator"></i> Show Fare & Send Enquiry
                             </button>
 
-                            <!-- Calculation Result Box -->
-                            <div id="result-box" class="bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-2">
+                            <!-- Calculation Result Box (Initially Hidden until Show Fare is clicked) -->
+                            <div id="result-box" class="hidden bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-2">
                                 <div class="flex justify-between items-center text-sm">
                                     <span class="text-slate-600">Customer Name:</span>
                                     <span id="res-cust-name" class="font-bold text-slate-900">-</span>
@@ -392,11 +393,11 @@
                                     <span class="font-bold text-slate-900">Total Estimated Fare:</span>
                                     <span id="res-fare" class="font-black text-2xl text-emerald-600">₹400</span>
                                 </div>
-                                <div class="text-[11px] text-slate-500 italic">* Includes Driver Allowance (₹400). Minimum billable distance 130 km. Tolls extra.</div>
+                                <div class="text-[11px] text-slate-500 italic">* Includes Driver Allowance (£400). Minimum billable distance 130 km. Tolls extra.</div>
                             </div>
 
-                            <button onclick="dispatchCombinedTelegramAndEmail()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-paper-plane text-slate-950"></i> Confirm Booking (Telegram & Email)
+                            <button onclick="dispatchCombinedTelegramAndEmail()" id="confirm-booking-btn" class="hidden w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane text-slate-950"></i> Confirm Booking (Email Backup)
                             </button>
                         </div>
 
@@ -404,7 +405,7 @@
                 </div>
             </div>
 
-            <!-- Homepage Popular Interlink Routes Grid (Expanded with more routes) -->
+            <!-- Homepage Popular Interlink Routes Grid -->
             <div class="py-16 bg-white border-b border-slate-200">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
@@ -739,7 +740,7 @@
                     </div>
                 </div>
 
-                <!-- Popular Routes Table (Expanded with more routes) -->
+                <!-- Popular Routes Table -->
                 <div>
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
                         <div>
@@ -807,7 +808,7 @@
                         </div>
                     </div>
 
-                    <!-- Booking Form Controls -->
+                    <!-- Booking Form Controls (Dedicated Page) -->
                     <div class="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
                         <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Trip Booking Details</h3>
 
@@ -865,12 +866,13 @@
                             </div>
                         </div>
 
-                        <button onclick="calculateGoogleRoute()" id="calc-btn-bk" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-route"></i> Calculate Route & Distance
+                        <!-- Show Fare Button -->
+                        <button onclick="handleShowFare()" id="calc-btn-bk" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> Show Fare & Send Enquiry
                         </button>
 
-                        <!-- Calculation Result Box -->
-                        <div id="result-box-bk" class="bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-2">
+                        <!-- Calculation Result Box (Initially Hidden) -->
+                        <div id="result-box-bk" class="hidden bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-2">
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-slate-600">Customer Name:</span>
                                 <span id="res-cust-name-bk" class="font-bold text-slate-900">-</span>
@@ -906,8 +908,8 @@
                             <div class="text-[11px] text-slate-500 italic">* Includes Driver Allowance (₹400). Minimum billable distance 130 km. Tolls extra.</div>
                         </div>
 
-                        <button onclick="dispatchCombinedTelegramAndEmail()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-paper-plane text-slate-950"></i> Confirm Booking (Telegram & Email)
+                        <button onclick="dispatchCombinedTelegramAndEmail()" id="confirm-booking-btn-bk" class="hidden w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane text-slate-950"></i> Confirm Booking (Email Backup)
                         </button>
                     </div>
 
@@ -1276,7 +1278,6 @@
             }
         }
 
-        // Listen to browser back/forward buttons
         window.addEventListener('popstate', (event) => {
             const path = window.location.pathname;
             let foundPage = 'home';
@@ -1295,7 +1296,6 @@
 
         function initGoogleMapsApi() {
             try {
-                // Note: gmap-home is removed from home page, but kept on booking page for calculator
                 const mapContainer = document.getElementById('gmap-booking');
                 if (!mapContainer) return;
 
@@ -1316,9 +1316,7 @@
                     const el = document.getElementById(id);
                     if (el) {
                         const ac = new google.maps.places.Autocomplete(el);
-                        ac.addListener('place_changed', () => {
-                            calculateGoogleRoute();
-                        });
+                        ac.addListener('place_changed', () => {});
                     }
                 });
             } catch(e) {
@@ -1354,20 +1352,25 @@
             return 150;
         }
 
-        function calculateGoogleRoute() {
-            const pickup = document.getElementById('g-pickup')?.value.trim() || document.getElementById('g-pickup-bk')?.value.trim() || '';
-            const drop = document.getElementById('g-drop')?.value.trim() || document.getElementById('g-drop-bk')?.value.trim() || '';
+        // Triggered only when user clicks "Show Fare"
+        function handleShowFare() {
+            const name = document.getElementById('g-name')?.value.trim() || document.getElementById('g-name-bk')?.value.trim();
+            const phone = document.getElementById('g-phone')?.value.trim() || document.getElementById('g-phone-bk')?.value.trim();
+            const pickup = document.getElementById('g-pickup')?.value.trim() || document.getElementById('g-pickup-bk')?.value.trim();
+            const drop = document.getElementById('g-drop')?.value.trim() || document.getElementById('g-drop-bk')?.value.trim();
             const carType = document.getElementById('g-cartype')?.value || document.getElementById('g-cartype-bk')?.value || 'Sedan';
-            const badge = document.getElementById('route-status-badge-home') || document.getElementById('route-status-badge-bk');
+            const date = document.getElementById('g-date')?.value || document.getElementById('g-date-bk')?.value || '';
+            const time = document.getElementById('g-time')?.value || document.getElementById('g-time-bk')?.value || '';
 
-            if (!pickup || !drop) {
-                if (badge) badge.textContent = 'Enter Locations Below';
-                currentCalculatedDistance = 0;
-                updateCalculatorUI(0, '-', carType);
-                return;
-            }
+            if (!name) { alert('Please enter your Customer Name first.'); return; }
+            if (!phone || phone.length < 10) { alert('Please enter a valid 10-digit Mobile Number.'); return; }
+            if (!pickup || !drop) { alert('Please enter both Pickup and Drop locations.'); return; }
 
-            if (badge) badge.textContent = 'Calculating Route...';
+            // Sync values between homepage and booking sections if toggled
+            const p1 = document.getElementById('g-pickup'); const p2 = document.getElementById('g-pickup-bk');
+            if (p1 && p2) { p1.value = pickup; p2.value = pickup; }
+            const d1 = document.getElementById('g-drop'); const d2 = document.getElementById('g-drop-bk');
+            if (d1 && d2) { d1.value = drop; d2.value = drop; }
 
             const pKey = pickup.toLowerCase().replace(/[^a-z]/g, '');
             const dKey = drop.toLowerCase().replace(/[^a-z]/g, '');
@@ -1378,12 +1381,8 @@
             if (presetKm) {
                 currentCalculatedDistance = presetKm;
                 const hours = Math.max(1, Math.round(presetKm / 55));
-                updateCalculatorUI(presetKm, `~${hours} hours`, carType);
-                if (badge) badge.textContent = `${presetKm} Km (Verified)`;
-                return;
-            }
-
-            if (googleDirectionsService && googleDirectionsRenderer) {
+                processFareDisplayAndTelegram(presetKm, `~${hours} hours`, carType, name, phone, pickup, drop, date, time);
+            } else if (googleDirectionsService && googleDirectionsRenderer) {
                 googleDirectionsService.route({
                     origin: pickup,
                     destination: drop,
@@ -1395,51 +1394,59 @@
                         const distKm = Math.round(leg.distance.value / 1000);
                         const durText = leg.duration.text;
                         currentCalculatedDistance = distKm;
-
-                        updateCalculatorUI(distKm, durText, carType);
-                        if (badge) badge.textContent = `${distKm} Km (${durText})`;
+                        processFareDisplayAndTelegram(distKm, durText, carType, name, phone, pickup, drop, date, time);
                     } else {
                         const fallbackKm = getDistanceBetween(pickup, drop);
                         currentCalculatedDistance = fallbackKm;
-                        updateCalculatorUI(fallbackKm, `~2 hours`, carType);
-                        if (badge) badge.textContent = `~${fallbackKm} Km (Est.)`;
+                        processFareDisplayAndTelegram(fallbackKm, `~2 hours`, carType, name, phone, pickup, drop, date, time);
                     }
                 });
             } else {
                 const fallbackKm = getDistanceBetween(pickup, drop);
                 currentCalculatedDistance = fallbackKm;
-                updateCalculatorUI(fallbackKm, `~2 hours`, carType);
-                if (badge) badge.textContent = `~${fallbackKm} Km (Est.)`;
+                processFareDisplayAndTelegram(fallbackKm, `~2 hours`, carType, name, phone, pickup, drop, date, time);
             }
         }
 
-        function updateCalculatorUI(distKm, durText, carType) {
+        function processFareDisplayAndTelegram(distKm, durText, carType, name, phone, pickup, drop, date, time) {
             const rate = CAR_RATES[carType] || 15;
             const beta = CAR_DRIVER_ALLOWANCE[carType] || 400;
-            const billableKm = distKm > 0 ? Math.max(distKm, 130) : 0;
+            const billableKm = Math.max(distKm, 130);
             const baseKmFare = billableKm * rate;
-            const totalFare = distKm > 0 ? (baseKmFare + beta) : 0;
+            const totalFare = (baseKmFare) + beta;
 
-            const name = document.getElementById('g-name')?.value.trim() || document.getElementById('g-name-bk')?.value.trim() || '-';
-            const phone = document.getElementById('g-phone')?.value.trim() || document.getElementById('g-phone-bk')?.value.trim() || '-';
-
-            // Sync inputs across homepage and booking page
-            const p1 = document.getElementById('g-pickup'); const p2 = document.getElementById('g-pickup-bk');
-            if (p1 && p2 && p1.value !== p2.value) { p2.value = p1.value; }
-            if (p1 && p2 && p2.value !== p1.value) { p1.value = p2.value; }
-
-            const d1 = document.getElementById('g-drop'); const d2 = document.getElementById('g-drop-bk');
-            if (d1 && d2 && d1.value !== d2.value) { d2.value = d1.value; }
-            if (d1 && d2 && d2.value !== d1.value) { d1.value = d2.value; }
-
+            // Update UI fields
             document.querySelectorAll('#res-cust-name, #res-cust-name-bk').forEach(el => el.textContent = name);
             document.querySelectorAll('#res-cust-phone, #res-cust-phone-bk').forEach(el => el.textContent = phone);
             document.querySelectorAll('#res-distance, #res-distance-bk').forEach(el => el.textContent = `~${distKm} Km`);
             document.querySelectorAll('#res-duration, #res-duration-bk').forEach(el => el.textContent = durText);
             document.querySelectorAll('#res-vehicle-info, #res-vehicle-info-bk').forEach(el => el.textContent = `${carType} @ ₹${rate}/km`);
             document.querySelectorAll('#res-base-fare, #res-base-fare-bk').forEach(el => el.textContent = `₹${baseKmFare.toLocaleString('en-IN')} (${billableKm} km × ₹${rate})`);
-            document.querySelectorAll('#res-driver-allowance, #res-driver-allowance-bk').forEach(el => el.textContent = distKm > 0 ? `+ ₹${beta.toLocaleString('en-IN')}` : `₹0`);
+            document.querySelectorAll('#res-driver-allowance, #res-driver-allowance-bk').forEach(el => el.textContent = `+ ₹${beta.toLocaleString('en-IN')}`);
             document.querySelectorAll('#res-fare, #res-fare-bk').forEach(el => el.textContent = `₹${totalFare.toLocaleString('en-IN')}`);
+
+            // Reveal the fare result box and confirm buttons
+            document.querySelectorAll('#result-box, #result-box-bk').forEach(el => el.classList.remove('hidden'));
+            document.querySelectorAll('#confirm-booking-btn, #confirm-booking-btn-bk').forEach(el => el.classList.remove('hidden'));
+
+            // Send details to Telegram Bot automatically upon clicking Show Fare
+            sendTelegramEnquiry(name, phone, pickup, drop, carType, distKm, totalFare, date, time);
+            showToast("Fare calculated & enquiry sent to Telegram!");
+        }
+
+        function sendTelegramEnquiry(name, phone, pickup, drop, carType, distKm, totalFare, date, time) {
+            const telegramMsg = `🔔 *NEW DROP TAXI ENQUIRY*%0A%0A` +
+                `👤 *Customer Name:* ${encodeURIComponent(name)}%0A` +
+                `📞 *Mobile Number:* ${encodeURIComponent(phone)}%0A` +
+                `📍 *Pickup:* ${encodeURIComponent(pickup)}%0A` +
+                `🎯 *Drop:* ${encodeURIComponent(drop)}%0A` +
+                `🚗 *Vehicle:* ${encodeURIComponent(carType)}%0A` +
+                `📏 *Distance:* ${distKm} Km%0A` +
+                `💰 *Shown Fare:* ₹${totalFare.toLocaleString('en-IN')}%0A` +
+                `📅 *Date/Time:* ${date || 'Not specified'} at ${time || 'Not specified'}`;
+
+            fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage?chat_id=${TELEGRAM_CONFIG.chatId}&text=${telegramMsg}&parse_mode=Markdown`)
+                .catch(err => console.warn("Telegram dispatch error:", err));
         }
 
         function dispatchCombinedTelegramAndEmail() {
@@ -1451,27 +1458,10 @@
             const date = document.getElementById('g-date')?.value || document.getElementById('g-date-bk')?.value || '';
             const time = document.getElementById('g-time')?.value || document.getElementById('g-time-bk')?.value || '';
 
-            if (!name) { alert('Please enter your Customer Name.'); return; }
-            if (!phone || phone.length < 10) { alert('Please enter a valid 10-digit Mobile Number.'); return; }
-            if (!pickup || !drop) { alert('Please enter both pickup and drop locations.'); return; }
-            if (!date || !time) { alert('Please select both Travel Date and Pickup Time.'); return; }
-
             const rate = CAR_RATES[carType] || 15;
             const beta = CAR_DRIVER_ALLOWANCE[carType] || 400;
             const billableKm = Math.max(currentCalculatedDistance || 150, 130);
             const totalFare = (billableKm * rate) + beta;
-
-            const telegramMsg = `🚕 *NEW DROP TAXI BOOKING*%0A%0A` +
-                `👤 *Customer:* ${encodeURIComponent(name)}%0A` +
-                `📞 *Mobile:* ${encodeURIComponent(phone)}%0A` +
-                `📍 *Pickup:* ${encodeURIComponent(pickup)}%0A` +
-                `🎯 *Drop:* ${encodeURIComponent(drop)}%0A` +
-                `🚗 *Vehicle:* ${encodeURIComponent(carType)}%0A` +
-                `📏 *Distance:* ${currentCalculatedDistance} Km%0A` +
-                `💰 *Total Fare:* ₹${totalFare.toLocaleString('en-IN')}%0A` +
-                `📅 *Date:* ${date} at ${time}`;
-
-            fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage?chat_id=${TELEGRAM_CONFIG.chatId}&text=${telegramMsg}&parse_mode=Markdown`).catch(err => console.warn(err));
 
             if (window.emailjs && EMAILJS_CONFIG.serviceId) {
                 emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
@@ -1494,7 +1484,6 @@
             if (pEl) pEl.value = pickup;
             if (dEl) dEl.value = drop;
             navigateTo('booking');
-            calculateGoogleRoute();
         }
 
         function bookCityService(cityName) {
@@ -1509,7 +1498,6 @@
             const cEl = document.getElementById('g-cartype') || document.getElementById('g-cartype-bk');
             if (cEl) cEl.value = carType;
             navigateTo('booking');
-            calculateGoogleRoute();
         }
 
         function renderDistrictsGrid(list) {
@@ -1599,7 +1587,6 @@
             renderDistrictsGrid();
             renderRoutesTable();
 
-            // Initial URL routing check on page load
             const path = window.location.pathname;
             let initialPage = 'home';
             for (const [pageId, url] of Object.entries(PAGE_URLS)) {
@@ -1609,15 +1596,6 @@
                 }
             }
             navigateTo(initialPage, false);
-
-            ['g-pickup', 'g-drop', 'g-cartype', 'g-pickup-bk', 'g-drop-bk', 'g-cartype-bk'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('input', calculateGoogleRoute);
-                    el.addEventListener('change', calculateGoogleRoute);
-                    el.addEventListener('blur', calculateGoogleRoute);
-                }
-            });
         });
     </script>
 </body>
