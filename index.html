@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NG Drop Taxi | One-Way Outstation Cabs in Tamil Nadu</title>
     
+    <!-- Preconnect to Critical Origins for Faster DNS/TLS Handshakes -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://maps.googleapis.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+
     <!-- Seorce API Script Integration -->
     <script src="https://scripts.seorce.com/api?projectId=6aaba99ce29e2b08342ab337" defer data-uuid="6aaba99ce29e2b08342ab337"></script>
 
@@ -32,7 +37,7 @@
     }
     </script>
 
-    <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) - Optimized Async Loading -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18453006158"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -42,7 +47,6 @@
     </script>
 
     <!-- Tailwind CSS CDN -->
-    <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
     <script src="https://cdn.tailwindcss.com" defer></script>
 
     <!-- Font Awesome Icons -->
@@ -82,8 +86,13 @@
         }
     </script>
     <style>
+        /* Eliminate 300ms mobile tap delay & optimize rendering */
+        button, a, input, select, textarea {
+            touch-action: manipulation;
+        }
         .page-view {
             display: none;
+            will-change: opacity;
         }
         .page-view.active {
             display: block;
@@ -119,13 +128,13 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen relative">
 
-    <!-- Sticky Floating Call & WhatsApp Buttons at Right Side End Corner -->
+    <!-- Sticky Floating Call & WhatsApp Buttons with Google Ads Conversion Tracking -->
     <div class="fixed right-4 bottom-6 z-50 flex flex-col gap-3">
-        <a href="https://wa.me/918122268687" target="_blank" class="w-14 h-14 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-2xl transition transform hover:scale-110 group relative" title="Chat on WhatsApp">
+        <a href="https://wa.me/918122268687" target="_blank" onclick="trackConversion('whatsapp')" class="w-14 h-14 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-2xl transition transform hover:scale-110 group relative" title="Chat on WhatsApp">
             <i class="fa-brands fa-whatsapp text-2xl"></i>
             <span class="absolute right-16 bg-slate-900 text-white text-[11px] font-bold px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md pointer-events-none">Chat on WhatsApp</span>
         </a>
-        <a href="tel:8122268687" class="w-14 h-14 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-full flex items-center justify-center shadow-2xl transition transform hover:scale-110 group relative" title="Call Drop Taxi Helpline">
+        <a href="tel:8122268687" onclick="trackConversion('phone')" class="w-14 h-14 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-full flex items-center justify-center shadow-2xl transition transform hover:scale-110 group relative" title="Call Drop Taxi Helpline">
             <i class="fa-solid fa-phone text-xl"></i>
             <span class="absolute right-16 bg-slate-900 text-white text-[11px] font-bold px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md pointer-events-none">Call: 8122268687</span>
         </a>
@@ -135,11 +144,11 @@
     <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
             <div class="flex items-center gap-4 flex-wrap justify-center sm:justify-start">
-                <a href="tel:8122268687" class="hover:text-amber-400 flex items-center gap-1.5 transition" title="Call Drop Taxi Helpline">
+                <a href="tel:8122268687" onclick="trackConversion('phone')" class="hover:text-amber-400 flex items-center gap-1.5 transition" title="Call Drop Taxi Helpline">
                     <i class="fa-solid fa-phone text-amber-400"></i>
                     <span class="font-bold text-white">8122268687</span>
                 </a>
-                <a href="https://wa.me/918122268687" target="_blank" class="hover:text-emerald-400 flex items-center gap-1.5 transition" title="WhatsApp Drop Taxi Booking">
+                <a href="https://wa.me/918122268687" target="_blank" onclick="trackConversion('whatsapp')" class="hover:text-emerald-400 flex items-center gap-1.5 transition" title="WhatsApp Drop Taxi Booking">
                     <i class="fa-brands fa-whatsapp text-emerald-400"></i>
                     <span>Chat on WhatsApp</span>
                 </a>
@@ -197,7 +206,7 @@
 
                 <!-- Action Button & Mobile Menu Toggle -->
                 <div class="flex items-center gap-3">
-                    <a href="tel:8122268687" class="hidden sm:flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold px-4 py-2.5 rounded-xl shadow-md transition transform active:scale-95 text-sm" title="Call Drop Taxi Now">
+                    <a href="tel:8122268687" onclick="trackConversion('phone')" class="hidden sm:flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold px-4 py-2.5 rounded-xl shadow-md transition transform active:scale-95 text-sm" title="Call Drop Taxi Now">
                         <i class="fa-solid fa-phone-volume"></i>
                         <span>Call 8122268687</span>
                     </a>
@@ -240,7 +249,7 @@
                 <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
             </a>
             <div class="pt-2">
-                <a href="tel:8122268687" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
+                <a href="tel:8122268687" onclick="trackConversion('phone')" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
                     <i class="fa-solid fa-phone"></i> Call Now: 8122268687
                 </a>
             </div>
@@ -268,13 +277,13 @@
 
                         <!-- Call, WhatsApp, and Telegram Buttons in Hero Section -->
                         <div class="flex flex-wrap justify-center gap-3 pt-3">
-                            <a href="tel:8122268687" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-5 py-3 rounded-xl shadow-lg transition flex items-center gap-2 text-sm">
+                            <a href="tel:8122268687" onclick="trackConversion('phone')" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-5 py-3 rounded-xl shadow-lg transition flex items-center gap-2 text-sm">
                                 <i class="fa-solid fa-phone text-base"></i> Call Now: 8122268687
                             </a>
-                            <a href="https://wa.me/918122268687" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-5 py-3 rounded-xl shadow-lg transition flex items-center gap-2 text-sm">
+                            <a href="https://wa.me/918122268687" target="_blank" onclick="trackConversion('whatsapp')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-5 py-3 rounded-xl shadow-lg transition flex items-center gap-2 text-sm">
                                 <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp Chat
                             </a>
-                            <a href="https://t.me/8905660087" target="_blank" class="bg-sky-600 hover:bg-sky-500 text-white font-black px-5 py-3 rounded-xl shadow-lg transition flex items-center gap-2 text-sm">
+                            <a href="https://t.me/8905660087" target="_blank" onclick="trackConversion('telegram')" class="bg-sky-600 hover:bg-sky-500 text-white font-black px-5 py-3 rounded-xl shadow-lg transition flex items-center gap-2 text-sm">
                                 <i class="fa-brands fa-telegram text-lg"></i> Telegram Support
                             </a>
                         </div>
@@ -963,7 +972,7 @@
                         </div>
                         <h3 class="font-bold text-slate-900 text-base mb-1">Direct Phone</h3>
                         <p class="text-xs text-slate-500 mb-3">24/7 Booking Helpline</p>
-                        <a href="tel:8122268687" class="text-amber-600 font-extrabold hover:underline text-lg">8122268687</a>
+                        <a href="tel:8122268687" onclick="trackConversion('phone')" class="text-amber-600 font-extrabold hover:underline text-lg">8122268687</a>
                     </div>
 
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm hover:border-emerald-400 transition">
@@ -972,7 +981,7 @@
                         </div>
                         <h3 class="font-bold text-slate-900 text-base mb-1">WhatsApp Chat</h3>
                         <p class="text-xs text-slate-500 mb-3">Instant Chat & Fare Quote</p>
-                        <a href="https://wa.me/918122268687" target="_blank" class="text-emerald-600 font-extrabold hover:underline text-base">Chat on 8122268687</a>
+                        <a href="https://wa.me/918122268687" target="_blank" onclick="trackConversion('whatsapp')" class="text-emerald-600 font-extrabold hover:underline text-base">Chat on 8122268687</a>
                     </div>
 
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm hover:border-amber-400 transition">
@@ -1240,8 +1249,8 @@
                 <div>
                     <h4 class="text-white font-bold text-sm mb-3">Direct Contact Details</h4>
                     <ul class="space-y-2 text-slate-300">
-                        <li><i class="fa-solid fa-phone text-amber-400 mr-2"></i> <a href="tel:8122268687" class="hover:text-amber-400 font-bold">8122268687</a></li>
-                        <li><i class="fa-brands fa-whatsapp text-emerald-400 mr-2"></i> <a href="https://wa.me/918122268687" target="_blank" class="hover:text-emerald-400 font-bold">8122268687</a></li>
+                        <li><i class="fa-solid fa-phone text-amber-400 mr-2"></i> <a href="tel:8122268687" onclick="trackConversion('phone')" class="hover:text-amber-400 font-bold">8122268687</a></li>
+                        <li><i class="fa-brands fa-whatsapp text-emerald-400 mr-2"></i> <a href="https://wa.me/918122268687" target="_blank" onclick="trackConversion('whatsapp')" class="hover:text-emerald-400 font-bold">8122268687</a></li>
                         <li><i class="fa-solid fa-envelope text-amber-400 mr-2"></i> <a href="mailto:ngdroptaxi@gmail.com" class="hover:text-amber-400">ngdroptaxi@gmail.com</a></li>
                         <li><i class="fa-solid fa-globe text-amber-400 mr-2"></i> <a href="https://ngdroptaxi.com" target="_blank" class="hover:text-amber-400">www.ngdroptaxi.com</a></li>
                     </ul>
@@ -1283,6 +1292,19 @@
                 }
             }
         })();
+
+        // Google Ads Conversion Tracking Helper
+        function trackConversion(actionType) {
+            if (typeof gtag === 'function') {
+                gtag('event', 'conversion', {
+                    'send_to': 'AW-18453006158/lead_conversion',
+                    'value': 1.0,
+                    'currency': 'INR',
+                    'event_category': 'Engagement',
+                    'event_label': actionType
+                });
+            }
+        }
 
         const CAR_RATES = {
             'Sedan': 15,
@@ -1670,7 +1692,7 @@
             document.querySelectorAll('#res-fare, #res-fare-bk').forEach(el => el.textContent = `₹${totalFare.toLocaleString('en-IN')}`);
         }
 
-        // Calculate and One-Touch Telegram Dispatch
+        // Calculate and One-Touch Telegram Dispatch with Google Ads Conversion Tracking
         function calculateAndSendTelegramEnquiry() {
             const name = document.getElementById('g-name')?.value.trim() || document.getElementById('g-name-bk')?.value.trim();
             const phone = document.getElementById('g-phone')?.value.trim() || document.getElementById('g-phone-bk')?.value.trim();
@@ -1708,16 +1730,12 @@
                 (returnDate ? `🔄 *Return Date:* ${returnDate}%0A` : '') +
                 `ℹ️ *Note:* Toll and State Tax, And Permit Charges Extra As per Government.`;
 
+            // Track Conversion for Google Ads
+            trackConversion('booking_lead');
+
             fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage?chat_id=${TELEGRAM_CONFIG.chatId}&text=${telegramMsg}&parse_mode=Markdown`)
                 .then(() => {
                     showToast("Fare calculated & lead sent to Telegram successfully!");
-                    if (typeof gtag === 'function') {
-                        gtag('event', 'conversion', {
-                            'send_to': 'AW-18453006158/lead_conversion',
-                            'value': 1.0,
-                            'currency': 'INR'
-                        });
-                    }
                 })
                 .catch(() => showToast("Fare calculated successfully!"));
 
@@ -1730,6 +1748,7 @@
 
         function handleContactSubmit(e) {
             e.preventDefault();
+            trackConversion('contact_form');
             showToast("Inquiry sent to Drop Taxi Operations!");
             e.target.reset();
         }
